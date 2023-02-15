@@ -29,7 +29,7 @@ interface UseDragResult {
   getDerta: () => DertaState
 }
 
-export function useDrag(domName: string): UseDragResult {
+export function useDrag(): UseDragResult {
   let startPoint: DragState = {
     isDragging: false,
     clientX: 0,
@@ -67,9 +67,18 @@ export function useDrag(domName: string): UseDragResult {
     const dertaX = clientX - startPoint.clientX
     const dertaY = clientY - startPoint.clientY
     // 存下位移差
-    derta = { ...derta, isChanged: true, dertaX, dertaY }
+    derta = {
+      ...derta,
+      isChanged: true,
+      dertaX,
+      dertaY,
+    }
     // 更新值
-    startPoint = { ...startPoint, clientX, clientY }
+    startPoint = {
+      ...startPoint,
+      clientX,
+      clientY,
+    }
 
     return true
   }

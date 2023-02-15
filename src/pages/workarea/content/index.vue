@@ -11,7 +11,7 @@ const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
 const canvasStyle = rulerStore.canvasStyle
 
-const { dragStart, getDerta } = useDrag('#canvas')
+const { dragStart, getDerta } = useDrag()
 
 /* dom ref */
 const wrapperRef = ref<null | HTMLElement>()
