@@ -3,12 +3,16 @@
 </script>
 
 <template>
-  <a-layout>
-    <a-layout-header>Header</a-layout-header>
-    <a-layout>
-      <a-layout-sider>Sider</a-layout-sider>
-      <a-layout-content>Content</a-layout-content>
-    </a-layout>
-    <a-layout-footer>Footer</a-layout-footer>
-  </a-layout>
+  <div h="100vh" w="100vw">
+    <header w-full h="50px" f-c-c>
+      Header
+    </header>
+    <div w-full h="[calc(100vh-50px)]" flex>
+      <router-view v-slot="{ Component }">
+        <transition mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </div>
+  </div>
 </template>
