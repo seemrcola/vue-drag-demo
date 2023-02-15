@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
 import { useRulerStore } from '@/store/modules/index'
 
@@ -11,7 +11,7 @@ const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
 const canvasStyle = rulerStore.canvasStyle
 
-const { dragStart, dragEnd, dragEnable } = useDrag('#canvas')
+const { dragStart, getDerta } = useDrag('#canvas')
 
 /* dom ref */
 const wrapperRef = ref<null | HTMLElement>()
@@ -56,34 +56,47 @@ function rulerInit() {
   rulerStore.setRulerSize(workareaRect)
 }
 
-// canvas初始化
-function canvasInit() {
-  // 由于尺子有厚度，所以canvas要给个边距
-  canvasRef.value!.style.left = `${state.thick}px`
-  canvasRef.value!.style.top = `${state.thick}px`
-}
-
-// 事件绑定初始化
-function eventInit() {
-  // 将事件绑定在app上
-  const app = document.querySelector('#app')
-  app?.addEventListener('mouseup', dragEnd)
-  app?.addEventListener('mousemove', (e) => {
-    if (!dragEnable(e))
-      return
-    handleScroll()
-  })
-}
-
-onMounted(() => {
-  rulerInit()
-  canvasInit()
-  eventInit()
+// 视野容器盒子初始化
+function screenInit() {
   // 滚动居中
   screensRef.value!.scrollLeft
     = containerRef.value!.getBoundingClientRect().width / 2 - state.width / 2
   screensRef.value!.scrollTop
     = containerRef.value!.getBoundingClientRect().height / 2 - state.height / 2
+}
+
+// canvas初始化
+function canvasInit() {
+  const workarea = document.querySelector('.wrapper')
+  const workareaRect = workarea!.getBoundingClientRect()
+  // 由于尺子有厚度，所以canvas要多给个厚度边距
+  canvasRef.value!.style.left = `${state.thick + workareaRect.width / 2}px`
+  canvasRef.value!.style.top = `${state.thick + workareaRect.height / 2}px`
+}
+
+// 事件绑定初始化
+const handleSrcollBar = () => {
+  const { isChanged, dertaX, dertaY } = getDerta()
+  console.log(dertaX, dertaY, isChanged)
+  if (isChanged) {
+    screensRef.value!.scrollLeft -= dertaX
+    screensRef.value!.scrollTop -= dertaY
+  }
+}
+
+function eventInit() {
+  window.addEventListener('mousemove', handleSrcollBar)
+}
+
+onMounted(() => {
+  rulerInit()
+  screenInit()
+  canvasInit()
+  eventInit()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('mousemove', handleSrcollBar)
 })
 </script>
 

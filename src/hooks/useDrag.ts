@@ -8,55 +8,102 @@
  * 6.鼠标弹起，拖拽结束
  */
 
-interface Point {
-  x: number
-  y: number
+import { onUnmounted } from 'vue'
+
+interface DragState {
+  isDragging: boolean
+  clientX: number
+  clientY: number
 }
 
-export function useDrag(domName: string) {
-  let dom: any
-  let start = false
+interface DertaState {
+  isChanged: boolean
+  dertaX: number
+  dertaY: number
+}
 
-  let startPoint: Point = {
-    x: 0,
-    y: 0,
+interface UseDragResult {
+  dragStart: (event: MouseEvent) => void
+  dragEnable: (event: MouseEvent) => boolean
+  dragEnd: (event: MouseEvent) => void
+  getDerta: () => DertaState
+}
+
+export function useDrag(domName: string): UseDragResult {
+  let dom: null | HTMLElement
+
+  let startPoint: DragState = {
+    isDragging: false,
+    clientX: 0,
+    clientY: 0,
+  }
+
+  let derta: DertaState = {
+    isChanged: false,
+    dertaX: 0,
+    dertaY: 0,
   }
 
   function dragStart(e: MouseEvent) {
-    start = true
+    const { clientX, clientY } = e
+    startPoint.isDragging = true
     dom = document.querySelector(domName)
+
     startPoint = {
-      x: e.clientX,
-      y: e.clientY,
+      ...startPoint,
+      clientX,
+      clientY,
     }
+
+    window.addEventListener('mousemove', dragEnable)
+    window.addEventListener('mouseup', dragEnd)
   }
 
-  function dragEnable(e: MouseEvent) {
+  function dragEnable(e: MouseEvent): boolean {
+    const { clientX, clientY } = e
     // 如果没有开启移动锁，则直接return
-    if (!start)
-      return
+    if (!startPoint.isDragging) {
+      derta.isChanged = false
+      return false
+    }
+
     requestAnimationFrame(() => {
       // 算出相对于上次的位移差
-      const x = e.clientX - startPoint.x
-      const y = e.clientY - startPoint.y
+      const dertaX = clientX - startPoint.clientX
+      const dertaY = clientY - startPoint.clientY
+      // 存下位移差
+      derta = { ...derta, isChanged: true, dertaX, dertaY }
       // 设置样式
-      dom.style.left = `${parseFloat(dom.style.left) + x}px`
-      dom.style.top = `${parseFloat(dom.style.top) + y}px`
+      dom!.style.position = 'absolute'
+      dom!.style.left = `${parseFloat(dom!.style.left) + dertaX}px`
+      dom!.style.top = `${parseFloat(dom!.style.top) + dertaY}px`
       // 更新值
-      startPoint = {
-        x: e.clientX,
-        y: e.clientY,
-      }
+      startPoint = { ...startPoint, clientX, clientY }
     })
+
+    return true
   }
 
   function dragEnd(e: MouseEvent) {
-    start = false
+    startPoint.isDragging = false
+    derta.isChanged = false
+    window.removeEventListener('mousemove', dragEnable)
+    window.removeEventListener('mouseup', dragEnd)
   }
+
+  function getDerta(): DertaState {
+    return derta
+  }
+
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', dragEnable)
+    window.removeEventListener('mouseup', dragEnd)
+  })
 
   return {
     dragStart,
     dragEnable,
     dragEnd,
+    getDerta,
   }
 }
