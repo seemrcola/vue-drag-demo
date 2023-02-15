@@ -30,8 +30,6 @@ interface UseDragResult {
 }
 
 export function useDrag(domName: string): UseDragResult {
-  let dom: null | HTMLElement
-
   let startPoint: DragState = {
     isDragging: false,
     clientX: 0,
@@ -47,7 +45,6 @@ export function useDrag(domName: string): UseDragResult {
   function dragStart(e: MouseEvent) {
     const { clientX, clientY } = e
     startPoint.isDragging = true
-    dom = document.querySelector(domName)
 
     startPoint = {
       ...startPoint,
@@ -66,20 +63,13 @@ export function useDrag(domName: string): UseDragResult {
       derta.isChanged = false
       return false
     }
-
-    requestAnimationFrame(() => {
-      // 算出相对于上次的位移差
-      const dertaX = clientX - startPoint.clientX
-      const dertaY = clientY - startPoint.clientY
-      // 存下位移差
-      derta = { ...derta, isChanged: true, dertaX, dertaY }
-      // 设置样式
-      dom!.style.position = 'absolute'
-      dom!.style.left = `${parseFloat(dom!.style.left) + dertaX}px`
-      dom!.style.top = `${parseFloat(dom!.style.top) + dertaY}px`
-      // 更新值
-      startPoint = { ...startPoint, clientX, clientY }
-    })
+    // 算出相对于上次的位移差
+    const dertaX = clientX - startPoint.clientX
+    const dertaY = clientY - startPoint.clientY
+    // 存下位移差
+    derta = { ...derta, isChanged: true, dertaX, dertaY }
+    // 更新值
+    startPoint = { ...startPoint, clientX, clientY }
 
     return true
   }
