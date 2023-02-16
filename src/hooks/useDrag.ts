@@ -27,10 +27,11 @@ interface UseDragResult {
   handleMouseMove: (event: MouseEvent) => boolean
   handleMouseUp: (event: MouseEvent) => void
   getDerta: () => DertaState
+  getPoint: () => DragState
 }
 
 export function useDrag(): UseDragResult {
-  let startPoint: DragState = {
+  let pointState: DragState = {
     isDragging: false,
     clientX: 0,
     clientY: 0,
@@ -46,10 +47,10 @@ export function useDrag(): UseDragResult {
     e.stopPropagation()
 
     const { clientX, clientY } = e
-    startPoint.isDragging = true
+    pointState.isDragging = true
 
-    startPoint = {
-      ...startPoint,
+    pointState = {
+      ...pointState,
       clientX,
       clientY,
     }
@@ -61,13 +62,13 @@ export function useDrag(): UseDragResult {
   function handleMouseMove(e: MouseEvent): boolean {
     const { clientX, clientY } = e
     // 如果没有开启移动锁，则直接return
-    if (!startPoint.isDragging) {
+    if (!pointState.isDragging) {
       derta.isChanged = false
       return false
     }
     // 算出相对于上次的位移差
-    const dertaX = clientX - startPoint.clientX
-    const dertaY = clientY - startPoint.clientY
+    const dertaX = clientX - pointState.clientX
+    const dertaY = clientY - pointState.clientY
     // 存下位移差
     derta = {
       ...derta,
@@ -76,8 +77,8 @@ export function useDrag(): UseDragResult {
       dertaY,
     }
     // 更新值
-    startPoint = {
-      ...startPoint,
+    pointState = {
+      ...pointState,
       clientX,
       clientY,
     }
@@ -86,7 +87,7 @@ export function useDrag(): UseDragResult {
   }
 
   function handleMouseUp() {
-    startPoint.isDragging = false
+    pointState.isDragging = false
     derta.isChanged = false
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseup', handleMouseUp)
@@ -94,6 +95,10 @@ export function useDrag(): UseDragResult {
 
   function getDerta(): DertaState {
     return derta
+  }
+
+  function getPoint(): DragState {
+    return pointState
   }
 
   onUnmounted(() => {
@@ -106,5 +111,6 @@ export function useDrag(): UseDragResult {
     handleMouseMove,
     handleMouseUp,
     getDerta,
+    getPoint,
   }
 }

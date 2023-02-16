@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export const useRulerStore = defineStore('ruler', () => {
   // 比例尺相关配置
   const rulerOptions = ref({
-    scale: 0.4, // 默认缩放
+    scale: 1.0, // 默认缩放
     startX: 0, // 尺子开始坐标
     startY: 0,
     height: 0, // 尺子大小,这个大小动态赋值
@@ -27,8 +27,8 @@ export const useRulerStore = defineStore('ruler', () => {
 
   // canvas样式配置, 样式的动态属性都由其他配置计算得来
   const canvasStyle = ref({
-    height: `${1200}px`,
-    width: `${1600}px`,
+    height: `${500}px`,
+    width: `${700}px`,
     transform: `scale(${rulerOptions.value.scale})`,
   })
 

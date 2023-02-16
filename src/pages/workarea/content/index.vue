@@ -39,7 +39,9 @@ const handleWheel = (
   }) => {
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
-    const nextScale = parseFloat(Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2))
+    const nextScale = parseFloat(
+      Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2),
+    )
     rulerStore.setScale(nextScale)
   }
   nextTick(() => handleScroll())
@@ -47,31 +49,39 @@ const handleWheel = (
 
 // 尺子宽高初始化
 function rulerInit() {
-  const workarea = document.querySelector('.wrapper')
-  const workareaRect = workarea!.getBoundingClientRect()
-  // 背景板大小处理
-  containerRef.value!.style.height = `${workareaRect.height * 2}px`
-  containerRef.value!.style.width = `${workareaRect.width * 2}px`
-  // 尺子大小处理
+  const workareaRect = screensRef.value!.getBoundingClientRect()
+  // 尺子大小设置
   rulerStore.setRulerSize(workareaRect)
+}
+
+function containerInit() {
+  const canvasRect = canvasRef.value!.getBoundingClientRect()
+  // 背景板大小处理, canvas两倍大小
+  containerRef.value!.style.height = `${canvasRect.height * 2}px`
+  containerRef.value!.style.width = `${canvasRect.width * 2}px`
 }
 
 // 视野容器盒子初始化
 function screenInit() {
-  // 滚动居中
-  screensRef.value!.scrollLeft
-    = containerRef.value!.getBoundingClientRect().width / 2 - state.width / 2
-  screensRef.value!.scrollTop
-    = containerRef.value!.getBoundingClientRect().height / 2 - state.height / 2
+  // 滚动居中, 由于containerRef的值是动态赋值的，所以这里nextTick一下
+  nextTick(() => {
+    const { height: containerHeight, width: containerWidth } = containerRef.value!.getBoundingClientRect()
+    const { clientHeight, clientWidth } = canvasRef.value!
+    screensRef.value!.scrollLeft = (containerWidth / 2 - clientWidth / 2)
+    screensRef.value!.scrollTop = (containerHeight / 2 - clientHeight / 2)
+  })
 }
 
 // canvas初始化
 function canvasInit() {
-  const workarea = document.querySelector('.wrapper')
-  const workareaRect = workarea!.getBoundingClientRect()
   // 由于尺子有厚度，所以canvas要多给个厚度边距
-  canvasRef.value!.style.left = `${state.thick + workareaRect.width / 2}px`
-  canvasRef.value!.style.top = `${state.thick + workareaRect.height / 2}px`
+  nextTick(() => {
+    const { clientHeight, clientWidth } = canvasRef.value!
+    // clientHeight, clientWidth是可视宽高
+    // console.log(clientHeight, clientWidth)
+    canvasRef.value!.style.left = `${state.thick + clientWidth / 2}px`
+    canvasRef.value!.style.top = `${state.thick + clientHeight / 2}px`
+  })
 }
 
 // 事件绑定初始化
@@ -88,10 +98,11 @@ function eventInit() {
 }
 
 onMounted(() => {
-  rulerInit()
-  screenInit()
-  canvasInit()
-  eventInit()
+  rulerInit() // 初始化尺子，尺子的宽高和screen可视容器px像素对应，先获取宽高再赋值给尺子
+  screenInit() // 可视区域初始化，让滚动条滚到中间
+  containerInit() // 背景初始化
+  canvasInit() // 画布初始化
+  eventInit() // 事件初始化，监听鼠标移动事件
 })
 
 onUnmounted(() => {
@@ -129,7 +140,7 @@ onUnmounted(() => {
           id="canvas"
           ref="canvasRef"
           :style="canvasStyle"
-          absolute bg="#fff"
+          absolute bg="#fff" rounded-2
           @mousedown="handleMouseDown"
         />
       </div>
