@@ -23,9 +23,9 @@ interface DertaState {
 }
 
 interface UseDragResult {
-  dragStart: (event: MouseEvent) => void
-  dragEnable: (event: MouseEvent) => boolean
-  dragEnd: (event: MouseEvent) => void
+  handleMouseDown: (event: MouseEvent) => void
+  handleMouseMove: (event: MouseEvent) => boolean
+  handleMouseUp: (event: MouseEvent) => void
   getDerta: () => DertaState
 }
 
@@ -42,7 +42,9 @@ export function useDrag(): UseDragResult {
     dertaY: 0,
   }
 
-  function dragStart(e: MouseEvent) {
+  function handleMouseDown(e: MouseEvent) {
+    e.stopPropagation()
+
     const { clientX, clientY } = e
     startPoint.isDragging = true
 
@@ -52,11 +54,11 @@ export function useDrag(): UseDragResult {
       clientY,
     }
 
-    window.addEventListener('mousemove', dragEnable)
-    window.addEventListener('mouseup', dragEnd)
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
   }
 
-  function dragEnable(e: MouseEvent): boolean {
+  function handleMouseMove(e: MouseEvent): boolean {
     const { clientX, clientY } = e
     // 如果没有开启移动锁，则直接return
     if (!startPoint.isDragging) {
@@ -83,11 +85,11 @@ export function useDrag(): UseDragResult {
     return true
   }
 
-  function dragEnd(e: MouseEvent) {
+  function handleMouseUp() {
     startPoint.isDragging = false
     derta.isChanged = false
-    window.removeEventListener('mousemove', dragEnable)
-    window.removeEventListener('mouseup', dragEnd)
+    window.removeEventListener('mousemove', handleMouseMove)
+    window.removeEventListener('mouseup', handleMouseUp)
   }
 
   function getDerta(): DertaState {
@@ -95,14 +97,14 @@ export function useDrag(): UseDragResult {
   }
 
   onUnmounted(() => {
-    window.removeEventListener('mousemove', dragEnable)
-    window.removeEventListener('mouseup', dragEnd)
+    window.removeEventListener('mousemove', handleMouseMove)
+    window.removeEventListener('mouseup', handleMouseUp)
   })
 
   return {
-    dragStart,
-    dragEnable,
-    dragEnd,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
     getDerta,
   }
 }

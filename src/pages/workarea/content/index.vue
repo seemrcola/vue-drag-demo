@@ -11,7 +11,7 @@ const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
 const canvasStyle = rulerStore.canvasStyle
 
-const { dragStart, getDerta } = useDrag()
+const { handleMouseDown, getDerta } = useDrag()
 
 /* dom ref */
 const wrapperRef = ref<null | HTMLElement>()
@@ -77,11 +77,10 @@ function canvasInit() {
 // 事件绑定初始化
 const handleSrcollBar = () => {
   const { isChanged, dertaX, dertaY } = getDerta()
-  console.log(dertaX, dertaY, isChanged)
-  if (isChanged) {
-    screensRef.value!.scrollLeft -= dertaX
-    screensRef.value!.scrollTop -= dertaY
-  }
+  if (!isChanged)
+    return
+  screensRef.value!.scrollLeft -= dertaX
+  screensRef.value!.scrollTop -= dertaY
 }
 
 function eventInit() {
@@ -121,6 +120,7 @@ onUnmounted(() => {
       overflow-auto
       @wheel="handleWheel"
       @scroll="handleScroll"
+      @mousedown="handleMouseDown"
     >
       <!-- 一个宽高很大的容器，作为背景板 -->
       <div ref="containerRef" absolute>
@@ -130,7 +130,7 @@ onUnmounted(() => {
           ref="canvasRef"
           :style="canvasStyle"
           absolute bg="#fff"
-          @mousedown="dragStart"
+          @mousedown="handleMouseDown"
         />
       </div>
     </div>
