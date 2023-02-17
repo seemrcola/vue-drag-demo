@@ -10,25 +10,7 @@
 
 import { onUnmounted } from 'vue'
 
-interface DragState {
-  isDragging: boolean
-  clientX: number
-  clientY: number
-}
-
-interface DertaState {
-  isChanged: boolean
-  dertaX: number
-  dertaY: number
-}
-
-interface UseDragResult {
-  handleMouseDown: (event: MouseEvent) => void
-  handleMouseMove: (event: MouseEvent) => boolean
-  handleMouseUp: (event: MouseEvent) => void
-  getDerta: () => DertaState
-  getPoint: () => DragState
-}
+import type { DertaState, DragState, UseDragResult } from './types/useDrag'
 
 export function useDrag(): UseDragResult {
   let pointState: DragState = {

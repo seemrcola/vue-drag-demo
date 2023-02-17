@@ -8,9 +8,12 @@ import 'uno.css'
 import App from './App.vue'
 import { setupRouter } from './router'
 import { setupStore } from './store'
+// global hooks
+import { useKeyboard } from '@/hooks/useKeyboard'
 
 function setupApp() {
   const app = createApp(App)
+  useKeyboard()
   setupRouter(app)
   setupStore(app)
   app.mount('#app')
