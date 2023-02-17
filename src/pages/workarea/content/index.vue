@@ -140,7 +140,7 @@ onUnmounted(() => {
           id="canvas"
           ref="canvasRef"
           :style="canvasStyle"
-          absolute bg="#fff" rounded-2
+          absolute bg="#ccc" rounded-2
           @mousedown="handleMouseDown"
         />
       </div>

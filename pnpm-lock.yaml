@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@antfu/eslint-config': ^0.35.2
+  '@iconify/json': ^2.2.23
   '@types/node': ^18.13.0
   '@vitejs/plugin-vue': ^4.0.0
   eslint: ^8.33.0
@@ -29,6 +30,7 @@ dependencies:
 
 devDependencies:
   '@antfu/eslint-config': 0.35.2_4vsywjlpuriuw3tl5oq6zy5a64
+  '@iconify/json': 2.2.23
   '@vitejs/plugin-vue': 4.0.0_vite@4.1.1+vue@3.2.47
   eslint: 8.33.0
   husky: 8.0.3
@@ -599,6 +601,13 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@iconify/json/2.2.23:
+    resolution: {integrity: sha512-zYQNe/FlZmKgaVu7xTuV1JYxBMt6MyNpLzu/UFuEoj40E5vRV41QVW2Q56+hYv74i4TGCGqpr7//EdKVR3/E+g==}
+    dependencies:
+      '@iconify/types': 2.0.0
+      pathe: 1.1.0
     dev: true
 
   /@iconify/types/2.0.0:
