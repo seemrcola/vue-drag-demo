@@ -44,8 +44,6 @@ export function useDrag(): UseDragResult {
   }
 
   function handleMouseDown(e: MouseEvent) {
-    e.stopPropagation()
-
     const { clientX, clientY } = e
     pointState.isDragging = true
 

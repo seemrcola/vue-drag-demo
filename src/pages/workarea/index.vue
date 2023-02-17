@@ -4,10 +4,10 @@ import Content from './content/index.vue'
 
 <template>
   <div wh-full flex>
-    <div h-full w-24 />
+    <div h-full w="240px" />
     <div h-full flex-1 bc-fdd>
       <Content />
     </div>
-    <div h-full w-24 />
+    <div h-full w="300px" />
   </div>
 </template>
