@@ -1,7 +1,7 @@
-import { KEYSMAP } from './types/useKeyboard'
+import { KEYSMAP } from './types/useKeyboard.d'
 
 // 处理键盘记录
-export function keyRecordHandle() {
+export function useKeyboard() {
   // 默认赋值
   window.$KeyboardActive = {
     ctrl: false,
