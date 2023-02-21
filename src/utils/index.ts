@@ -1,0 +1,1 @@
+export { imgGlob } from './glob'

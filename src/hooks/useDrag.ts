@@ -1,5 +1,5 @@
 /**
- * 拖拽逻辑
+ * shift + 鼠标的拖拽逻辑
  * 1.当点击画布的时候，鼠标按下，开始拖动（start = true）
  * 2.记录下开始的坐标 (startPoint)
  * 3.拖动之后，算出位移坐标 (dertaX, dertaY)
@@ -26,6 +26,8 @@ export function useDrag(): UseDragResult {
   }
 
   function handleMouseDown(e: MouseEvent) {
+    if (!e.shiftKey)
+      return
     const { clientX, clientY } = e
     pointState.isDragging = true
 
@@ -42,7 +44,7 @@ export function useDrag(): UseDragResult {
   function handleMouseMove(e: MouseEvent): boolean {
     const { clientX, clientY } = e
     // 如果没有开启移动锁，则直接return
-    if (!pointState.isDragging) {
+    if (!pointState.isDragging || !e.shiftKey) {
       derta.isChanged = false
       return false
     }

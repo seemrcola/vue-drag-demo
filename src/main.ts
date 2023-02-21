@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 // 基本样式
-import './style.css'
+import './style.scss'
 // 标尺样式
 import 'vue3-sketch-ruler/lib/style.css'
 // unocss
