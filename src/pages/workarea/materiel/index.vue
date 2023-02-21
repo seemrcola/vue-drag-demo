@@ -55,14 +55,23 @@ function changeImgSrc(imgSrc: string) {
 }
 function dragHandle(e: DragEvent) {
   const { dataTransfer } = e
-  // 给img设置宽高是不生效的,详见https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLImageElement/Image
-  const img = new Image()
-  img.src = imgsrc.value
-  // 计算偏移x,y
-  const { height, width } = img
-  dataTransfer!.setDragImage(img, width / 2, height / 2)
+  const target = e.target as HTMLImageElement
+  // 给Image()设置宽高是不生效的 ， cloneNode出来的也这样
+  // 详见https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLImageElement/Image
+  // const img = new Image()
+  // img.src = imgsrc.value
+  // const { height, width } = img
+
+  // 计算偏移x,y setDragImage是drag事件的特殊方法，详见mdn
+  // ！todo ！=> 直接改变e.target的宽高是可以的，但是cloneNode出来的不行，回头再写
+  // target.width = 200
+  // target.height = 200
+  // target.style.transform = 'scale(0.4)'
+  dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
 /********************************/
+
+/** * 拖拽结束时进入画布 ****/
 </script>
 
 <template>
