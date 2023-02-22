@@ -126,6 +126,7 @@ onUnmounted(() => {
     />
     <!-- 和标尺容器同级，一个定位容器，用于限制可视区域 -->
     <div
+      id="screen"
       ref="screensRef"
       absolute w="100%" h="100%"
       overflow-auto

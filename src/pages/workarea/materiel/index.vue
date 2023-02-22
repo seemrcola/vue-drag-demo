@@ -48,30 +48,27 @@ function linkPreviewImg(icon: Icon, idx: number) {
 }
 /********************************/
 
-/** 鼠标始终在图片中心的方案*********/
+/** 鼠标始终在图片中心的拖拽方案*********/
 const imgsrc = ref<string>('')
 function changeImgSrc(imgSrc: string) {
   imgsrc.value = imgSrc
 }
 function dragHandle(e: DragEvent) {
+  // cloneNode 和 new Image 出来的图片都无法处理宽高，只能先这样
   const { dataTransfer } = e
   const target = e.target as HTMLImageElement
-  // 给Image()设置宽高是不生效的 ， cloneNode出来的也这样
-  // 详见https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLImageElement/Image
-  // const img = new Image()
-  // img.src = imgsrc.value
-  // const { height, width } = img
-
-  // 计算偏移x,y setDragImage是drag事件的特殊方法，详见mdn
-  // ！todo ！=> 直接改变e.target的宽高是可以的，但是cloneNode出来的不行，回头再写
-  // target.width = 200
-  // target.height = 200
-  // target.style.transform = 'scale(0.4)'
   dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
 /********************************/
 
-/** * 拖拽结束时进入画布 ****/
+/** * 拖拽结束时组件放入画布 *******/
+function imgDragEnd(e: DragEvent) {
+  console.log(e)
+  // 判断一下是否进入画布内
+
+  // 进入画布则收集该组件信息
+}
+/*******************************/
 </script>
 
 <template>
@@ -117,9 +114,10 @@ function dragHandle(e: DragEvent) {
           f-c-c p-1 my-2 b="1px #fff solid" rounded-1 relative
         >
           <img
-            :id="item" :src="item"
+            :src="item"
             h-24 w-full rounded-1 cursor-move
             @dragstart="dragHandle"
+            @dragend="imgDragEnd"
             @mousedown="changeImgSrc(item)"
           >
         </div>

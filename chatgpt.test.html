@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>拖拽图片</title>
+    <style>
+      #container {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        border: 1px solid black;
+      }
+      #image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <img id="image" src="https://picsum.photos/200/300" draggable="true">
+    </div>
+    <script>
+      const container = document.getElementById('container')
+      const image = document.getElementById('image')
+      let isDragging = false
+      let startOffsetX, startOffsetY, startWidth, startHeight
+
+// 记录拖拽开始时的图片宽度和高度
+image.addEventListener('dragstart', (event) => {
+  isDragging = true
+  startOffsetX = event.clientX - image.offsetLeft
+  startOffsetY = event.clientY - image.offsetTop
+  startWidth = image.offsetWidth
+  startHeight = image.offsetHeight
+
+  // 创建一个新的图片元素
+  const dragImage = document.createElement('img')
+  dragImage.src = image.src
+  dragImage.style.width = `${startWidth}px`
+  dragImage.style.height = `${startHeight}px`
+
+  // 将新的图片元素作为拖拽的图像
+  event.dataTransfer.setDragImage(dragImage, startOffsetX, startOffsetY)
+})
+
+// 在拖拽结束时停止拖拽
+container.addEventListener('dragend', (event) => {
+        isDragging = false
+})
+    </script>
+  </body>
+</html>
