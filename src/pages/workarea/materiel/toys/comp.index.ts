@@ -1,15 +1,18 @@
-import { defineComponent } from 'vue'
-const requireComponent = import.meta.glob('./**/index.vue')
+const requireComponent = import.meta.glob(
+  './**/index.vue',
+  { eager: true },
+)
 
-export default Object.keys(requireComponent).map((fileName) => {
-  const componentConfig = defineComponent(() => requireComponent[fileName]())
+export const toysComponents
+  = Object.keys(requireComponent).map(async (fileName) => {
+    const component = await import(fileName)
 
-  const componentName = fileName
-    .replace(/^\.\//, '')
-    .replace(/\/index.vue$/, '')
+    const name = fileName
+      .replace(/^\.\//, '')
+      .replace(/\/index.vue$/, '')
 
-  return {
-    name: componentName,
-    component: componentConfig,
-  }
-})
+    return {
+      name,
+      component,
+    }
+  })

@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { shallowRef } from 'vue'
-import type { DefineComponent } from 'vue'
 
 export interface Component {
   id: string
@@ -10,7 +9,7 @@ export interface Component {
   clientY: number
   height: number
   width: number
-  component: DefineComponent
+  component: any // {name: string, component: any}
 }
 
 export const useViewStore = defineStore('view', () => {

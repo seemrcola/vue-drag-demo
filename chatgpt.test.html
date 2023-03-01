@@ -1,56 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>拖拽图片</title>
-    <style>
-      #container {
-        position: relative;
-        width: 500px;
-        height: 500px;
-        border: 1px solid black;
-      }
-      #image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container">
-      <img id="image" src="https://picsum.photos/200/300" draggable="true">
-    </div>
-    <script>
-      const container = document.getElementById('container')
-      const image = document.getElementById('image')
-      let isDragging = false
-      let startOffsetX, startOffsetY, startWidth, startHeight
 
-// 记录拖拽开始时的图片宽度和高度
-image.addEventListener('dragstart', (event) => {
-  isDragging = true
-  startOffsetX = event.clientX - image.offsetLeft
-  startOffsetY = event.clientY - image.offsetTop
-  startWidth = image.offsetWidth
-  startHeight = image.offsetHeight
+<head>
+  <title>组件拖拽示例</title>
+  <style>
+    #sidebar {
+      width: 200px;
+      height: 500px;
+      background-color: #ddd;
+      float: left;
+      padding: 10px;
+    }
 
-  // 创建一个新的图片元素
-  const dragImage = document.createElement('img')
-  dragImage.src = image.src
-  dragImage.style.width = `${startWidth}px`
-  dragImage.style.height = `${startHeight}px`
+    #canvas {
+      width: 500px;
+      height: 500px;
+      background-color: #fff;
+      float: left;
+      margin-left: 20px;
+      padding: 10px;
+    }
 
-  // 将新的图片元素作为拖拽的图像
-  event.dataTransfer.setDragImage(dragImage, startOffsetX, startOffsetY)
-})
+    .widget {
+      width: 100px;
+      height: 50px;
+      background-color: #888;
+      color: #fff;
+      text-align: center;
+      line-height: 50px;
+      cursor: move;
+    }
 
-// 在拖拽结束时停止拖拽
-container.addEventListener('dragend', (event) => {
-        isDragging = false
-})
-    </script>
-  </body>
+  </style>
+</head>
+
+<body>
+  <div id="sidebar">
+    <div class="widget">组件1</div>
+    <div class="widget">组件2</div>
+    <div class="widget">组件3</div>
+  </div>
+  <div id="canvas"></div>
+
+  <script>
+    let dragged
+    document.addEventListener('dragstart', (event) => {
+      dragged = event.target
+      event.dataTransfer.setData('text/plain', null)
+    })
+    document.addEventListener('dragover', (event) => {
+      event.preventDefault()
+    })
+    document.addEventListener('drop', (event) => {
+      event.preventDefault()
+      if (event.target.id === 'canvas')
+        event.target.appendChild(dragged.cloneNode(true))
+    })
+  </script>
+</body>
+
 </html>

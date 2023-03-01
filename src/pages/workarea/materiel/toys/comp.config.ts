@@ -1,5 +1,4 @@
-import type { DefineComponent } from 'vue'
-import toysComponents from './comp.index'
+import { toysComponents } from './comp.index'
 import type { Component } from '@/store/modules/view'
 
 interface ToysComponent extends Component {
@@ -10,7 +9,7 @@ interface ToysComponent extends Component {
   clientY: number
   width: number
   height: number
-  component: DefineComponent
+  component: any
 }
 
 export const toysComponentsConfig: ToysComponent[] = [
@@ -23,7 +22,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 500,
     clientX: 0,
     clientY: 0,
-    component: toysComponents[0].component,
+    component: toysComponents[0],
   },
   // plums
   {
@@ -34,6 +33,6 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 500,
     clientX: 0,
     clientY: 0,
-    component: toysComponents[1].component,
+    component: toysComponents[1],
   },
 ]

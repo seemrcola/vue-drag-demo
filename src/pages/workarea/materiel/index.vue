@@ -68,15 +68,16 @@ function dragHandle(e: DragEvent) {
 
 /** * 拖拽结束时组件放入画布 *******/
 function imgDragEnd(e: DragEvent, idx: number) {
-  console.log(e, 'xxxxxx')
   // 判断一下是否进入画布内
   const screen = document.getElementById('screen')
   const screenRect = screen!.getBoundingClientRect()
   const { clientX, clientY } = e
   if (clientX > screenRect.left && clientY > screenRect.top) {
+    console.log(e, 'xxxxxx')
     // 进入画布则收集该组件信息
     const targetComponent = { ...toysComponentsConfig[idx], id: uuidv4() }
     viewStore.addComponent(targetComponent)
+    console.log(viewStore.components, 'ccccccccccccc')
   }
 }
 /*******************************/

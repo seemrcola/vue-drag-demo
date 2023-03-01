@@ -4,6 +4,9 @@ import { SketchRule } from 'vue3-sketch-ruler'
 import { useRulerStore } from '@/store/modules/index'
 import { useViewStore } from '@/store/modules/view'
 
+// import A from '../materiel/toys/mines/index.vue'
+// console.log(A)
+
 /* useDrag */
 import { useDrag } from '@/hooks/useDrag'
 
@@ -129,7 +132,6 @@ onUnmounted(() => {
     />
     <!-- 和标尺容器同级，一个定位容器，用于限制可视区域 -->
     <div
-
       id="screen"
       ref="screensRef"
       absolute w="100%" h="100%"
@@ -150,8 +152,9 @@ onUnmounted(() => {
         >
           <Suspense>
             <component
-              :is="componentItem.component"
-              v-for="componentItem in viewStore.components" :key="componentItem.name"
+              :is="componentItem.component.component"
+              v-for="componentItem in viewStore.components"
+              :key="componentItem.name"
             />
           </Suspense>
         </div>
