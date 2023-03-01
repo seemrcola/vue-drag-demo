@@ -1,7 +1,12 @@
 <script setup lang='ts'>
 import { reactive, ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+import { toysComponentsConfig } from './toys/comp.config'
 import { compType } from '@/enum/materiel.enum'
 import { imgGlob } from '@/utils/index'
+import { useViewStore } from '@/store/modules/view'
+
+const viewStore = useViewStore()
 
 const toysModules = imgGlob(compType.TOYS)
 const shapeModules = imgGlob(compType.SHAPE)
@@ -62,11 +67,17 @@ function dragHandle(e: DragEvent) {
 /********************************/
 
 /** * 拖拽结束时组件放入画布 *******/
-function imgDragEnd(e: DragEvent) {
-  console.log(e)
+function imgDragEnd(e: DragEvent, idx: number) {
+  console.log(e, 'xxxxxx')
   // 判断一下是否进入画布内
-
-  // 进入画布则收集该组件信息
+  const screen = document.getElementById('screen')
+  const screenRect = screen!.getBoundingClientRect()
+  const { clientX, clientY } = e
+  if (clientX > screenRect.left && clientY > screenRect.top) {
+    // 进入画布则收集该组件信息
+    const targetComponent = { ...toysComponentsConfig[idx], id: uuidv4() }
+    viewStore.addComponent(targetComponent)
+  }
 }
 /*******************************/
 </script>
@@ -117,7 +128,7 @@ function imgDragEnd(e: DragEvent) {
             :src="item"
             h-24 w-full rounded-1 cursor-move
             @dragstart="dragHandle"
-            @dragend="imgDragEnd"
+            @dragend="e => imgDragEnd(e, idx)"
             @mousedown="changeImgSrc(item)"
           >
         </div>

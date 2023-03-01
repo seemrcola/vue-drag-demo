@@ -2,9 +2,12 @@
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
 import { useRulerStore } from '@/store/modules/index'
+import { useViewStore } from '@/store/modules/view'
 
 /* useDrag */
 import { useDrag } from '@/hooks/useDrag'
+
+const viewStore = useViewStore()
 
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
@@ -126,6 +129,7 @@ onUnmounted(() => {
     />
     <!-- 和标尺容器同级，一个定位容器，用于限制可视区域 -->
     <div
+
       id="screen"
       ref="screensRef"
       absolute w="100%" h="100%"
@@ -143,7 +147,14 @@ onUnmounted(() => {
           :style="canvasStyle"
           absolute bg="#ccc" rounded-2
           @mousedown="handleMouseDown"
-        />
+        >
+          <Suspense>
+            <component
+              :is="componentItem.component"
+              v-for="componentItem in viewStore.components" :key="componentItem.name"
+            />
+          </Suspense>
+        </div>
       </div>
     </div>
   </div>
@@ -154,7 +165,7 @@ onUnmounted(() => {
   position: relative;
   /*
    * 特别注意,这个width要和传入组件的width成对应关系,
-   * 也就是 580width +thick20 = 600
+   * 也就是 580width +thick20 = 60
    * 不过我这里就直接给100%了
    */
   width: 100%;
