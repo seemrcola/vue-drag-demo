@@ -4,8 +4,8 @@ const requireComponent = import.meta.glob(
 )
 
 export const toysComponents
-  = Object.keys(requireComponent).map(async (fileName) => {
-    const component = await import(fileName)
+  = Object.keys(requireComponent).map((fileName) => {
+    const component = (requireComponent[fileName] as any).default
 
     const name = fileName
       .replace(/^\.\//, '')

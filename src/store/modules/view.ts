@@ -9,7 +9,10 @@ export interface Component {
   clientY: number
   height: number
   width: number
-  component: any // {name: string, component: any}
+  component: {
+    component: any
+    name: string
+  }
 }
 
 export const useViewStore = defineStore('view', () => {

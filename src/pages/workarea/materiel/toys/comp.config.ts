@@ -9,7 +9,10 @@ interface ToysComponent extends Component {
   clientY: number
   width: number
   height: number
-  component: any
+  component: {
+    component: any
+    name: string
+  }
 }
 
 export const toysComponentsConfig: ToysComponent[] = [
