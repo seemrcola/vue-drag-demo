@@ -4,9 +4,6 @@ import { SketchRule } from 'vue3-sketch-ruler'
 import { useRulerStore } from '@/store/modules/index'
 import { useViewStore } from '@/store/modules/view'
 
-// import A from '../materiel/toys/mines/index.vue'
-// console.log(A)
-
 /* useDrag */
 import { useDrag } from '@/hooks/useDrag'
 
@@ -150,13 +147,12 @@ onUnmounted(() => {
           absolute bg="#ccc" rounded-2
           @mousedown="handleMouseDown"
         >
-          <Suspense>
-            <component
-              :is="componentItem.component.component"
-              v-for="componentItem in viewStore.components"
-              :key="componentItem.name"
-            />
-          </Suspense>
+          <component
+            :is="componentItem.component.component"
+            v-for="componentItem in viewStore.components"
+            :key="componentItem.name"
+            :style="viewStore.setComponentStyle(componentItem)"
+          />
         </div>
       </div>
     </div>

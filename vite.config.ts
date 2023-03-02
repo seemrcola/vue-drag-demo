@@ -4,18 +4,25 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Unocss from 'unocss/vite'
 
-import { pluginSetup } from './build/index'
+import { rollupPluginSetup, vitePluginSetup } from './build/index'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     Unocss(),
-    ...pluginSetup(),
+    ...vitePluginSetup(),
   ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+    },
+  },
+  build: {
+    rollupOptions: {
+      plugins: [
+        ...rollupPluginSetup(),
+      ],
     },
   },
 })

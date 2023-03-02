@@ -131,13 +131,14 @@ function checkGameStatus() {
 </script>
 
 <template>
-  <div>
-    <p text-sm mb-4>
+  <div border="2px solid #666" bg="#fff" p-1 rounded-2>
+    <p text-sm mb-4 color="#000">
       炸弹已生成：「{{ minesCount }}」
     </p>
     <div v-for="(list, index) of state" :key="index" flex="~">
       <Block
-        v-for="(block, index) of list" :key="index" :block="block" @block-click="blockClick"
+        v-for="(block, index) of list" :key="index"
+        :block="block" @block-click="blockClick"
         @right-click="rightClick"
       />
     </div>

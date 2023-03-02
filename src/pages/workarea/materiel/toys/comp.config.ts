@@ -1,7 +1,8 @@
+import type { Component } from 'vue'
 import { toysComponents } from './comp.index'
-import type { Component } from '@/store/modules/view'
+import type { IComponent } from '@/store/modules/view'
 
-interface ToysComponent extends Component {
+interface ToysComponent extends IComponent {
   type: string
   id: string
   name: string
@@ -10,7 +11,7 @@ interface ToysComponent extends Component {
   width: number
   height: number
   component: {
-    component: any
+    component: Component
     name: string
   }
 }
