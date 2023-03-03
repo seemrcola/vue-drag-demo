@@ -6,8 +6,8 @@ interface ToysComponent extends IComponent {
   type: string
   id: string
   name: string
-  clientX: number
-  clientY: number
+  x: number
+  y: number
   width: number
   height: number
   component: {
@@ -22,10 +22,10 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: 'toys',
     name: 'minesweeper',
     id: '',
-    height: 600,
-    width: 500,
-    clientX: 0,
-    clientY: 0,
+    height: 400,
+    width: 350,
+    x: 0,
+    y: 0,
     component: toysComponents[0],
   },
   // plums
@@ -33,10 +33,10 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: 'toys',
     name: 'plums',
     id: '',
-    height: 500,
-    width: 500,
-    clientX: 0,
-    clientY: 0,
+    height: 400,
+    width: 400,
+    x: 0,
+    y: 0,
     component: toysComponents[1],
   },
 ]

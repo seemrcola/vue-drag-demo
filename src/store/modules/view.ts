@@ -5,8 +5,8 @@ export interface IComponent {
   id: string
   type: string
   name: string
-  clientX: number
-  clientY: number
+  x: number
+  y: number
   height: number
   width: number
   component: {
@@ -31,8 +31,9 @@ export const useViewStore = defineStore('view', () => {
     console.log('setComponentStyle')
     return {
       position: 'absolute',
-      left: component.clientX,
-      top: component.clientY,
+      left: `${component.x}px`,
+      top: `${component.y}px`,
+      // 'border-color': 'red',
     }
   }
 

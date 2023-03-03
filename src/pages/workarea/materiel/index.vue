@@ -5,8 +5,10 @@ import { toysComponentsConfig } from './toys/comp.config'
 import { compType } from '@/enum/materiel.enum'
 import { imgGlob } from '@/utils/index'
 import { useViewStore } from '@/store/modules/view'
+import { useRulerStore } from '@/store/modules/ruler'
 
 const viewStore = useViewStore()
+const rulerStore = useRulerStore()
 
 const toysModules = imgGlob(compType.TOYS)
 const shapeModules = imgGlob(compType.SHAPE)
@@ -62,6 +64,16 @@ function dragHandle(e: DragEvent) {
   // cloneNode 和 new Image 出来的图片都无法处理宽高，只能先这样
   const { dataTransfer } = e
   const target = e.target as HTMLImageElement
+  // *******************************************************************
+  // ** !!这里做个解释
+  // ** 当drag操作自定义拖动图片，并且改变了dataTransfer!.setDragImage(img, x, y)
+  // ** 此时当drag操作结束时，dragend获取clientX喝clientY都会受到这个x和y的影响
+  // ** 把dragend绑定在document上就不会有这个问题
+  // ** 但是dragend绑定在和dragstart一样的元素上时就会造成clientX和clientY的偏移
+  // ** fix: 但是为了记录这个操作，我决定在window上加个属性来打补丁，并提醒自己。
+  //* ******************************************************************
+  window.$fixClientX = target.width / 2
+  window.$fixClientY = target.height / 2
   dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
 /********************************/
@@ -69,12 +81,19 @@ function dragHandle(e: DragEvent) {
 /** * 拖拽结束时组件放入画布 *******/
 function imgDragEnd(e: DragEvent, idx: number) {
   // 判断一下是否进入画布内
-  const screen = document.getElementById('screen')
-  const screenRect = screen!.getBoundingClientRect()
+  const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
+  const { width, height } = toysComponentsConfig[idx]
   const { clientX, clientY } = e
-  if (clientX > screenRect.left && clientY > screenRect.top) {
-    // 进入画布则收集该组件信息
-    const targetComponent = { ...toysComponentsConfig[idx], id: uuidv4() }
+  // 计算坐标点
+  const x
+  = (clientX - left - window.$fixClientX) / rulerStore.rulerOptions.scale - width / 2
+  const y
+  = (clientY - top + window.$fixClientY) / rulerStore.rulerOptions.scale - height / 2
+  // 进入画布则收集该组件信息
+  if (clientX > left && clientY > top) {
+    const targetComponent = {
+      ...toysComponentsConfig[idx], id: uuidv4(), x, y,
+    }
     viewStore.addComponent(targetComponent)
   }
 }
@@ -127,7 +146,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
             :src="item"
             h-24 w-full rounded-1 cursor-move
             @dragstart="dragHandle"
-            @dragend="e => { e.preventDefault(); imgDragEnd(e, idx) } "
+            @dragend="e => imgDragEnd(e, idx)"
             @mousedown="changeImgSrc(item)"
           >
         </div>
