@@ -146,6 +146,7 @@ onUnmounted(() => {
           :style="canvasStyle"
           absolute bg="#ccc" rounded-2
           @mousedown="handleMouseDown"
+          @dragover="e => e.preventDefault()"
         >
           <component
             :is="componentItem.component.component"

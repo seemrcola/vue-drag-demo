@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { shallowRef } from 'vue'
+import { markRaw, ref } from 'vue'
 
 export interface IComponent {
   id: string
@@ -16,10 +16,10 @@ export interface IComponent {
 }
 
 export const useViewStore = defineStore('view', () => {
-  const components = shallowRef<IComponent[]>([])
+  const components = ref<IComponent[]>([])
 
   function addComponent(component: IComponent) {
-    components.value.push(component)
+    components.value.push(markRaw(component))
   }
 
   function removeComponent(component: IComponent) {
@@ -28,9 +28,11 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function setComponentStyle(component: IComponent) {
-    console.log('dfdf')
+    console.log('setComponentStyle')
     return {
       position: 'absolute',
+      left: component.clientX,
+      top: component.clientY,
     }
   }
 

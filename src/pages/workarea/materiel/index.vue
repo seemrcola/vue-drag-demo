@@ -53,7 +53,7 @@ function linkPreviewImg(icon: Icon, idx: number) {
 }
 /********************************/
 
-/** 鼠标始终在图片中心的拖拽方案*********/
+/** 鼠标始终在图片中心的拖拽方案*******/
 const imgsrc = ref<string>('')
 function changeImgSrc(imgSrc: string) {
   imgsrc.value = imgSrc
@@ -73,11 +73,9 @@ function imgDragEnd(e: DragEvent, idx: number) {
   const screenRect = screen!.getBoundingClientRect()
   const { clientX, clientY } = e
   if (clientX > screenRect.left && clientY > screenRect.top) {
-    console.log(e, 'xxxxxx')
     // 进入画布则收集该组件信息
     const targetComponent = { ...toysComponentsConfig[idx], id: uuidv4() }
     viewStore.addComponent(targetComponent)
-    console.log(viewStore.components, 'ccccccccccccc')
   }
 }
 /*******************************/
@@ -129,7 +127,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
             :src="item"
             h-24 w-full rounded-1 cursor-move
             @dragstart="dragHandle"
-            @dragend="e => imgDragEnd(e, idx)"
+            @dragend="e => { e.preventDefault(); imgDragEnd(e, idx) } "
             @mousedown="changeImgSrc(item)"
           >
         </div>

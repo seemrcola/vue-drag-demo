@@ -54,7 +54,7 @@ function step(b: Line) {
   branches++
   drawLine(b)
   const end = getEndPoint(b)
-  if (branches < 3 || Math.random() > 0.5) {
+  if (branches < 6 || Math.random() > 0.5) {
     penddingTask.push(() => step({
       start: end,
       theta: b.theta - 0.2,
@@ -105,5 +105,5 @@ function arcTo(p: Point) {
 </script>
 
 <template>
-  <canvas ref="el" :height="400" :width="400" b color="#000" />
+  <canvas ref="el" :height="400" :width="400" b bg="#444" />
 </template>
