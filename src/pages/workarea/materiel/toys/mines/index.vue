@@ -123,9 +123,9 @@ function checkGameStatus() {
   const blocks = state.flat()
   if (blocks.every(block => block.revealed || block.flag)) {
     if (blocks.some(block => block.flag && !block.mine))
-      alert('YOU CHEAT')
+      console.log('YOU CHEAT')
     else
-      alert('YOU WIN')
+      console.log('YOU WIN')
   }
 }
 </script>
@@ -137,7 +137,7 @@ function checkGameStatus() {
     </p>
     <div v-for="(list, index) of state" :key="index" flex="~">
       <Block
-        v-for="(block, index) of list" :key="index"
+        v-for="(block, idx) of list" :key="idx"
         :block="block" @block-click="blockClick"
         @right-click="rightClick"
       />

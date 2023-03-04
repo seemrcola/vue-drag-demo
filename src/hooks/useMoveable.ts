@@ -7,6 +7,11 @@ export function useMoveable() {
     selectTarget.value = `#${(comp).id}`
   }
 
+  function dropComponent() {
+    console.log('fdfdxxxxxxxxs')
+    selectTarget.value = ''
+  }
+
   function getDom() {
     return document.querySelector(selectTarget.value) as HTMLSelectElement
   }
@@ -30,7 +35,8 @@ export function useMoveable() {
     onRotate,
     onDrag,
     onScale,
-    selectComponent,
     selectTarget,
+    selectComponent,
+    dropComponent,
   }
 }

@@ -100,11 +100,20 @@ const handleSrcollBar = () => {
 }
 
 function eventInit() {
-  window.addEventListener('mousemove', handleSrcollBar)
+  document.addEventListener('mousemove', handleSrcollBar)
 }
 
 // moveable------------------------------------------
-const { onDrag, onRotate, onScale, selectComponent, selectTarget } = useMoveable()
+const {
+  onDrag,
+  onRotate,
+  onScale,
+  selectComponent,
+  dropComponent,
+  selectTarget,
+}
+= useMoveable()
+document.addEventListener('click', dropComponent)
 // ---------------------------------------------------------
 
 onMounted(() => {
@@ -116,7 +125,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('mousemove', handleSrcollBar)
+  document.removeEventListener('mousemove', handleSrcollBar)
 })
 </script>
 
@@ -170,6 +179,7 @@ onUnmounted(() => {
             :id="componentItem.id"
             :key="componentItem.name"
             :style="viewStore.setComponentStyle(componentItem)"
+            class="component"
             @click.stop="selectComponent(componentItem)"
           />
         </div>
@@ -183,12 +193,17 @@ onUnmounted(() => {
   position: relative;
   /*
    * 特别注意,这个width要和传入组件的width成对应关系,
-   * 也就是 580width +thick20 = 60
+   * 也就是 580width +thick20 = 600
    * 不过我这里就直接给100%了
    */
   width: 100%;
   height: 100%;
   background-color: #333;
   border: 1px solid #dadadc;
+}
+.component {
+  &:hover {
+    box-shadow: 0px 0px 2px 2px #4af;
+  }
 }
 </style>

@@ -150,10 +150,10 @@ function imgDragEnd(e: DragEvent, idx: number) {
         >
           <img
             :src="item"
-            h-24 w-full rounded-1 cursor-move
+            h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
             @dragstart="dragHandle"
             @dragend="e => imgDragEnd(e, idx)"
-            @mousedown="changeImgSrc(item)"
+            @click.stop="changeImgSrc(item)"
           >
         </div>
       </div>
