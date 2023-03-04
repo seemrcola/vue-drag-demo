@@ -10,7 +10,7 @@
 
 import { onUnmounted } from 'vue'
 
-import type { DertaState, DragState, UseDragResult } from './types/useDrag'
+import type { DertaState, DragState, UseDragResult } from './types/useDrag.d'
 
 export function useDrag(): UseDragResult {
   let pointState: DragState = {

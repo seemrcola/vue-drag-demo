@@ -90,9 +90,15 @@ function imgDragEnd(e: DragEvent, idx: number) {
   const y
   = (clientY - top + window.$fixClientY) / rulerStore.rulerOptions.scale - height / 2
   // 进入画布则收集该组件信息
-  if (clientX > left && clientY > top) {
+  if (
+    (clientX - window.$fixClientX) > left
+    && (clientY + window.$fixClientY) > top
+  ) {
     const targetComponent = {
-      ...toysComponentsConfig[idx], id: uuidv4(), x, y,
+      ...toysComponentsConfig[idx],
+      id: `wrapper${uuidv4().split('-')[0]}`,
+      x,
+      y,
     }
     viewStore.addComponent(targetComponent)
   }

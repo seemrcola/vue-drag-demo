@@ -39,4 +39,14 @@ export const toysComponentsConfig: ToysComponent[] = [
     y: 0,
     component: toysComponents[1],
   },
+  {
+    type: 'toys',
+    name: 'random',
+    id: '',
+    height: 200,
+    width: 200,
+    x: 0,
+    y: 0,
+    component: toysComponents[2],
+  },
 ]

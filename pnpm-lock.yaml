@@ -22,6 +22,7 @@ specifiers:
   vue-demi: ^0.13.11
   vue-router: '4'
   vue-tsc: ^1.0.24
+  vue3-moveable: ^0.18.1
   vue3-sketch-ruler: ^1.3.9
 
 dependencies:
@@ -33,6 +34,7 @@ dependencies:
   vue: 3.2.47
   vue-demi: 0.13.11_vue@3.2.47
   vue-router: 4.1.6_vue@3.2.47
+  vue3-moveable: 0.18.1
   vue3-sketch-ruler: 1.3.9_vue@3.2.47
 
 devDependencies:
@@ -364,6 +366,24 @@ packages:
       '@babel/helper-string-parser': 7.19.4
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
+
+  /@daybrush/utils/1.10.2:
+    resolution: {integrity: sha512-fNMWeGUDokdIpebU8oIBUXkyGYITCwwodBfgx277p8d+kvI+k9wdFtKtdY4mvbWxhbAwuWprtVDq8My3KQ24Dg==}
+    dev: false
+
+  /@egjs/agent/2.4.3:
+    resolution: {integrity: sha512-XvksSENe8wPeFlEVouvrOhKdx8HMniJ3by7sro2uPF3M6QqWwjzVcmvwoPtdjiX8O1lfRoLhQMp1a7NGlVTdIA==}
+    dev: false
+
+  /@egjs/children-differ/1.0.1:
+    resolution: {integrity: sha512-DRvyqMf+CPCOzAopQKHtW+X8iN6Hy6SFol+/7zCUiE5y4P/OB8JP8FtU4NxtZwtafvSL4faD5KoQYPj3JHzPFQ==}
+    dependencies:
+      '@egjs/list-differ': 1.0.0
+    dev: false
+
+  /@egjs/list-differ/1.0.0:
+    resolution: {integrity: sha512-HsbMKc0ZAQH+EUeCmI/2PvTYSybmkaWwakU8QGDYYgMVIg9BQ5sM0A0Nnombjxo2+JzXHxmH+jw//yGX+y6GYw==}
+    dev: false
 
   /@esbuild/android-arm/0.16.17:
     resolution: {integrity: sha512-N9x1CMXVhtWEAMS7pNNONyA14f71VPQN9Cnavj1XQh6T7bskqiLLrSca4O0Vr8Wdcga943eThxnVp3JLnBMYtw==}
@@ -764,6 +784,25 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
+
+  /@scena/dragscroll/1.4.0:
+    resolution: {integrity: sha512-3O8daaZD9VXA9CP3dra6xcgt/qrm0mg0xJCwiX6druCteQ9FFsXffkF8PrqxY4Z4VJ58fFKEa0RlKqbsi/XnRA==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      '@scena/event-emitter': 1.0.5
+    dev: false
+
+  /@scena/event-emitter/1.0.5:
+    resolution: {integrity: sha512-AzY4OTb0+7ynefmWFQ6hxDdk0CySAq/D4efljfhtRHCOP7MBF9zUfhKG3TJiroVjASqVgkRJFdenS8ArZo6Olg==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+    dev: false
+
+  /@scena/matrix/1.1.1:
+    resolution: {integrity: sha512-JVKBhN0tm2Srl+Yt+Ywqu0oLgLcdemDQlD1OxmN9jaCTwaFPZ7tY8n6dhVgMEaR9qcR7r+kAlMXnSfNyYdE+Vg==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+    dev: false
 
   /@types/eslint/8.21.0:
     resolution: {integrity: sha512-35EhHNOXgxnUgh4XCJsGhE7zdlDhYDN/aMG6UbkByCFFNgQ7b3U+uVoqBpicFydR8JEfgdjCF7SJ7MiJfzuiTA==}
@@ -1628,6 +1667,22 @@ packages:
       which: 2.0.2
     dev: true
 
+  /css-styled/1.0.1_@daybrush+utils@1.10.2:
+    resolution: {integrity: sha512-psJCbNDPPusDBWH/gszP6BetPh577QaqpvaysTNPitxX0nxdGiTgELiOCus0gZ0yXk3gvjShBrFP07nvn58/TQ==}
+    peerDependencies:
+      '@daybrush/utils': '>=1.0.0'
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      string-hash: 1.1.3
+    dev: false
+
+  /css-to-mat/1.0.3:
+    resolution: {integrity: sha512-HADRhVqPc8wFqEp6ClK+uuPYg+FMBinNo2ReLyI/KQCncmHPJ60o5zldyJG7NjsTqXWbdfGJO51jnoxfMvWJiA==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      '@scena/matrix': 1.1.1
+    dev: false
+
   /css-tree/2.3.1:
     resolution: {integrity: sha512-6Fv1DV/TYw//QF5IzQdqsNDjx/wc8TrMBZsqjL9eW01tWb7R7k/mq+/VXfJCl7SoD5emsJop9cOByJZfs8hYIw==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
@@ -2437,6 +2492,10 @@ packages:
       is-callable: 1.2.7
     dev: true
 
+  /framework-utils/1.1.0:
+    resolution: {integrity: sha512-KAfqli5PwpFJ8o3psRNs8svpMGyCSAe8nmGcjQ0zZBWN2H6dZDnq+ABp3N3hdUmFeMrLtjOCTXD4yplUJIWceg==}
+    dev: false
+
   /fs-minipass/2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
     engines: {node: '>= 8'}
@@ -2478,6 +2537,13 @@ packages:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
     dev: true
+
+  /gesto/1.15.1:
+    resolution: {integrity: sha512-mqdBeVeYpymupHojEEyH33u0KvL/hbG6gKbqoQKoR7aeWrN82CIXYZkAo4Ie81PUhxS5HNDdmJVcSzqOpPm0JQ==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      '@scena/event-emitter': 1.0.5
+    dev: false
 
   /get-caller-file/2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
@@ -3273,6 +3339,15 @@ packages:
       ufo: 1.0.1
     dev: true
 
+  /moveable/0.43.1:
+    resolution: {integrity: sha512-D533ZWgftClA0dVN1IrctxCFEYsRKDsQcT4VneI02TJu2N2ArtaPwkYi6Je/ZHx9ShxKbdS8iCzUkDLy1+yOyA==}
+    dependencies:
+      '@scena/event-emitter': 1.0.5
+      react-compat-moveable: 0.31.1
+      react-moveable: 0.46.1
+      react-simple-compat: 1.2.3
+    dev: false
+
   /mri/1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -3431,6 +3506,12 @@ packages:
   /os-tmpdir/1.0.2:
     resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /overlap-area/1.1.0:
+    resolution: {integrity: sha512-3dlJgJCaVeXH0/eZjYVJvQiLVVrPO4U1ZGqlATtx6QGO3b5eNM6+JgUKa7oStBTdYuGTk7gVoABCW6Tp+dhRdw==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
     dev: false
 
   /p-limit/2.3.0:
@@ -3624,6 +3705,67 @@ packages:
       destr: 1.2.2
       flat: 5.0.2
     dev: true
+
+  /react-compat-css-styled/1.0.9:
+    resolution: {integrity: sha512-YpUgTpXU1wR58aPQJVGAWq6QeEFWkafV0qq4Y8KRUwpQJLbJF2GYu5ZQ/kafHGvN3dqQX2e340NlNZ+zbZZv2w==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      css-styled: 1.0.1_@daybrush+utils@1.10.2
+      framework-utils: 1.1.0
+      react-css-styled: 1.0.4_@daybrush+utils@1.10.2
+    dev: false
+
+  /react-compat-moveable/0.31.1:
+    resolution: {integrity: sha512-PI1YmWeJnGR00sG+4RJvfxjYcGQ0HpMFK3gVAyjh9Y7GGFo3GPms55JNyRK9UYYw47ik0Vx3mHEr90l5ZUNK7Q==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      '@egjs/agent': 2.4.3
+      '@egjs/children-differ': 1.0.1
+      '@egjs/list-differ': 1.0.0
+      '@scena/dragscroll': 1.4.0
+      '@scena/event-emitter': 1.0.5
+      '@scena/matrix': 1.1.1
+      css-to-mat: 1.0.3
+      framework-utils: 1.1.0
+      gesto: 1.15.1
+      overlap-area: 1.1.0
+      react-compat-css-styled: 1.0.9
+      react-css-styled: 1.0.4_@daybrush+utils@1.10.2
+      react-moveable: 0.46.1
+    dev: false
+
+  /react-css-styled/1.0.4_@daybrush+utils@1.10.2:
+    resolution: {integrity: sha512-nRske1bAKOCaf7Gf3o76tKQFIYggaW1qH4rutBlitH5lYnRPA7WoAYKrcxqdUPZd00oASg3SvFZSh3Mc1Wvj3w==}
+    dependencies:
+      css-styled: 1.0.1_@daybrush+utils@1.10.2
+      framework-utils: 1.1.0
+    transitivePeerDependencies:
+      - '@daybrush/utils'
+    dev: false
+
+  /react-moveable/0.46.1:
+    resolution: {integrity: sha512-Xi+64z51p7nrXwu3PeTUCoOYgRUwaZ6wxkrrbLAxYIqEd9Mfu/WHdiWzp5sp0kHsegJPX2t+XEErTmulAEQaIQ==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      '@egjs/agent': 2.4.3
+      '@egjs/children-differ': 1.0.1
+      '@egjs/list-differ': 1.0.0
+      '@scena/dragscroll': 1.4.0
+      '@scena/event-emitter': 1.0.5
+      '@scena/matrix': 1.1.1
+      css-to-mat: 1.0.3
+      framework-utils: 1.1.0
+      gesto: 1.15.1
+      overlap-area: 1.1.0
+      react-css-styled: 1.0.4_@daybrush+utils@1.10.2
+    dev: false
+
+  /react-simple-compat/1.2.3:
+    resolution: {integrity: sha512-vYepRjSriGRyEmFtSsTQoHWVQRbBMYR4ONATeZtuf8GDY8jWGkc6R4+lIb5rVhPBIkx3ru68bpl+9r8V4YA/nA==}
+    dependencies:
+      '@daybrush/utils': 1.10.2
+      '@egjs/list-differ': 1.0.0
+    dev: false
 
   /read-pkg-up/7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}
@@ -3926,6 +4068,10 @@ packages:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
     engines: {node: '>=10.0.0'}
     dev: true
+
+  /string-hash/1.1.3:
+    resolution: {integrity: sha512-kJUvRUFK49aub+a7T1nNE66EJbZBMnBgoC1UbCZ5n6bsZKBRga4KgBRTMn/pFkeCZSYtNeSyMxPDM0AXWELk2A==}
+    dev: false
 
   /string-width/4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -4451,6 +4597,13 @@ packages:
       '@vue/runtime-dom': 3.2.47
       '@vue/server-renderer': 3.2.47_vue@3.2.47
       '@vue/shared': 3.2.47
+
+  /vue3-moveable/0.18.1:
+    resolution: {integrity: sha512-mnfKn2BjQleowrcnLVRIJr7hic7xS3tHKUDOd2GCRaBCz63vOxKPkxLyWiKjaGlQzddrEONYHvPjqICv6gzFoQ==}
+    dependencies:
+      framework-utils: 1.1.0
+      moveable: 0.43.1
+    dev: false
 
   /vue3-sketch-ruler/1.3.9_vue@3.2.47:
     resolution: {integrity: sha512-sLlxGWEJOgDWcX5i7AE20WzBxQ/GvGwNP+oVOIeiYoCPe/NPSU15WsWgtc0b/enGvUgwJexqtA/+QnH1okBc9A==}

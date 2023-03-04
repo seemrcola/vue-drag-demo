@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
+import Moveable from 'vue3-moveable'
 import { useRulerStore } from '@/store/modules/index'
 import { useViewStore } from '@/store/modules/view'
 
 /* useDrag */
 import { useDrag } from '@/hooks/useDrag'
+/* useMoveable */
+import { useMoveable } from '@/hooks/useMoveable'
 
 const viewStore = useViewStore()
 
@@ -100,6 +103,10 @@ function eventInit() {
   window.addEventListener('mousemove', handleSrcollBar)
 }
 
+// moveable------------------------------------------
+const { onDrag, onRotate, onScale, selectComponent, selectTarget } = useMoveable()
+// ---------------------------------------------------------
+
 onMounted(() => {
   rulerInit() // 初始化尺子，尺子的宽高和screen可视容器px像素对应，先获取宽高再赋值给尺子
   screenInit() // 可视区域初始化，让滚动条滚到中间
@@ -148,11 +155,22 @@ onUnmounted(() => {
           @mousedown="handleMouseDown"
           @dragover="e => e.preventDefault()"
         >
+          <Moveable
+            :target="selectTarget"
+            :draggable="true"
+            :scalable="true"
+            :rotatable="true"
+            @drag="onDrag"
+            @scale="onScale"
+            @rotate="onRotate"
+          />
           <component
             :is="componentItem.component.component"
             v-for="componentItem in viewStore.components"
+            :id="componentItem.id"
             :key="componentItem.name"
             :style="viewStore.setComponentStyle(componentItem)"
+            @click.stop="selectComponent(componentItem)"
           />
         </div>
       </div>

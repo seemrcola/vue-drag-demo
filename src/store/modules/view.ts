@@ -28,7 +28,6 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function setComponentStyle(component: IComponent) {
-    console.log('setComponentStyle')
     return {
       position: 'absolute',
       left: `${component.x}px`,

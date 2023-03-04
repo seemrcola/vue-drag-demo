@@ -19,6 +19,7 @@
     "vue": "^3.2.45",
     "vue-demi": "^0.13.11",
     "vue-router": "4",
+    "vue3-moveable": "^0.18.1",
     "vue3-sketch-ruler": "^1.3.9"
   },
   "devDependencies": {
