@@ -152,8 +152,8 @@ function imgDragEnd(e: DragEvent, idx: number) {
             :src="item"
             h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
             @dragstart="dragHandle"
-            @dragend="e => imgDragEnd(e, idx)"
-            @click.stop="changeImgSrc(item)"
+            @dragend="imgDragEnd($event, idx)"
+            @mousedown.stop="changeImgSrc(item)"
           >
         </div>
       </div>

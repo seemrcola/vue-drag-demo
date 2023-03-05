@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 
+// 暂定方案：
+// hover和按下一样了，就拖，要不然赋值回hover的
 export function useMoveable() {
   const selectTarget = ref<string>('')
 
@@ -8,7 +10,6 @@ export function useMoveable() {
   }
 
   function dropComponent() {
-    console.log('fdfdxxxxxxxxs')
     selectTarget.value = ''
   }
 
@@ -17,6 +18,7 @@ export function useMoveable() {
   }
 
   function onDrag({ transform }: any) {
+    console.log('draging')
     const target = getDom()
     target.style.transform = transform
   }

@@ -109,8 +109,8 @@ const {
   onRotate,
   onScale,
   selectComponent,
-  dropComponent,
   selectTarget,
+  dropComponent,
 }
 = useMoveable()
 document.addEventListener('click', dropComponent)

@@ -11,7 +11,7 @@ export const useRulerStore = defineStore('ruler', () => {
     width: 0,
     thick: 20, // 尺子厚度，即标尺本身所占宽度
     isShowRuler: true, // 显示标尺
-    isShowReferLine: true, // 显示参考线
+    isShowReferLine: false, // 显示参考线
 
     palette: { // 基础样式
       bgColor: '#181b24',

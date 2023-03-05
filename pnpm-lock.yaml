@@ -8,6 +8,7 @@ specifiers:
   '@vitejs/plugin-vue': ^4.0.0
   eslint: ^8.33.0
   husky: ^8.0.3
+  moveable: ^0.43.1
   pinia: ^2.0.30
   rollup-plugin-visualizer: ^5.9.0
   sass: ^1.58.0
@@ -28,6 +29,7 @@ specifiers:
 dependencies:
   '@types/node': 18.13.0
   '@types/uuid': 9.0.1
+  moveable: 0.43.1
   pinia: 2.0.30_hmuptsblhheur2tugfgucj7gc4
   tiny-compress-images: 3.2.0
   uuid: 9.0.0
