@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-
+console.log('random render')
 </script>
 
 <template>
