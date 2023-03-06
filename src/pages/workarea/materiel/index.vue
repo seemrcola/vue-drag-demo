@@ -4,8 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { toysComponentsConfig } from './toys/comp.config'
 import { compType } from '@/enum/materiel.enum'
 import { imgGlob } from '@/utils/index'
-import { useViewStore } from '@/store/modules/view'
-import { useRulerStore } from '@/store/modules/ruler'
+import { useRulerStore, useViewStore } from '@/store/modules/index'
 
 const viewStore = useViewStore()
 const rulerStore = useRulerStore()
@@ -70,7 +69,7 @@ function dragHandle(e: DragEvent) {
   // ** 此时当drag操作结束时，dragend获取clientX喝clientY都会受到这个x和y的影响
   // ** 把dragend绑定在document上就不会有这个问题
   // ** 但是dragend绑定在和dragstart一样的元素上时就会造成clientX和clientY的偏移
-  // ** fix: 但是为了记录这个操作，我决定在window上加个属性来打补丁，并提醒自己。
+  // ** fix: 但是为了记录这个操作，我决定在window上加个属性来打补丁，以提醒自己这个知识点。
   //* ******************************************************************
   window.$fixClientX = target.width / 2
   window.$fixClientY = target.height / 2

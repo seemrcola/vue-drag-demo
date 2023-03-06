@@ -2,8 +2,7 @@
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
 import Moveable from 'vue3-moveable'
-import { useRulerStore } from '@/store/modules/index'
-import { useViewStore } from '@/store/modules/view'
+import { useRulerStore, useViewStore } from '@/store/modules/index'
 
 /* useDrag */
 import { useDrag } from '@/hooks/useDrag'
@@ -60,6 +59,13 @@ function rulerInit() {
   rulerStore.setRulerSize(workareaRect)
 }
 
+// 窗口缩放监听----------------------------------------
+function windowResizeHandle() {
+  console.log('resize')
+  rulerInit()
+}
+// --------------------------------------------------
+
 function containerInit() {
   const canvasRect = canvasRef.value!.getBoundingClientRect()
   // 背景板大小处理, canvas两倍大小
@@ -85,8 +91,8 @@ function canvasInit() {
     const { clientHeight, clientWidth } = canvasRef.value!
     // clientHeight, clientWidth是可视宽高
     // console.log(clientHeight, clientWidth)
-    canvasRef.value!.style.left = `${state.thick + clientWidth / 2}px`
-    canvasRef.value!.style.top = `${state.thick + clientHeight / 2}px`
+    canvasRef.value!.style.marginLeft = `${state.thick + clientWidth / 2}px`
+    canvasRef.value!.style.marginTop = `${state.thick + clientHeight / 2}px`
   })
 }
 
@@ -122,10 +128,12 @@ onMounted(() => {
   containerInit() // 背景初始化
   canvasInit() // 画布初始化
   eventInit() // 事件初始化，监听鼠标移动事件
+  window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
+  window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
 })
 </script>
 
@@ -154,7 +162,7 @@ onUnmounted(() => {
       @mousedown="handleMouseDown"
     >
       <!-- 一个宽高很大的容器，作为背景板 -->
-      <div ref="containerRef" absolute>
+      <div ref="containerRef">
         <!-- 画布 -->
         <div
           id="canvas"
@@ -178,7 +186,9 @@ onUnmounted(() => {
             v-for="componentItem in viewStore.components"
             :id="componentItem.id"
             :key="componentItem.name"
-            :style="viewStore.setComponentStyle(componentItem)"
+            :style="{
+              ...viewStore.setComponentStyle(componentItem),
+            }"
             class="component"
             @click.stop="selectComponent(componentItem)"
           />

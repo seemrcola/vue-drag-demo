@@ -28,11 +28,12 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function setComponentStyle<T extends IComponent>(component: T) {
+    console.log('xxxx')
     return {
       position: 'absolute',
       left: `${component.x}px`,
       top: `${component.y}px`,
-      // 'border-color': 'red',
+      // transform: `translateX(${component.x}px) translateY(${component.y}px)`,
     }
   }
 

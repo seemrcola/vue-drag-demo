@@ -1,7 +1,5 @@
 import { ref } from 'vue'
 
-// 暂定方案：
-// hover和按下一样了，就拖，要不然赋值回hover的
 export function useMoveable() {
   const selectTarget = ref<string>('')
 
