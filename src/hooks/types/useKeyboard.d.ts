@@ -1,4 +1,4 @@
 export enum KEYSMAP  {
   'SPACE' = 32,
-  'CTRL' = 17
+  'CTRL' = 17,
 }

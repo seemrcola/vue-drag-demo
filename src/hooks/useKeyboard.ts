@@ -1,5 +1,6 @@
 import { KEYSMAP } from './types/useKeyboard.d'
 
+const keysmap = [KEYSMAP.SPACE, KEYSMAP.CTRL]
 // 处理键盘记录
 export function useKeyboard() {
   // 默认赋值
@@ -23,7 +24,7 @@ export function useKeyboard() {
     if (metaKey && window.$KeyboardActive)
       window.$KeyboardActive.meta = true
 
-    if ([KEYSMAP.SPACE, KEYSMAP.CTRL].includes(keyCode) && window.$KeyboardActive) {
+    if (keysmap.includes(keyCode) && window.$KeyboardActive) {
       switch (keyCode) {
         case KEYSMAP.CTRL:
           window.$KeyboardActive.ctrl = true
@@ -48,7 +49,7 @@ export function useKeyboard() {
     if (!metaKey && window.$KeyboardActive)
       window.$KeyboardActive.meta = false
 
-    if ([KEYSMAP.CTRL, KEYSMAP.SPACE].includes(keyCode) && window.$KeyboardActive) {
+    if (keysmap.includes(keyCode) && window.$KeyboardActive) {
       switch (keyCode) {
         case KEYSMAP.CTRL:
           window.$KeyboardActive.ctrl = false

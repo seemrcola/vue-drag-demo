@@ -139,6 +139,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div>{{ selectTarget }}</div>
   <!-- 最外层的包裹容器 -->
   <div ref="wrapperRef" class="wrapper">
     <!-- 标尺容器 -->
@@ -182,6 +183,8 @@ onUnmounted(() => {
             @scale="onScale"
             @rotate="onRotate"
           />
+          <!-- <div id="test1" w-50 h-50 />
+          <div id="test2" w-50 h-50 /> -->
           <component
             :is="componentItem.component.component"
             v-for="componentItem in viewStore.components"

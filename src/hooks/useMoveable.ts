@@ -17,15 +17,15 @@ export function useMoveable() {
     const { isMeta, isCtrl } = getKeyStatus()
     const id = `#${(comp).id}`
 
+    // note: 每次必须要更换数组指向，否则不生效
     if (!isCtrl && !isMeta) {
-      selectTarget.value = []
-      selectTarget.value.push(id)
+      selectTarget.value = [id]
     }
     else {
       const ifHasId = selectTarget.value.find(compId => compId === id)
-      !ifHasId && selectTarget.value.push(id)
+      if (!ifHasId)
+        selectTarget.value = [...selectTarget.value, id]
     }
-    console.log(selectTarget.value)
   }
 
   function dropComponent() {
