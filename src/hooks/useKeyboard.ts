@@ -7,15 +7,21 @@ export function useKeyboard() {
     ctrl: false,
     space: false,
     shift: false,
+    meta: false, // mac command
   }
 
   document.onkeydown = (e: KeyboardEvent) => {
-    const { keyCode, shiftKey } = e
+    const { keyCode, shiftKey, metaKey } = e
+
+    /* space键有特殊作用，但是space又会有默认事件 */
     if (keyCode === KEYSMAP.SPACE && e.target === document.body)
       e.preventDefault()
 
     if (shiftKey && window.$KeyboardActive)
       window.$KeyboardActive.shift = true
+
+    if (metaKey && window.$KeyboardActive)
+      window.$KeyboardActive.meta = true
 
     if ([KEYSMAP.SPACE, KEYSMAP.CTRL].includes(keyCode) && window.$KeyboardActive) {
       switch (keyCode) {
@@ -30,12 +36,17 @@ export function useKeyboard() {
   }
 
   document.onkeyup = (e: KeyboardEvent) => {
-    const { keyCode, shiftKey } = e
+    const { keyCode, shiftKey, metaKey } = e
+
+    /* space键有特殊作用，但是space又会有默认事件 */
     if (keyCode === KEYSMAP.SPACE && e.target === document.body)
       e.preventDefault()
 
     if (!shiftKey && window.$KeyboardActive)
       window.$KeyboardActive.shift = false
+
+    if (!metaKey && window.$KeyboardActive)
+      window.$KeyboardActive.meta = false
 
     if ([KEYSMAP.CTRL, KEYSMAP.SPACE].includes(keyCode) && window.$KeyboardActive) {
       switch (keyCode) {

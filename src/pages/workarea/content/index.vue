@@ -109,7 +109,7 @@ function eventInit() {
   document.addEventListener('mousemove', handleSrcollBar)
 }
 
-// moveable------------------------------------------
+// moveable------------------------------------------------
 const {
   onDrag,
   onRotate,
@@ -120,7 +120,8 @@ const {
 }
 = useMoveable()
 document.addEventListener('click', dropComponent)
-// ---------------------------------------------------------
+console.log(selectTarget, 'xcxcxcxcxxcxcxc')
+// --------------------------------------------------------
 
 onMounted(() => {
   rulerInit() // 初始化尺子，尺子的宽高和screen可视容器px像素对应，先获取宽高再赋值给尺子

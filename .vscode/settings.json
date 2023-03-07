@@ -251,5 +251,6 @@
   "editor.tokenColorCustomizations": {
     // "comments": "yellow",
     "functions": "#d4289b"
+    // "variables": "#f40"
   }
 }
