@@ -139,7 +139,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>{{ selectTarget }}</div>
+  <!-- <div>{{ selectTarget }}</div> -->
   <!-- 最外层的包裹容器 -->
   <div ref="wrapperRef" class="wrapper">
     <!-- 标尺容器 -->
@@ -179,6 +179,9 @@ onUnmounted(() => {
             :draggable="true"
             :scalable="true"
             :rotatable="true"
+            :throttle-drag="1"
+            :start-drag-rotate="0"
+            :throttle-drag-rotate="0"
             @drag="onDrag"
             @scale="onScale"
             @rotate="onRotate"

@@ -17,7 +17,7 @@ export function useMoveable() {
     const { isMeta, isCtrl } = getKeyStatus()
     const id = `#${(comp).id}`
 
-    // note: 每次必须要更换数组指向，否则不生效
+    // note: 每次必须要更换数组指向，否则不生效，就离谱
     if (!isCtrl && !isMeta) {
       selectTarget.value = [id]
     }

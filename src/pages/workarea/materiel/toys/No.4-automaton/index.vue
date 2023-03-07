@@ -23,7 +23,7 @@ const state = reactive(
     { length: HEIGHT },
     (_, y) =>
       Array.from({ length: WIDTH }, (_, x): CellState => ({
-        status: (Math.random() < 0.2) ? CellStatus.ALIVE : CellStatus.DEAD,
+        status: (Math.random() < 0.1) ? CellStatus.ALIVE : CellStatus.DEAD,
         x,
         y,
       })),
@@ -64,7 +64,18 @@ function start() {
   })
 }
 
-setInterval(() => start(), 500)
+let frameCounter = 0
+function startFrame() {
+  requestAnimationFrame(() => {
+    frameCounter++
+    if (frameCounter % 20 === 0) {
+      frameCounter = 0
+      start()
+    }
+    startFrame()
+  })
+}
+startFrame()
 </script>
 
 <template>
