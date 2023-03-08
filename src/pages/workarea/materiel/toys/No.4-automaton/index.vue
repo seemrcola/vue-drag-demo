@@ -52,6 +52,7 @@ function start() {
   state.forEach((list, _idx, _self) => {
     list.forEach((cell, __idx, __self) => {
       const count = getSiblings(cell)
+      // 状态转移方案-----------------
       if (count < 2)
         cell.status = CellStatus.DEAD
       if (count === 2)
@@ -60,6 +61,7 @@ function start() {
         cell.status = CellStatus.ALIVE
       if (count > 3)
         cell.status = CellStatus.DEAD
+      // ------------------------------
     })
   })
 }
