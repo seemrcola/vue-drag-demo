@@ -9,18 +9,16 @@ export default defineComponent({
   data() {
     return {
       target: [],
-      className: '',
       draggable: true,
     }
   },
   methods: {
     mousedown(event) {
       this.target = ['.target']
-      event.target.classList.add('target')
 
-      // this.$nextTick(() => {
-      //   this.$refs.moveable.dragStart(event)
-      // })
+      this.$nextTick(() => {
+        this.$refs.moveable.dragStart(event)
+      })
     },
     onDrag(e) {
       e.target.style.transform = e.transform
@@ -36,7 +34,7 @@ export default defineComponent({
 <template>
   <div class="root">
     <div class="container" style="position: relative">
-      <div :class="className" @mousedown="mousedown">
+      <div class="target" @mousedown="mousedown">
         Target
       </div>
       <button @click="toggleDraggable">

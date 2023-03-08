@@ -124,7 +124,9 @@ const {
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
 function MouseDownHandle(e: MouseEvent, comp: IComponent) {
   selectComponent(comp)
-  nextTick(() => moveable.value!.dragStart(e))
+  nextTick(() => {
+    moveable.value!.dragStart(e)
+  })
 }
 // --------------------------------------------------------
 
