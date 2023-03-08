@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
+import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 
@@ -8,6 +9,7 @@ import { useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
 /* useMoveable */
 import { useMoveable } from '@/hooks/useMoveable'
+import type { IComponent } from '@/store/modules/view'
 
 const viewStore = useViewStore()
 
@@ -110,17 +112,20 @@ function eventInit() {
 }
 
 // moveable------------------------------------------------
+const moveable = ref<null | VueMoveableInstance>(null)
 const {
   onDrag,
   onRotate,
   onScale,
   selectComponent,
   selectTarget,
-  dropComponent,
 }
 = useMoveable()
-document.addEventListener('click', dropComponent)
-console.log(selectTarget, 'xcxcxcxcxxcxcxc')
+// 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
+function MouseDownHandle(e: MouseEvent, comp: IComponent) {
+  selectComponent(comp)
+  nextTick(() => moveable.value!.dragStart(e))
+}
 // --------------------------------------------------------
 
 onMounted(() => {
@@ -175,6 +180,7 @@ onUnmounted(() => {
           @dragover="e => e.preventDefault()"
         >
           <Moveable
+            ref="moveable"
             :target="selectTarget"
             :draggable="true"
             :scalable="true"
@@ -197,7 +203,7 @@ onUnmounted(() => {
               ...viewStore.setComponentStyle(componentItem),
             }"
             class="component"
-            @click.stop="selectComponent(componentItem)"
+            @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
           />
         </div>
       </div>

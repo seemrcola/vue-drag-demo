@@ -1,8 +1,6 @@
 import { ref } from 'vue'
 
 /* 这个hooks需要用到useKeyBoard */
-console.log(window.$KeyboardActive, 'xxxx')
-
 export function useMoveable() {
   const selectTarget = ref<string[]>([])
 

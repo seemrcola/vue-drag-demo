@@ -149,7 +149,7 @@ function startFrame() {
       frameCounter = 0
       // 全部清零则停止
       if (ifZero()) {
-        console.log('疫情结束')
+        return
       }
       else {
         start()
