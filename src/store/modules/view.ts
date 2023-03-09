@@ -7,6 +7,7 @@ export interface IComponent {
   name: string
   x: number
   y: number
+  rotate: number
   height: number
   width: number
   component: {
@@ -33,7 +34,7 @@ export const useViewStore = defineStore('view', () => {
       position: 'absolute',
       left: `${component.x}px`,
       top: `${component.y}px`,
-      // transform: `translateX(${component.x}px) translateY(${component.y}px)`,
+      transform: `rotate(${component.rotate})`,
     }
   }
 

@@ -10,6 +10,7 @@ interface ToysComponent extends IComponent {
   y: number
   width: number
   height: number
+  rotate: number
   component: {
     component: Component
     name: string
@@ -17,7 +18,7 @@ interface ToysComponent extends IComponent {
 }
 
 export const toysComponentsConfig: ToysComponent[] = [
-  // mines
+  // mines扫雷
   {
     type: 'toys',
     name: 'minesweeper',
@@ -26,9 +27,10 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 350,
     x: 0,
     y: 0,
+    rotate: 0,
     component: toysComponents[0],
   },
-  // plums
+  // plums 梅花生长
   {
     type: 'toys',
     name: 'plums',
@@ -37,8 +39,10 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 400,
     x: 0,
     y: 0,
+    rotate: 0,
     component: toysComponents[1],
   },
+  // 随机数
   {
     type: 'toys',
     name: 'random',
@@ -47,8 +51,10 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 200,
     x: 0,
     y: 0,
+    rotate: 0,
     component: toysComponents[2],
   },
+  // 元胞自动机-生命游戏
   {
     type: 'toys',
     name: 'automaton',
@@ -57,8 +63,10 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 300,
     x: 0,
     y: 0,
+    rotate: 0,
     component: toysComponents[3],
   },
+  // 疫情元胞自动机
   {
     type: 'toys',
     name: 'virus',
@@ -67,6 +75,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     width: 300,
     x: 0,
     y: 0,
+    rotate: 0,
     component: toysComponents[4],
   },
 ]

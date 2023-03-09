@@ -6,7 +6,7 @@ const requireComponent = import.meta.glob(
 )
 
 /**
-src/pages/workarea/content/index.vue * requireComponent[fileName] 是一个() => import(path)函数，返回一个Promise
+ * src/pages/workarea/content/index.vue * requireComponent[fileName] 是一个() => import(path)函数，返回一个Promise
  * defineAsyncComponent文档地址 https://cn.vuejs.org/guide/components/async.html
  */
 
