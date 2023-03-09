@@ -15,18 +15,19 @@ h.当所有感染者都康复时，模型停止。
  -->
 
 <script setup lang='ts'>
-import { reactive, ref } from 'vue'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { CellStatus } from './type'
 import type { Person } from './type'
 
-const HEIGHT = 40
-const WIDTH = 40
+const HEIGHT = 50
+const WIDTH = 50
+const CELL_SIZE = 8
+const FRAME_RATE = 20
 
 const P = 0.7 // 周围每一个感染者均70%几率传染给未感染过的元胞-奥米克戎
 const T = 10 // 感染者10天后恢复正常
 const Q = 0.1 // 康复者周围每有感染者，有10%概率失去免疫力。
 
-let frameCounter = 0
 const day = ref(0)
 
 const state = reactive(
@@ -43,6 +44,7 @@ const state = reactive(
   ),
 )
 
+// 设置一个感染母体
 state[20][20].status = CellStatus.V
 
 const siblings = [
@@ -70,7 +72,35 @@ function getR(cell: Person) {
   return siblings.filter(s => s === CellStatus.R).length
 }
 
-function start() {
+const canvas = ref<any>()
+function draw(ctx: any) {
+  state.forEach((list) => {
+    list.forEach(cell => drawCell(ctx, cell))
+  })
+}
+function drawCell(ctx: any, cell: Person) {
+  let color = 'yellow'
+  if (cell.status === CellStatus.V)
+    color = '#f40'
+  else if (cell.status === CellStatus.D)
+    color = 'aquamarine'
+  else if (cell.status === CellStatus.R)
+    color = 'yellow'
+
+  // 填充
+  ctx.fillStyle = color
+  ctx.fillRect(cell.x * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+  // 画线
+  ctx.strokeStyle = 'gray'
+  ctx.strokeRect(
+    cell.x * CELL_SIZE + 1,
+    cell.y * CELL_SIZE + 1,
+    CELL_SIZE - 2,
+    CELL_SIZE - 2,
+  )
+}
+
+function start(ctx: any) {
   state.forEach((list, _idx, _self) => {
     list.forEach((cell, __idx, __self) => {
       // 状态转移方案-----------------
@@ -81,6 +111,7 @@ function start() {
       if (cell.status === CellStatus.D)
         dueToD(cell)
       // ------------------------------
+      drawCell(ctx, cell)
     })
   })
 }
@@ -142,57 +173,36 @@ function ifZero() {
   return true
 }
 
-function startFrame() {
-  requestAnimationFrame(() => {
-    frameCounter++
-    if (frameCounter % 20 === 0) {
-      frameCounter = 0
+let frameCounter = FRAME_RATE
+let requestId: any
+function startFrame(ctx: any) {
+  requestId = requestAnimationFrame(() => {
+    frameCounter--
+    if (frameCounter === 0) {
+      frameCounter = FRAME_RATE
       // 全部清零则停止
       if (ifZero()) {
         return
       }
       else {
-        start()
+        start(ctx)
         day.value++
       }
     }
-    startFrame()
+    startFrame(ctx)
   })
 }
-startFrame()
+
+onMounted(() => {
+  const ctx = canvas.value.getContext('2d')
+  draw(ctx)
+  startFrame(ctx)
+})
+onUnmounted(() => {
+  cancelAnimationFrame(requestId)
+})
 </script>
 
 <template>
-  <div w-100>
-    <div>{{ Math.random() }}</div>
-    <div w-full h-6 f-c-c text-sm bg="#000" color="#fff" rounded-1>
-      清零天数 {{ day }}
-    </div>
-    <div w-full h-100 f-c-c border="1px solid #fff" bg="yellow">
-      <div v-for="(list, index) of state" :key="index">
-        <div v-for="(cell, idx) of list" :key="idx" flex>
-          <div
-            border="1px solid #fff" m-0.25 rounded-0.2 w-2 h-2
-            :class="{
-              R: cell.status === CellStatus.R,
-              D: cell.status === CellStatus.D,
-              V: cell.status === CellStatus.V,
-            }"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
+  <canvas ref="canvas" height="400" width="400" />
 </template>
-
-<style lang="scss" scoped>
-.R {
-  background-color: yellow;
-}
-.D {
-  background-color: aquamarine;
-}
-.V {
-  background-color: red;
-}
-</style>

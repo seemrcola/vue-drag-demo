@@ -12,12 +12,15 @@
 < 2 孤独而死
 -->
 <script setup lang='ts'>
-import { reactive } from 'vue'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import type { CellState } from './type'
 import { CellStatus } from './type'
 
 const HEIGHT = 40
 const WIDTH = 40
+const FRAME_RATE = 20
+const CELL_SIZE = 10
+
 const state = reactive(
   Array.from(
     { length: HEIGHT },
@@ -35,6 +38,7 @@ const siblings = [
   [0, -1], /* self */[0, 1],
   [1, -1], [1, 0], [1, 1],
 ]
+
 function getSiblings(cell: CellState) {
   return siblings
     .map(([dx, dy]) => {
@@ -48,7 +52,27 @@ function getSiblings(cell: CellState) {
     .length
 }
 
-function start() {
+const canvas = ref<any>()
+function draw(ctx: any) {
+  state.forEach((list) => {
+    list.forEach(cell => drawCell(ctx, cell))
+  })
+}
+function drawCell(ctx: any, cell: CellState) {
+  // 填充
+  ctx.fillStyle = cell.status === CellStatus.ALIVE ? 'black' : 'white'
+  ctx.fillRect(cell.x * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+  // 画线
+  ctx.strokeStyle = 'gray'
+  ctx.strokeRect(
+    cell.x * CELL_SIZE + 1,
+    cell.y * CELL_SIZE + 1,
+    CELL_SIZE - 2,
+    CELL_SIZE - 2,
+  )
+}
+
+function start(ctx: any) {
   state.forEach((list, _idx, _self) => {
     list.forEach((cell, __idx, __self) => {
       const count = getSiblings(cell)
@@ -62,35 +86,37 @@ function start() {
       if (count > 3)
         cell.status = CellStatus.DEAD
       // ------------------------------
+      drawCell(ctx, cell)
     })
   })
 }
 
-let frameCounter = 0
-function startFrame() {
-  requestAnimationFrame(() => {
-    frameCounter++
-    if (frameCounter % 20 === 0) {
-      frameCounter = 0
-      start()
+// 按帧更新
+let frameCounter = FRAME_RATE
+let requestId: any
+function startFrame(ctx: any) {
+  requestId = requestAnimationFrame(() => {
+    frameCounter--
+    if (frameCounter === 0) {
+      frameCounter = FRAME_RATE
+      start(ctx)
     }
-    startFrame()
+    startFrame(ctx)
   })
 }
-startFrame()
+
+onMounted(() => {
+  const ctx = canvas.value.getContext('2d')
+  draw(ctx)
+  startFrame(ctx)
+})
+onUnmounted(() => {
+  cancelAnimationFrame(requestId)
+})
 </script>
 
 <template>
-  <div w-100 h-100 f-c-c border="1px solid #fff" bg="yellow">
-    <div v-for="(list, index) of state" :key="index">
-      <div v-for="(cell, idx) of list" :key="idx" flex>
-        <div
-          border="1px solid #fff" m-0.25 rounded-0.2 w-2 h-2
-          :class="{ alive: cell.status }"
-        />
-      </div>
-    </div>
-  </div>
+  <canvas ref="canvas" height="400" width="400" />
 </template>
 
 <style lang="scss" scoped>

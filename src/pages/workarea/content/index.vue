@@ -145,7 +145,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- <div>{{ selectTarget }}</div> -->
   <!-- 最外层的包裹容器 -->
   <div ref="wrapperRef" class="wrapper">
     <!-- 标尺容器 -->
