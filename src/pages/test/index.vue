@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 import { defineComponent } from 'vue'
 import Moveable from 'vue3-moveable'
 
@@ -49,4 +49,12 @@ export default defineComponent({
       />
     </div>
   </div>
+</template> -->
+
+<script setup lang='ts'>
+
+</script>
+
+<template>
+  <div>hello world</div>
 </template>
