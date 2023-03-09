@@ -117,6 +117,7 @@ const {
   onDrag,
   onRotate,
   onScale,
+  onDragEnd,
   selectComponent,
   selectTarget,
 }
@@ -124,9 +125,7 @@ const {
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
 function MouseDownHandle(e: MouseEvent, comp: IComponent) {
   selectComponent(comp)
-  nextTick(() => {
-    moveable.value!.dragStart(e)
-  })
+  nextTick(() => moveable.value!.dragStart(e))
 }
 // --------------------------------------------------------
 
@@ -193,16 +192,15 @@ onUnmounted(() => {
             @drag="onDrag"
             @scale="onScale"
             @rotate="onRotate"
+            @drag-end="onDragEnd"
           />
-          <!-- <div id="test1" w-50 h-50 />
-          <div id="test2" w-50 h-50 /> -->
           <component
             :is="componentItem.component.component"
             v-for="componentItem in viewStore.components"
             :id="componentItem.id"
             :key="componentItem.name"
             :style="{
-              ...viewStore.setComponentStyle(componentItem),
+              ...viewStore.initComponentStyle(componentItem),
             }"
             class="component"
             @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"

@@ -84,7 +84,10 @@ startFrame()
   <div w-100 h-100 f-c-c border="1px solid #fff" bg="yellow">
     <div v-for="(list, index) of state" :key="index">
       <div v-for="(cell, idx) of list" :key="idx" flex>
-        <div border="1px solid #fff" m-0.25 rounded-0.2 w-2 h-2 :class="{ alive: cell.status }" />
+        <div
+          border="1px solid #fff" m-0.25 rounded-0.2 w-2 h-2
+          :class="{ alive: cell.status }"
+        />
       </div>
     </div>
   </div>

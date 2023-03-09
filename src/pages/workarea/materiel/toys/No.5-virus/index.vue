@@ -164,6 +164,7 @@ startFrame()
 
 <template>
   <div w-100>
+    <div>{{ Math.random() }}</div>
     <div w-full h-6 f-c-c text-sm bg="#000" color="#fff" rounded-1>
       清零天数 {{ day }}
     </div>

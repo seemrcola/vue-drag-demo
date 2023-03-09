@@ -17,7 +17,19 @@ export interface IComponent {
 }
 
 export const useViewStore = defineStore('view', () => {
+  // 画布上的全部图表
   const components = ref<IComponent[]>([])
+  // 画布上被选中的图表
+  const taregtSelect = ref<IComponent>()
+
+  // 更改选中的图表
+  function setTarget(targetId: string) {
+    taregtSelect.value = getTarget(targetId)
+  }
+
+  function getTarget(targetId: string) {
+    return components.value.find(component => `#${component.id}` === targetId)
+  }
 
   function addComponent<T extends IComponent>(component: T) {
     components.value.push(markRaw(component))
@@ -28,8 +40,7 @@ export const useViewStore = defineStore('view', () => {
     components.value.splice(index, 1)
   }
 
-  function setComponentStyle<T extends IComponent>(component: T) {
-    console.log('xxxx')
+  function initComponentStyle<T extends IComponent>(component: T) {
     return {
       position: 'absolute',
       left: `${component.x}px`,
@@ -42,6 +53,9 @@ export const useViewStore = defineStore('view', () => {
     components,
     removeComponent,
     addComponent,
-    setComponentStyle,
+    initComponentStyle,
+    setTarget,
+    getTarget,
+    taregtSelect,
   }
 })
