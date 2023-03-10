@@ -1,20 +1,8 @@
-import type { Component } from 'vue'
 import { toysComponents } from './comp.index'
 import type { IComponent } from '@/store/modules/view'
 
 interface ToysComponent extends IComponent {
-  type: string
-  id: string
-  name: string
-  x: number
-  y: number
-  width: number
-  height: number
-  rotate: number
-  component: {
-    component: Component
-    name: string
-  }
+
 }
 
 export const toysComponentsConfig: ToysComponent[] = [
@@ -28,6 +16,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     x: 0,
     y: 0,
     rotate: 0,
+    scale: [1, 1],
     component: toysComponents[0],
   },
   // plums 梅花生长
@@ -40,6 +29,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     x: 0,
     y: 0,
     rotate: 0,
+    scale: [1, 1],
     component: toysComponents[1],
   },
   // 随机数
@@ -52,6 +42,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     x: 0,
     y: 0,
     rotate: 0,
+    scale: [1, 1],
     component: toysComponents[2],
   },
   // 元胞自动机-生命游戏
@@ -64,6 +55,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     x: 0,
     y: 0,
     rotate: 0,
+    scale: [1, 1],
     component: toysComponents[3],
   },
   // 疫情元胞自动机
@@ -76,6 +68,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     x: 0,
     y: 0,
     rotate: 0,
+    scale: [1, 1],
     component: toysComponents[4],
   },
 ]
