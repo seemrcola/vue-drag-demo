@@ -1,7 +1,8 @@
 import type { Ref } from 'vue'
 import { ref } from 'vue'
-/* 这个hooks需要用到store 改变view里面的属性 */
 import type { VueMoveableInstance } from 'vue3-moveable'
+
+/* 这个hooks需要用到store 改变view里面的属性 */
 import { useViewStore } from '@/store/modules'
 
 export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
@@ -66,32 +67,54 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
     target as HTMLElement
     // 这里gpt给出了很多方案，最终都解决了问题。
     // 最好的建议是使用delta的值，而不是用lastEvent，以免造成很多不必要的问题。
-    uSetStyle(target, [...lastEvent.delta])
+    const [x, y] = lastEvent.delta
+    uSetStyle(target, { dx: x, dy: y })
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
-
+    if (!lastEvent)
+      return
+    target as HTMLElement
+    const rotate = lastEvent.delta
+    uSetStyle(target, { rotate })
   }
 
   function onScaleEnd({ lastEvent, target }: any) {
-
+    console.log(lastEvent.delta)
+    if (!lastEvent)
+      return
+    target as HTMLElement
+    const scale = lastEvent.delta
+    uSetStyle(target, { scale })
   }
 
-  function uSetStyle(target: HTMLElement, delta: number[]) {
+  function uSetStyle(
+    target: HTMLElement,
+    delta: { [propname: string]: any },
+  ) {
     const viewStore = useViewStore()
     // 拿到targetComponent
     const targetComponent = viewStore.getTarget(selectTarget.value[0])
     // 拿到transform对应属性
-    const [dx, dy, rotate, scale] = delta
+    const { dx, dy, rotate, scale } = delta
 
     // 处理targetComponent的属性
-    targetComponent!.x += dx
-    targetComponent!.y += dy
+    if (dx)
+      targetComponent!.x += dx
+    if (dy)
+      targetComponent!.y += dy
+    if (rotate)
+      targetComponent!.rotate = rotate
+    if (scale)
+      targetComponent!.scale = scale
 
     // 通过对象实例改变对象style.position的属性
     target.style.top = `${targetComponent!.y}px`
     target.style.left = `${targetComponent!.x}px`
-    target.style.transform = `rotate(${rotate}deg))` // scale(${scale}
+    target.style.transform = `
+      rotate(${targetComponent!.rotate}deg)) 
+      scale(${targetComponent!.scale?.[0]}, ${targetComponent!.scale?.[1]})
+    `
   }
 
   return {
