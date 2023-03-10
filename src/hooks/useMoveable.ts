@@ -64,10 +64,9 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
     if (!lastEvent)
       return
     target as HTMLElement
-    // gpt方案，重置一下translate，以免control box双倍位移
-    target.style.transform = 'translate(0px, 0px)'
-    uSetStyle(target, lastEvent.translate)
-    moveableRef.value!.updateRect()
+    // 这里gpt给出了很多方案，最终都解决了问题。
+    // 最好的建议是使用delta的值，而不是用lastEvent，以免造成很多不必要的问题。
+    uSetStyle(target, [...lastEvent.delta])
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
@@ -78,16 +77,16 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
 
   }
 
-  function uSetStyle(target: HTMLElement, transform: number[]) {
+  function uSetStyle(target: HTMLElement, delta: number[]) {
     const viewStore = useViewStore()
     // 拿到targetComponent
     const targetComponent = viewStore.getTarget(selectTarget.value[0])
     // 拿到transform对应属性
-    const [x, y, rotate, scale] = transform
+    const [dx, dy, rotate, scale] = delta
 
     // 处理targetComponent的属性
-    targetComponent!.x += x
-    targetComponent!.y += y
+    targetComponent!.x += dx
+    targetComponent!.y += dy
 
     // 通过对象实例改变对象style.position的属性
     target.style.top = `${targetComponent!.y}px`
