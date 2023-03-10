@@ -49,6 +49,7 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
   function onDrag({ transform }: any) {
     const target = getDom()
     target.forEach(el => el.style.transform = transform)
+    console.log(999)
   }
 
   function onScale({ drag }: any) {
@@ -65,27 +66,36 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
     if (!lastEvent)
       return
     target as HTMLElement
-    // 这里gpt给出了很多方案，最终都解决了问题。
-    // 最好的建议是使用delta的值，而不是用lastEvent，以免造成很多不必要的问题。
-    const [x, y] = lastEvent.delta
-    uSetStyle(target, { dx: x, dy: y })
+    target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
+    const [dx, dy] = [...lastEvent.dist]
+    uSetStyle(target, { dx, dy })
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
     target as HTMLElement
-    const rotate = lastEvent.delta
+    target.style.transform = 'translate(0px, 0px)'
+    const rotate = lastEvent.rotate
     uSetStyle(target, { rotate })
   }
 
   function onScaleEnd({ lastEvent, target }: any) {
-    console.log(lastEvent.delta)
     if (!lastEvent)
       return
     target as HTMLElement
-    const scale = lastEvent.delta
-    uSetStyle(target, { scale })
+    target.style.transform = 'translate(0px, 0px)'
+    const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
+    const match = regex.exec(lastEvent.afterTransform)
+    const scale = [...lastEvent.dist]
+    let dx = 0
+    let dy = 0
+    if (match) {
+      dx = parseFloat(match[1])
+      dy = parseFloat(match[3])
+    }
+    console.log(dx, dy)
+    uSetStyle(target, { scale, dx, dy })
   }
 
   function uSetStyle(
@@ -105,16 +115,16 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
       targetComponent!.y += dy
     if (rotate)
       targetComponent!.rotate = rotate
-    if (scale)
-      targetComponent!.scale = scale
+    if (scale) {
+      targetComponent!.scale[0] *= scale[0]
+      targetComponent!.scale[1] *= scale[1]
+    }
 
     // 通过对象实例改变对象style.position的属性
+    const [scalex = 1, scaley = 1] = targetComponent!.scale
     target.style.top = `${targetComponent!.y}px`
     target.style.left = `${targetComponent!.x}px`
-    target.style.transform = `
-      rotate(${targetComponent!.rotate}deg)) 
-      scale(${targetComponent!.scale?.[0]}, ${targetComponent!.scale?.[1]})
-    `
+    target.style.transform = `rotate(${targetComponent!.rotate}deg) scale(${scalex}, ${scaley})`
   }
 
   return {
