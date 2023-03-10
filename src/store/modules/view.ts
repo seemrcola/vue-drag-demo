@@ -8,6 +8,7 @@ export interface IComponent {
   x: number
   y: number
   rotate: number
+  scale: number[]
   height: number
   width: number
   component: {
@@ -32,7 +33,9 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function addComponent<T extends IComponent>(component: T) {
-    components.value.push(markRaw(component))
+    // 把compnent属性变成非响应式
+    component.component = markRaw(component.component)
+    components.value.push(component)
   }
 
   function removeComponent<T extends IComponent>(component: T) {
@@ -45,7 +48,7 @@ export const useViewStore = defineStore('view', () => {
       position: 'absolute',
       left: `${component.x}px`,
       top: `${component.y}px`,
-      transform: `rotate(${component.rotate})`,
+      transform: `rotate(${component.rotate}))`,
     }
   }
 

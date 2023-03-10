@@ -118,10 +118,12 @@ const {
   onRotate,
   onScale,
   onDragEnd,
+  onRotateEnd,
+  onScaleEnd,
   selectComponent,
   selectTarget,
 }
-= useMoveable()
+= useMoveable(moveable)
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
 function MouseDownHandle(e: MouseEvent, comp: IComponent) {
   selectComponent(comp)
@@ -192,6 +194,8 @@ onUnmounted(() => {
             @scale="onScale"
             @rotate="onRotate"
             @drag-end="onDragEnd"
+            @rotate-end="onRotateEnd"
+            @scale-end="onScaleEnd"
           />
           <component
             :is="componentItem.component.component"
