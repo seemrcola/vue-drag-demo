@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-console.log('random render')
+const random = Math.random().toFixed(8)
 </script>
 
 <template>
@@ -7,6 +7,6 @@ console.log('random render')
     h="200px" w="200px"
     f-c-c text-xl border="1px #fff solid"
   >
-    {{ Math.random().toFixed(8) }}
+    {{ random }}
   </div>
 </template>

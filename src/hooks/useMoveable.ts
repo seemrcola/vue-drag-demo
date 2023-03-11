@@ -1,11 +1,9 @@
-import type { Ref } from 'vue'
 import { ref } from 'vue'
-import type { VueMoveableInstance } from 'vue3-moveable'
 
 /* 这个hooks需要用到store 改变view里面的属性 */
 import { useViewStore } from '@/store/modules'
 
-export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
+export function useMoveable() {
   const selectTarget = ref<string[]>([])
   /* 这个hooks需要用到useKeyBoard */
   function getKeyStatus() {
@@ -40,50 +38,74 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
     selectTarget.value = []
   }
 
-  function getDom() {
-    return selectTarget.value.map((domId) => {
-      return document.querySelector(domId) as HTMLSelectElement
+  function onDrag({ transform, target }: any) {
+    target.style.transform = transform
+  }
+
+  function onScale({ drag, target }: any) {
+    target.style.transform = drag.transform
+  }
+
+  function onRotate({ drag, target }: any) {
+    target.style.transform = drag.transform
+  }
+
+  // 组合操作------------------------------------------------------------
+  // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
+  function onDragGroup({ events }: any) {
+    events.forEach((event: any) => {
+      event.target.style.cssText += event.cssText
     })
   }
 
-  function onDrag({ transform }: any) {
-    const target = getDom()
-    target.forEach(el => el.style.transform = transform)
-    console.log(999)
+  function onScaleGroup({ events }: any) {
+    events.forEach((event: any) => {
+      event.target.style.cssText += event.cssText
+    })
   }
 
-  function onScale({ drag }: any) {
-    const target = getDom()
-    target.forEach(el => el.style.transform = drag.transform)
+  function onRotateGroup({ events }: any) {
+    events.forEach((event: any) => {
+      event.target.style.cssText += event.cssText
+    })
   }
-
-  function onRotate({ drag }: any) {
-    const target = getDom()
-    target.forEach(el => el.style.transform = drag.transform)
-  }
+  // ------------------------------------------------------------------------
 
   function onDragEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    target as HTMLElement
     target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     const [dx, dy] = [...lastEvent.dist]
     uSetStyle(target, { dx, dy })
   }
 
+  function onDragGroupEnd({ lastEvent, targets }: any) {
+    if (!lastEvent)
+      return
+    targets.forEach(
+      (target: any) => onDragEnd({ lastEvent, target }),
+    )
+  }
+
   function onRotateEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    target as HTMLElement
     target.style.transform = 'translate(0px, 0px)'
     const rotate = lastEvent.rotate
     uSetStyle(target, { rotate })
   }
 
+  function onRotateGroupEnd({ lastEvent, targets }: any) {
+    // if (!lastEvent)
+    //   return
+    // targets.forEach(
+    //   (target: any) => onRotateEnd({ lastEvent, target }),
+    // )
+  }
+
   function onScaleEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    target as HTMLElement
     target.style.transform = 'translate(0px, 0px)'
     const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
     const match = regex.exec(lastEvent.afterTransform)
@@ -94,17 +116,25 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
       dx = parseFloat(match[1])
       dy = parseFloat(match[3])
     }
-    console.log(dx, dy)
     uSetStyle(target, { scale, dx, dy })
+  }
+
+  function onScaleGroupEnd({ lastEvent, targets }: any) {
+    // if (!lastEvent)
+    //   return
+    // targets.forEach(
+    //   (target: any) => onScaleEnd({ lastEvent, target }),
+    // )
   }
 
   function uSetStyle(
     target: HTMLElement,
     delta: { [propname: string]: any },
   ) {
+    const id = target.id
     const viewStore = useViewStore()
     // 拿到targetComponent
-    const targetComponent = viewStore.getTarget(selectTarget.value[0])
+    const targetComponent = viewStore.getTarget(`#${id}`)
     // 拿到transform对应属性
     const { dx, dy, rotate, scale } = delta
 
@@ -131,9 +161,15 @@ export function useMoveable(moveableRef: Ref<null | VueMoveableInstance>) {
     onRotate,
     onDrag,
     onScale,
+    onDragGroup,
+    onRotateGroup,
+    onScaleGroup,
     onDragEnd,
     onRotateEnd,
     onScaleEnd,
+    onDragGroupEnd,
+    onRotateGroupEnd,
+    onScaleGroupEnd,
     selectTarget,
     selectComponent,
     dropComponent,

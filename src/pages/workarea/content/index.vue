@@ -117,17 +117,25 @@ const {
   onDrag,
   onRotate,
   onScale,
+  onDragGroup,
+  onRotateGroup,
+  onScaleGroup,
   onDragEnd,
   onRotateEnd,
   onScaleEnd,
+  onDragGroupEnd,
+  onScaleGroupEnd,
+  onRotateGroupEnd,
   selectComponent,
   selectTarget,
 }
-= useMoveable(moveable)
+= useMoveable()
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
 function MouseDownHandle(e: MouseEvent, comp: IComponent) {
   selectComponent(comp)
-  nextTick(() => moveable.value!.dragStart(e))
+  nextTick(() => {
+    moveable.value!.dragStart(e)
+  })
 }
 // --------------------------------------------------------
 
@@ -187,15 +195,19 @@ onUnmounted(() => {
             :draggable="true"
             :scalable="true"
             :rotatable="true"
-            :throttle-drag="1"
-            :start-drag-rotate="0"
-            :throttle-drag-rotate="0"
+            :scrollable="true"
             @drag="onDrag"
             @scale="onScale"
             @rotate="onRotate"
+            @drag-group="onDragGroup"
+            @scale-group="onScaleGroup"
+            @rotate-group="onRotateGroup"
             @drag-end="onDragEnd"
             @rotate-end="onRotateEnd"
             @scale-end="onScaleEnd"
+            @drag-group-end="onDragGroupEnd"
+            @rotate-group-end="onRotateGroupEnd"
+            @scale-group-end="onScaleGroupEnd"
           />
           <component
             :is="componentItem.component.component"
