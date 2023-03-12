@@ -62,7 +62,22 @@ export function useMoveable() {
 
   function onScaleGroup({ events }: any) {
     events.forEach((event: any) => {
-      event.target.style.transform = event.style.transform
+      const transformString = event.style.transform
+
+      // const scaleRegex = /transform:\s*scale\((\d*\.?\d+),\s*(\d*\.?\d+)\);/
+      // const match = transformString.match(scaleRegex)
+      // let x = 0
+      // let y = 0
+      // if (match) {
+      //   x = parseFloat(match[1])
+      //   y = parseFloat(match[2])
+      // }
+      // if (x < 0 || y < 0) { // moveable存在bug，组合拖拽不能完全反转
+      //   alert('暂时无法完全反转')
+      //   return
+      // }
+
+      event.target.style.transform = transformString
     })
   }
 

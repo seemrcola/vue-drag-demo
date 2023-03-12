@@ -1,60 +1,55 @@
-<!-- <script>
-import { defineComponent } from 'vue'
+<script>
 import Moveable from 'vue3-moveable'
-
-export default defineComponent({
-  components: {
-    Moveable,
-  },
-  data() {
-    return {
-      target: [],
-      draggable: true,
-    }
-  },
-  methods: {
-    mousedown(event) {
-      this.target = ['.target']
-
-      this.$nextTick(() => {
-        this.$refs.moveable.dragStart(event)
+import { ref } from 'vue'
+export default {
+  components: { Moveable },
+  setup() {
+    const moveableRef = ref(null)
+    const onDragGroup = (e) => {
+      e.events.forEach((ev) => {
+        ev.target.style.cssText += ev.cssText
       })
-    },
-    onDrag(e) {
-      e.target.style.transform = e.transform
-    },
-    toggleDraggable() {
-      console.log(this.draggable)
-      this.draggable = !this.draggable
-    },
+    }
+    const onRotateGroup = (e) => {
+      e.events.forEach((ev) => {
+        ev.target.style.cssText += ev.cssText
+      })
+    }
+    const onScaleGroup = (e) => {
+      e.events.forEach((ev) => {
+        ev.target.style.cssText += ev.cssText
+      })
+    }
+    return { moveableRef, onDragGroup, onRotateGroup }
   },
-})
+}
 </script>
 
 <template>
   <div class="root">
-    <div class="container" style="position: relative">
-      <div class="target" @mousedown="mousedown">
-        Target
+    <div
+      class="container"
+      style="width: 500px;height: 500px;border: 1px solid #ccc;"
+    >
+      <div class="target target1">
+        Target1
       </div>
-      <button @click="toggleDraggable">
-        Toggle {{ draggable }}
-      </button>
+      <div class="target target2">
+        Target2
+      </div>
+      <div class="target target3">
+        Target3
+      </div>
       <Moveable
-        ref="moveable"
-        :target="target"
-        :draggable="draggable"
-        :edge-draggable="false"
-        @drag="onDrag"
+        ref="moveableRef"
+        :target="['.target1', '.target2']"
+        :draggable="true"
+        :rotatable="true"
+        :scalable="true"
+        @dragGroup="onDragGroup"
+        @rotateGroup="onRotateGroup"
+        @scaleGroup="onRotateGroup"
       />
     </div>
   </div>
-</template> -->
-
-<script setup lang='ts'>
-
-</script>
-
-<template>
-  <div>hello world</div>
 </template>
