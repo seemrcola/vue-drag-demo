@@ -38,6 +38,7 @@ export function useMoveable() {
     selectTarget.value = []
   }
 
+  // ！！单个组件操作-----------------------------------------------------------
   function onDrag({ transform, target }: any) {
     target.style.transform = transform
   }
@@ -49,8 +50,9 @@ export function useMoveable() {
   function onRotate({ drag, target }: any) {
     target.style.transform = drag.transform
   }
+  // -------------------------------------------------------------------------
 
-  // 组合操作------------------------------------------------------------
+  // ！！组合操作----------------------------------------------------------------
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
   function onDragGroup({ events }: any) {
     events.forEach((event: any) => {
@@ -60,53 +62,49 @@ export function useMoveable() {
 
   function onScaleGroup({ events }: any) {
     events.forEach((event: any) => {
+      console.log(event.cssText)
       event.target.style.cssText += event.cssText
     })
   }
 
   function onRotateGroup({ events }: any) {
     events.forEach((event: any) => {
+      // console.log(event.cssText)
       event.target.style.cssText += event.cssText
     })
   }
-  // ------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
+  // ！！单个组件操作结束--------------------------------------------------------
   function onDragEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
+    // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     const [dx, dy] = [...lastEvent.dist]
     uSetStyle(target, { dx, dy })
-  }
-
-  function onDragGroupEnd({ lastEvent, targets }: any) {
-    if (!lastEvent)
-      return
-    targets.forEach(
-      (target: any) => onDragEnd({ lastEvent, target }),
-    )
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    target.style.transform = 'translate(0px, 0px)'
+    // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
+    const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
+    const match = regex.exec(lastEvent.afterTransform)
+    let dx = 0
+    let dy = 0
+    if (match) {
+      dx = parseFloat(match[1])
+      dy = parseFloat(match[3])
+    }
     const rotate = lastEvent.rotate
-    uSetStyle(target, { rotate })
-  }
-
-  function onRotateGroupEnd({ lastEvent, targets }: any) {
-    // if (!lastEvent)
-    //   return
-    // targets.forEach(
-    //   (target: any) => onRotateEnd({ lastEvent, target }),
-    // )
+    uSetStyle(target, { dx, dy, rotate })
   }
 
   function onScaleEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    target.style.transform = 'translate(0px, 0px)'
+    // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
+    // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况
     const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
     const match = regex.exec(lastEvent.afterTransform)
     const scale = [...lastEvent.dist]
@@ -118,15 +116,41 @@ export function useMoveable() {
     }
     uSetStyle(target, { scale, dx, dy })
   }
+  // -------------------------------------------------------------------------
 
-  function onScaleGroupEnd({ lastEvent, targets }: any) {
-    // if (!lastEvent)
-    //   return
-    // targets.forEach(
-    //   (target: any) => onScaleEnd({ lastEvent, target }),
-    // )
+  // ！！多个组件操作结束---------------------------------------------------------
+  function onDragGroupEnd({ events }: any) {
+    console.log(events)
+    events.forEach((event: any) => {
+      const { lastEvent, target } = event
+      if (!lastEvent)
+        return
+      onDragEnd({ lastEvent, target })
+    })
   }
 
+  function onRotateGroupEnd({ events }: any) {
+    console.log(events)
+    events.forEach((event: any) => {
+      const { lastEvent, target } = event
+      if (!lastEvent)
+        return
+      onRotateEnd({ lastEvent, target })
+    })
+  }
+
+  function onScaleGroupEnd({ events }: any) {
+    console.log(events)
+    events.forEach((event: any) => {
+      const { lastEvent, target } = event
+      if (!lastEvent)
+        return
+      onScaleEnd({ lastEvent, target })
+    })
+  }
+  // ----------------------------------------------------------------------
+
+  // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
   function uSetStyle(
     target: HTMLElement,
     delta: { [propname: string]: any },
@@ -137,6 +161,8 @@ export function useMoveable() {
     const targetComponent = viewStore.getTarget(`#${id}`)
     // 拿到transform对应属性
     const { dx, dy, rotate, scale } = delta
+
+    console.log(dx, dy, rotate, scale)
 
     // 处理targetComponent的属性
     if (dx)
