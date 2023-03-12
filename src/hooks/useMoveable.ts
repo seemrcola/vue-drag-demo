@@ -56,21 +56,19 @@ export function useMoveable() {
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
   function onDragGroup({ events }: any) {
     events.forEach((event: any) => {
-      event.target.style.cssText += event.cssText
+      event.target.style.transform = event.style.transform
     })
   }
 
   function onScaleGroup({ events }: any) {
     events.forEach((event: any) => {
-      console.log(event.cssText)
-      event.target.style.cssText += event.cssText
+      event.target.style.transform = event.style.transform
     })
   }
 
   function onRotateGroup({ events }: any) {
     events.forEach((event: any) => {
-      // console.log(event.cssText)
-      event.target.style.cssText += event.cssText
+      event.target.style.transform = event.style.transform
     })
   }
   // -------------------------------------------------------------------------
@@ -103,6 +101,7 @@ export function useMoveable() {
   function onScaleEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
+
     // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况
     const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
@@ -120,7 +119,6 @@ export function useMoveable() {
 
   // ！！多个组件操作结束---------------------------------------------------------
   function onDragGroupEnd({ events }: any) {
-    console.log(events)
     events.forEach((event: any) => {
       const { lastEvent, target } = event
       if (!lastEvent)
@@ -130,7 +128,6 @@ export function useMoveable() {
   }
 
   function onRotateGroupEnd({ events }: any) {
-    console.log(events)
     events.forEach((event: any) => {
       const { lastEvent, target } = event
       if (!lastEvent)
@@ -140,7 +137,6 @@ export function useMoveable() {
   }
 
   function onScaleGroupEnd({ events }: any) {
-    console.log(events)
     events.forEach((event: any) => {
       const { lastEvent, target } = event
       if (!lastEvent)
@@ -155,14 +151,14 @@ export function useMoveable() {
     target: HTMLElement,
     delta: { [propname: string]: any },
   ) {
+    // debugger
     const id = target.id
     const viewStore = useViewStore()
     // 拿到targetComponent
     const targetComponent = viewStore.getTarget(`#${id}`)
+    console.log(JSON.parse(JSON.stringify(targetComponent)))
     // 拿到transform对应属性
     const { dx, dy, rotate, scale } = delta
-
-    console.log(dx, dy, rotate, scale)
 
     // 处理targetComponent的属性
     if (dx)
@@ -175,7 +171,6 @@ export function useMoveable() {
       targetComponent!.scale[0] *= scale[0]
       targetComponent!.scale[1] *= scale[1]
     }
-
     // 通过对象实例改变对象style.position的属性
     const [scalex = 1, scaley = 1] = targetComponent!.scale
     target.style.top = `${targetComponent!.y}px`
