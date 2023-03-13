@@ -56,10 +56,8 @@ export function useMoveable() {
   }
 
   // function onEqualScale({ drag, target }: any) {
-  //   console.log('uiuiuiiuiiu')
   //   const regex = /scale\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)/
   //   const transformValue = drag.transform
-  //   console.log(transformValue, 'opopop')
   //   const match = regex.exec(transformValue)
   //   let scaleX = 0
   //   let scaleY = 0
@@ -111,6 +109,7 @@ export function useMoveable() {
     if (!lastEvent)
       return
     // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
+    // ----------------这部分是为了处理组合旋转，单个旋转无需考虑translate ------------------
     const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
     const match = regex.exec(lastEvent.afterTransform)
     let dx = 0
@@ -119,6 +118,7 @@ export function useMoveable() {
       dx = parseFloat(match[1])
       dy = parseFloat(match[3])
     }
+    // -------------------------------------------------------------------------------
     const rotate = lastEvent.rotate
     uSetStyle(target, { dx, dy, rotate })
   }
@@ -181,7 +181,6 @@ export function useMoveable() {
     const viewStore = useViewStore()
     // 拿到targetComponent
     const targetComponent = viewStore.getTarget(`#${id}`)
-    console.log(JSON.parse(JSON.stringify(targetComponent)))
     // 拿到transform对应属性
     const { dx, dy, rotate, scale } = delta
 

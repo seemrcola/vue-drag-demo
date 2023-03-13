@@ -29,13 +29,11 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function getTarget(targetId: string) {
-    console.log(components, 'components')
     return components.value.find(component => `#${component.id}` === targetId)
   }
 
   function addComponent<T extends IComponent>(component: T) {
     // 把compnent属性变成非响应式
-    console.log(component, 'addComponent')
     component.component = markRaw(component.component)
     components.value.push(component)
   }
