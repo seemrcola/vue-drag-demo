@@ -10,6 +10,7 @@ export function useMoveable() {
     return {
       isMeta: window.$KeyboardActive!.meta,
       isCtrl: window.$KeyboardActive!.ctrl,
+      isSpace: window.$KeyboardActive!.space,
     }
   }
 
@@ -22,7 +23,6 @@ export function useMoveable() {
     if (!isCtrl && !isMeta) {
       selectTarget.value = [id]
     }
-    // todo：按住ctrl进行多选【搁置中...】
     else {
       const ifHasId = selectTarget.value.find(compId => compId === id)
       if (!ifHasId)
@@ -44,12 +44,35 @@ export function useMoveable() {
   }
 
   function onScale({ drag, target }: any) {
+    // todo: 当space按下，使用等比缩放
+    // const { isSpace } = getKeyStatus()
+    // if (isSpace)
+    //   return onEqualScale({ drag, target })
     target.style.transform = drag.transform
   }
 
   function onRotate({ drag, target }: any) {
     target.style.transform = drag.transform
   }
+
+  // function onEqualScale({ drag, target }: any) {
+  //   console.log('uiuiuiiuiiu')
+  //   const regex = /scale\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)/
+  //   const transformValue = drag.transform
+  //   console.log(transformValue, 'opopop')
+  //   const match = regex.exec(transformValue)
+  //   let scaleX = 0
+  //   let scaleY = 0
+  //   let scale = 0
+  //   if (match) {
+  //     scaleX = parseFloat(match[1])
+  //     scaleY = parseFloat(match[2])
+  //   }
+  //   const { min, abs } = Math
+  //   scale = min(abs(scaleX), abs(scaleY))
+  //   target.style.transform = transformValue
+  //   target.style.cssText += `transform: scale(${scale})`
+  // }
   // -------------------------------------------------------------------------
 
   // ！！组合操作----------------------------------------------------------------
@@ -63,20 +86,7 @@ export function useMoveable() {
   function onScaleGroup({ events }: any) {
     events.forEach((event: any) => {
       const transformString = event.style.transform
-
-      // const scaleRegex = /transform:\s*scale\((\d*\.?\d+),\s*(\d*\.?\d+)\);/
-      // const match = transformString.match(scaleRegex)
-      // let x = 0
-      // let y = 0
-      // if (match) {
-      //   x = parseFloat(match[1])
-      //   y = parseFloat(match[2])
-      // }
-      // if (x < 0 || y < 0) { // moveable存在bug，组合拖拽不能完全反转
-      //   alert('暂时无法完全反转')
-      //   return
-      // }
-
+      // todo: 不允许翻转
       event.target.style.transform = transformString
     })
   }
