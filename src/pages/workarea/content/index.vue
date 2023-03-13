@@ -137,6 +137,13 @@ function MouseDownHandle(e: MouseEvent, comp: IComponent) {
     moveable.value!.dragStart(e)
   })
 }
+// 等比缩放
+const keepRatio = ref(false)
+function scaleHandle(e: any) {
+  const { space } = window.$KeyboardActive!
+  keepRatio.value = space
+  onScale(e)
+}
 // --------------------------------------------------------
 
 onMounted(() => {
@@ -196,8 +203,9 @@ onUnmounted(() => {
             :scalable="true"
             :rotatable="true"
             :scrollable="true"
+            :keep-ratio="keepRatio"
             @drag="onDrag"
-            @scale="onScale"
+            @scale="scaleHandle"
             @rotate="onRotate"
             @drag-group="onDragGroup"
             @scale-group="onScaleGroup"

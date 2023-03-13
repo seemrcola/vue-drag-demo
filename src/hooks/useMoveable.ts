@@ -5,6 +5,7 @@ import { useViewStore } from '@/store/modules'
 
 export function useMoveable() {
   const selectTarget = ref<string[]>([])
+
   /* 这个hooks需要用到useKeyBoard */
   function getKeyStatus() {
     return {
@@ -44,10 +45,6 @@ export function useMoveable() {
   }
 
   function onScale({ drag, target }: any) {
-    // todo: 当space按下，使用等比缩放
-    // const { isSpace } = getKeyStatus()
-    // if (isSpace)
-    //   return onEqualScale({ drag, target })
     target.style.transform = drag.transform
   }
 
@@ -55,22 +52,6 @@ export function useMoveable() {
     target.style.transform = drag.transform
   }
 
-  // function onEqualScale({ drag, target }: any) {
-  //   const regex = /scale\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)/
-  //   const transformValue = drag.transform
-  //   const match = regex.exec(transformValue)
-  //   let scaleX = 0
-  //   let scaleY = 0
-  //   let scale = 0
-  //   if (match) {
-  //     scaleX = parseFloat(match[1])
-  //     scaleY = parseFloat(match[2])
-  //   }
-  //   const { min, abs } = Math
-  //   scale = min(abs(scaleX), abs(scaleY))
-  //   target.style.transform = transformValue
-  //   target.style.cssText += `transform: scale(${scale})`
-  // }
   // -------------------------------------------------------------------------
 
   // ！！组合操作----------------------------------------------------------------

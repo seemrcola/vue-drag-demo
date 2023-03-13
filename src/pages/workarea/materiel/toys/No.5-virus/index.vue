@@ -103,7 +103,7 @@ function drawCell(ctx: any, cell: Person) {
 function start(ctx: any) {
   state.forEach((list, _idx, _self) => {
     list.forEach((cell, __idx, __self) => {
-      // 状态转移方案-----------------
+      // 状态转移方案-------------------
       if (cell.status === CellStatus.V)
         dueToV(cell)
       if (cell.status === CellStatus.R)
