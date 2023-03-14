@@ -127,6 +127,7 @@ const {
   onScaleGroupEnd,
   onRotateGroupEnd,
   selectComponent,
+  dropComponent,
   selectTarget,
 }
 = useMoveable()
@@ -144,6 +145,8 @@ function scaleHandle(e: any) {
   keepRatio.value = space
   onScale(e)
 }
+// 点击空白处取消选中
+document.addEventListener('mousedown', dropComponent)
 // --------------------------------------------------------
 
 onMounted(() => {
@@ -157,6 +160,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
+  document.removeEventListener('mousedown', dropComponent)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
 })
 </script>
@@ -226,7 +230,10 @@ onUnmounted(() => {
               ...viewStore.initComponentStyle(componentItem),
             }"
             class="component"
-            @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
+            @mousedown="(e: MouseEvent) => {
+              e.stopPropagation()
+              MouseDownHandle(e, componentItem)
+            }"
           />
         </div>
       </div>
