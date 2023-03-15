@@ -3,12 +3,12 @@ import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
 import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
+import { useMoveable } from './hooks/useMoveable'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 
 /* useDrag */
+
 import { useDrag } from '@/hooks/useDrag'
-/* useMoveable */
-import { useMoveable } from '@/hooks/useMoveable'
 import type { IComponent } from '@/store/modules/view'
 
 const viewStore = useViewStore()
@@ -129,6 +129,7 @@ const {
   selectComponent,
   dropComponent,
   selectTarget,
+  setMoveableRef,
 }
 = useMoveable()
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
@@ -145,8 +146,7 @@ function scaleHandle(e: any) {
   keepRatio.value = space
   onScale(e)
 }
-// 点击空白处取消选中
-document.addEventListener('mousedown', dropComponent)
+// 点击取消选中
 // --------------------------------------------------------
 
 onMounted(() => {
@@ -156,11 +156,11 @@ onMounted(() => {
   canvasInit() // 画布初始化
   eventInit() // 事件初始化，监听鼠标移动事件
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
+  setMoveableRef(moveable.value) // 将moveable对象传入hooks
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
-  document.removeEventListener('mousedown', dropComponent)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
 })
 </script>
@@ -168,6 +168,11 @@ onUnmounted(() => {
 <template>
   <!-- 最外层的包裹容器 -->
   <div ref="wrapperRef" class="wrapper">
+    <div
+      h-10 w-10 rounded="50%" bg="#fff"
+      absolute left-10 top-10 z-99999 cursor-pointer
+      @click="dropComponent"
+    />
     <!-- 标尺容器 -->
     <SketchRule
       :thick="state.thick"
