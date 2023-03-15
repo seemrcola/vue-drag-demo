@@ -49,8 +49,22 @@ export const useViewStore = defineStore('view', () => {
     }
   }
 
-  function setShowDataTargetForGroup() {
-
+  function setShowDataTargetForGroup(data: any) {
+    // 如果组合被改变了，则重制
+    if (data.change)
+      return showDataTarget.value = { ...initData, ...data }
+    // 组合没有被改变， 则在基础上运算
+    const { x, y, rotate, scale } = data
+    if (x)
+      showDataTarget.value.x += x
+    if (y)
+      showDataTarget.value.y += y
+    if (rotate)
+      showDataTarget.value.rotate = rotate
+    if (scale) {
+      showDataTarget.value.scale[0] *= scale[0]
+      showDataTarget.value.scale[1] *= scale[1]
+    }
   }
 
   function setTarget(targetId: string, isGroup = false) {
@@ -92,5 +106,6 @@ export const useViewStore = defineStore('view', () => {
     taregtSelect,
     showDataTarget,
     setShowDataTargetForComp,
+    setShowDataTargetForGroup,
   }
 })

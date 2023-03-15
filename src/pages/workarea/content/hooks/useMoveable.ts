@@ -2,7 +2,7 @@
  * uSetStyle 用来处理单个组件的位置【在拖拽操作结束之后处理】
  * view.setShowDataTarget 用来处理seetings.vue文件展示的数值【在拖拽结束之后处理】
  */
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 /* 这个hooks需要用到useKeyBoard */
 /* 这个hooks需要用到store 改变view里面的属性 */
 /* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
@@ -13,6 +13,7 @@ export function useMoveable() {
   const selectTarget = ref<string[]>([])
   const viewStore = useViewStore()
   const moveableRef = ref<VueMoveableInstance>()
+  let status: 'comp' | 'group' | undefined
 
   function getKeyStatus() {
     return {
@@ -30,8 +31,10 @@ export function useMoveable() {
     const { isMeta, isCtrl } = getKeyStatus()
     const id = `#${(comp).id}`
     // note: 每次必须要更换数组指向，否则不生效，就离谱----
-    // 不按住ctrl
-    if (!isCtrl && !isMeta) {
+    // 不按住ctrl 或者按住ctrl但是target列表长度为0
+    const noCtrl = !isCtrl && !isMeta
+    if (noCtrl || (!noCtrl && selectTarget.value.length === 0)) {
+      status = 'comp'
       // view中的选中数组处理
       selectTarget.value = [id]
       viewStore.setTarget(id, false) // isGroup = false
@@ -39,15 +42,18 @@ export function useMoveable() {
       viewStore.setShowDataTargetForComp() // 相同就不操作了，要不会造成点击坐标就变
     }
     else {
+      status = 'group'
       const ifHasId = selectTarget.value.find(compId => compId === id)
       if (!ifHasId) {
         // view中的选中数组处理
         selectTarget.value = [...selectTarget.value, id]
         viewStore.setTarget(id, true) // isGroup = true
         // view中的展示数组处理
-        nextTick(() => {
+        setTimeout(() => {
           const { x, y } = uCalcXY()
+          console.log(x, y, 'klklklkl')
           // todo
+          viewStore.setShowDataTargetForGroup({ x, y, change: true })
         })
       }
     }
@@ -58,7 +64,7 @@ export function useMoveable() {
     // todo
   }
 
-  // ！！单个组件操作-----------------------------------------------------------
+  // !!单个组件操作-----------------------------------------------------------
   function onDrag({ transform, target }: any) {
     target.style.transform = transform
   }
@@ -70,9 +76,9 @@ export function useMoveable() {
   function onRotate({ drag, target }: any) {
     target.style.transform = drag.transform
   }
-  // -------------------------------------------------------------------------
+  // !!-------------------------------------------------------------------------
 
-  // ！！组合操作----------------------------------------------------------------
+  // !!组合操作----------------------------------------------------------------
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
   // 组合操作要记得变更x，y的坐标----------
   function onDragGroup({ events }: any) {
@@ -94,16 +100,16 @@ export function useMoveable() {
       event.target.style.transform = event.style.transform
     })
   }
-  // -------------------------------------------------------------------------
+  // !!-------------------------------------------------------------------------
 
-  // ！！单个组件操作结束--------------------------------------------------------
+  // !!单个组件操作结束--------------------------------------------------------
   function onDragEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
     // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     const [dx, dy] = [...lastEvent.dist]
     uSetStyle(target, { dx, dy })
-    viewStore.setShowDataTargetForComp()
+    status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
@@ -114,7 +120,7 @@ export function useMoveable() {
     // -------------------------------------------------------------------------------
     const rotate = lastEvent.rotate
     uSetStyle(target, { dx, dy, rotate })
-    viewStore.setShowDataTargetForComp()
+    status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
   function onScaleEnd({ lastEvent, target }: any) {
@@ -126,7 +132,7 @@ export function useMoveable() {
     // ----------------------------------------------------------------------
     const scale = [...lastEvent.dist]
     uSetStyle(target, { scale, dx, dy })
-    viewStore.setShowDataTargetForComp()
+    status === 'comp' && viewStore.setShowDataTargetForComp()
   }
   // -------------------------------------------------------------------------
 
@@ -140,9 +146,10 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    // console.log(lastEvent, 'drag')
+    console.log(lastEvent, 'drag')
     const [x, y] = [...lastEvent.dist]
     // todo
+    viewStore.setShowDataTargetForGroup({ x, y })
   }
 
   function onRotateGroupEnd({ events, lastEvent }: any) {
@@ -158,6 +165,7 @@ export function useMoveable() {
     const rotate = lastEvent.rotate
     // const { dx, dy } = uCalcTranslateXY(lastEvent)
     // todo
+    viewStore.setShowDataTargetForGroup({ rotate })
   }
 
   function onScaleGroupEnd({ events, lastEvent }: any) {
@@ -170,11 +178,12 @@ export function useMoveable() {
     if (!lastEvent)
       return
     // console.log(lastEvent, 'scale')
-    const [scaleX, scaleY] = [...lastEvent.dist]
+    const scale = [...lastEvent.dist]
     // const { dx, dy } = uCalcTranslateXY(lastEvent)
     // todo
+    viewStore.setShowDataTargetForGroup({ scale })
   }
-  // ------------------------------------------------------------------------
+  // !!------------------------------------------------------------------------
 
   // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
   function uSetStyle(
@@ -221,10 +230,14 @@ export function useMoveable() {
 
   // 用来计算组合操作的xy坐标值
   function uCalcXY() {
-    const area = moveableRef.value!.getRect()
+    const area = document.getElementsByClassName('moveable-area')[0]!
+    const areaRect = area.getBoundingClientRect()
+    const canvas = document.querySelector('#canvas')!
+    const canvasRect = canvas.getBoundingClientRect()
+    console.log(canvasRect, areaRect, 'uuiuiuiiu')
     return {
-      x: area.left,
-      y: area.top,
+      x: areaRect.left - canvasRect.left,
+      y: areaRect.top - canvasRect.top,
     }
   }
 

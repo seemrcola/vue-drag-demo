@@ -252,5 +252,23 @@
     // "comments": "yellow",
     // "functions": "#d4289b"
     // "variables": "#f40"
-  }
+  },
+  "better-comments.tags": [
+    {
+      "tag": "todo",
+      "color": "#FFA500",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "!!",
+      "color": "#996666",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    }
+  ]
 }
