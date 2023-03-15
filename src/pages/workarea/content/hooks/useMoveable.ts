@@ -129,16 +129,8 @@ export function useMoveable() {
   function onRotateEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     // ----------------这部分是为了处理组合旋转，单个旋转无需考虑translate ------------------
-    const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
-    const match = regex.exec(lastEvent.afterTransform)
-    let dx = 0
-    let dy = 0
-    if (match) {
-      dx = parseFloat(match[1])
-      dy = parseFloat(match[3])
-    }
+    const { dx, dy } = uCalcTranslateXY(lastEvent)
     // -------------------------------------------------------------------------------
     const rotate = lastEvent.rotate
     uSetStyle(target, { dx, dy, rotate })
@@ -150,17 +142,10 @@ export function useMoveable() {
     if (!lastEvent)
       return
 
-    // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
-    // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况
-    const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
-    const match = regex.exec(lastEvent.afterTransform)
+    // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况-------------------
+    const { dx, dy } = uCalcTranslateXY(lastEvent)
+    // ----------------------------------------------------------------------
     const scale = [...lastEvent.dist]
-    let dx = 0
-    let dy = 0
-    if (match) {
-      dx = parseFloat(match[1])
-      dy = parseFloat(match[3])
-    }
     uSetStyle(target, { scale, dx, dy })
     if (moveableType.value === 'comp')
       viewStore.setShowDataTarget({ x: dx, y: dy, scaleX: scale[0], scaleY: scale[1] }, 'comp')
@@ -191,9 +176,10 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    // console.log(lastEvent, 'rotate')
+    console.log(lastEvent, 'rotate')
     const rotate = lastEvent.rotate
-    viewStore.setShowDataTarget({ rotate }, 'group')
+    const { dx, dy } = uCalcTranslateXY(lastEvent)
+    viewStore.setShowDataTarget({ rotate, x: dx, y: dy }, 'group')
   }
 
   function onScaleGroupEnd({ events, lastEvent }: any) {
@@ -207,7 +193,8 @@ export function useMoveable() {
       return
     // console.log(lastEvent, 'scale')
     const [scaleX, scaleY] = [...lastEvent.dist]
-    viewStore.setShowDataTarget({ scaleX, scaleY }, 'group')
+    const { dx, dy } = uCalcTranslateXY(lastEvent)
+    viewStore.setShowDataTarget({ scaleX, scaleY, x: dx, y: dy }, 'group')
   }
   // ------------------------------------------------------------------------
 
@@ -239,6 +226,20 @@ export function useMoveable() {
     target.style.top = `${targetComponent!.y}px`
     target.style.left = `${targetComponent!.x}px`
     target.style.transform = `rotate(${targetComponent!.rotate}deg) scale(${scalex}, ${scaley})`
+  }
+
+  function uCalcTranslateXY(lastEvent: any) {
+    const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
+    const match = regex.exec(lastEvent.afterTransform)
+    console.log(lastEvent, 'lastEvent')
+    let dx = 0
+    let dy = 0
+    if (match) {
+      dx = parseFloat(match[1])
+      dy = parseFloat(match[3])
+    }
+
+    return { dx, dy }
   }
 
   return {
