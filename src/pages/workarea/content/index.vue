@@ -156,7 +156,7 @@ onMounted(() => {
   canvasInit() // 画布初始化
   eventInit() // 事件初始化，监听鼠标移动事件
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
-  setMoveableRef(moveable.value!) // 将moveable对象传入hooks
+  setMoveableRef(moveable.value) // 将moveable对象传入hooks
 })
 
 onUnmounted(() => {
