@@ -31,13 +31,11 @@ export const useViewStore = defineStore('view', () => {
   const taregtSelect = ref<IComponent[]>([])
   // 右侧用于展示的数据
   const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1] }
-  const showDataTarget = ref(initData)
+  const showDataTarget = ref<ShowData>({ x: 0, y: 0, rotate: 0, scale: [1, 1] })
 
   // 右侧栏setting的展示
   function setShowDataTargetForComp() {
-    console.log('in comp')
     // 当单个组件的情况下，可能是切换组件，也可能是连续移动某个组件
-    console.log(taregtSelect.value)
     const { x, y, rotate, scale } = taregtSelect.value[0] // !! fixme: 这里没有跟着动态改变
     if (x)
       showDataTarget.value.x = x
@@ -55,6 +53,7 @@ export const useViewStore = defineStore('view', () => {
     // 如果组合被改变了，则重制
     if (data.change)
       return showDataTarget.value = { ...initData, ...data }
+
     // 组合没有被改变， 则在基础上运算
     const { x, y, rotate, scale } = data
     if (x)

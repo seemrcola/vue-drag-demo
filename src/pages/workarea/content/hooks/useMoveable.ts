@@ -59,7 +59,7 @@ export function useMoveable() {
 
   function dropComponent() {
     selectTarget.value = []
-    viewStore.setShowDataTargetForGroup({}, true)
+    viewStore.setShowDataTargetForGroup({ change: true })
   }
 
   // !!单个组件操作-----------------------------------------------------------
