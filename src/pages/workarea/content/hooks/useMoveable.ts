@@ -124,17 +124,18 @@ export function useMoveable() {
   function onScaleEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-
+    console.log(lastEvent.direction, 'scale')
     // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况-------------------
     const { dx, dy } = uCalcTranslateXY(lastEvent)
     // ----------------------------------------------------------------------
     const scale = [...lastEvent.dist]
     uSetStyle(target, { scale, dx, dy })
-    status === 'comp' && viewStore.setShowDataTargetForComp()
+    status === 'comp'
+    && viewStore.setShowDataTargetForComp({ dx, dy }, lastEvent.direction.toString())
   }
   // -------------------------------------------------------------------------
 
-  // ！！多个组件操作结束---------------------------------------------------------
+  // !!多个组件操作结束---------------------------------------------------------
   function onDragGroupEnd({ events, lastEvent }: any) {
     events.forEach((event: any) => {
       const { lastEvent, target } = event
@@ -158,7 +159,7 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    console.log(lastEvent, 'rotate')
+    // console.log(lastEvent, 'rotate')
     const rotate = lastEvent.rotate
     // const { dx, dy } = uCalcTranslateXY(lastEvent)
     viewStore.setShowDataTargetForGroup({ rotate })
