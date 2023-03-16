@@ -9,7 +9,7 @@ import App from './App.vue'
 import { setupRouter } from './router'
 import { setupStore } from './store'
 // global hooks
-import { useKeyboard } from '@/hooks/useKeyboard'
+import { useKeyboard } from '@/hooks/useFnKeyboard'
 useKeyboard()
 
 function setupApp() {

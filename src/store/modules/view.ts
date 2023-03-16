@@ -70,6 +70,7 @@ export const useViewStore = defineStore('view', () => {
         // 2.如果减掉位移 此时又回到上一次的结束位置 所以我们需要知道什么时候要保持不变
         // 3.如果加上位移，则显示我们处理之后的位置
         // 4.保持不变即不在SCALEDIRECTION方向 SCALEDIRECTION的都需要改变
+        // todo : 旋转状态下做缩放的问题
         if (!SCALEDIRECTION.includes(direction)) {
           showDataTarget.value.x -= dx
           showDataTarget.value.y -= dy

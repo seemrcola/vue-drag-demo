@@ -1,4 +1,4 @@
-import { KEYSMAP } from './types/useKeyboard.d'
+import { KEYSMAP } from './types/useFnKeyboard.d'
 
 const keysmap = [KEYSMAP.SPACE, KEYSMAP.CTRL]
 // 处理键盘记录
