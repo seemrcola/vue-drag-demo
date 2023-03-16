@@ -36,7 +36,7 @@ export const useViewStore = defineStore('view', () => {
   // 右侧栏setting的展示
   function setShowDataTargetForComp() {
     // 当单个组件的情况下，可能是切换组件，也可能是连续移动某个组件
-    const { x, y, rotate, scale } = taregtSelect.value[0] // !! fixme: 这里没有跟着动态改变
+    const { x, y, rotate, scale } = taregtSelect.value[0]
     if (x)
       showDataTarget.value.x = x
     if (y)
