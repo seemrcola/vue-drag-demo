@@ -35,8 +35,10 @@ export const useViewStore = defineStore('view', () => {
 
   // 右侧栏setting的展示
   function setShowDataTargetForComp() {
+    console.log('in comp')
     // 当单个组件的情况下，可能是切换组件，也可能是连续移动某个组件
-    const { x, y, rotate, scale } = taregtSelect.value[0]
+    console.log(taregtSelect.value)
+    const { x, y, rotate, scale } = taregtSelect.value[0] // !! fixme: 这里没有跟着动态改变
     if (x)
       showDataTarget.value.x = x
     if (y)
@@ -68,8 +70,9 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function setTarget(targetId: string, isGroup = false) {
-    !isGroup && taregtSelect.value?.pop()
-    taregtSelect.value?.push(getTarget(targetId)!)
+    if (!isGroup)
+      taregtSelect.value.length = 0
+    taregtSelect.value.push(getTarget(targetId)!)
   }
 
   function getTarget(targetId: string) {

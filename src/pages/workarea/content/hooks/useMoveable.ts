@@ -39,7 +39,7 @@ export function useMoveable() {
       selectTarget.value = [id]
       viewStore.setTarget(id, false) // isGroup = false
       // view中的展示数组处理
-      viewStore.setShowDataTargetForComp() // 相同就不操作了，要不会造成点击坐标就变
+      viewStore.setShowDataTargetForComp()
     }
     else {
       status = 'group'
@@ -51,8 +51,6 @@ export function useMoveable() {
         // view中的展示数组处理
         setTimeout(() => {
           const { x, y } = uCalcXY()
-          console.log(x, y, 'klklklkl')
-          // todo
           viewStore.setShowDataTargetForGroup({ x, y, change: true })
         })
       }
@@ -61,7 +59,7 @@ export function useMoveable() {
 
   function dropComponent() {
     selectTarget.value = []
-    // todo
+    viewStore.setShowDataTargetForGroup({}, true)
   }
 
   // !!单个组件操作-----------------------------------------------------------
@@ -148,7 +146,6 @@ export function useMoveable() {
       return
     console.log(lastEvent, 'drag')
     const [x, y] = [...lastEvent.dist]
-    // todo
     viewStore.setShowDataTargetForGroup({ x, y })
   }
 
@@ -164,7 +161,6 @@ export function useMoveable() {
     console.log(lastEvent, 'rotate')
     const rotate = lastEvent.rotate
     // const { dx, dy } = uCalcTranslateXY(lastEvent)
-    // todo
     viewStore.setShowDataTargetForGroup({ rotate })
   }
 
@@ -180,7 +176,6 @@ export function useMoveable() {
     // console.log(lastEvent, 'scale')
     const scale = [...lastEvent.dist]
     // const { dx, dy } = uCalcTranslateXY(lastEvent)
-    // todo
     viewStore.setShowDataTargetForGroup({ scale })
   }
   // !!------------------------------------------------------------------------
