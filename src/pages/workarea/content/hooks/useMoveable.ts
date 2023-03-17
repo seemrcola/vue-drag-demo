@@ -7,6 +7,7 @@ import { ref } from 'vue'
 /* 这个hooks需要用到store 改变view里面的属性 */
 /* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
 import type { VueMoveableInstance } from 'vue3-moveable'
+import type { ShowData } from '@/store/modules/view'
 import { useViewStore } from '@/store/modules'
 
 export function useMoveable() {
@@ -74,7 +75,7 @@ export function useMoveable() {
   function onRotate({ drag, target }: any) {
     target.style.transform = drag.transform
   }
-  // !!-------------------------------------------------------------------------
+  // !!----------------------------------------------------------------------
 
   // !!组合操作----------------------------------------------------------------
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
@@ -98,40 +99,42 @@ export function useMoveable() {
       event.target.style.transform = event.style.transform
     })
   }
-  // !!-------------------------------------------------------------------------
+  // !!---------------------------------------------------------------------
 
   // !!单个组件操作结束--------------------------------------------------------
   function onDragEnd({ lastEvent, target }: any) {
+    // console.log(lastEvent, 'drag')
     if (!lastEvent)
       return
     // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
-    const [dx, dy] = [...lastEvent.dist]
-    uSetStyle(target, { dx, dy })
+    const [dx, dy] = [...lastEvent.dist] as [number, number]
+    uSetStyle(target, { x: dx, y: dy })
     status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
+    // console.log(lastEvent, 'rotate')
     if (!lastEvent)
       return
     // ----------------这部分是为了处理组合旋转，单个旋转无需考虑translate ------------------
     const { dx, dy } = uCalcTranslateXY(lastEvent)
     // -------------------------------------------------------------------------------
     const rotate = lastEvent.rotate
-    uSetStyle(target, { dx, dy, rotate })
+    uSetStyle(target, { x: dx, y: dy, rotate })
     status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
   function onScaleEnd({ lastEvent, target }: any) {
+    // console.log(lastEvent, 'scale')
     if (!lastEvent)
       return
-    console.log(lastEvent.direction, 'scale')
     // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况-------------------
     const { dx, dy } = uCalcTranslateXY(lastEvent)
     // ----------------------------------------------------------------------
-    const scale = [...lastEvent.dist]
-    uSetStyle(target, { scale, dx, dy })
+    const scale = [...lastEvent.dist] as [number, number]
+    uSetStyle(target, { scale, x: dx, y: dy })
     status === 'comp'
-    && viewStore.setShowDataTargetForComp({ dx, dy }, lastEvent.direction.toString())
+    && viewStore.setShowDataTargetForComp()
   }
   // -------------------------------------------------------------------------
 
@@ -145,7 +148,7 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    console.log(lastEvent, 'drag')
+    // console.log(lastEvent, 'drag')
     const [x, y] = [...lastEvent.dist]
     viewStore.setShowDataTargetForGroup({ x, y })
   }
@@ -184,26 +187,13 @@ export function useMoveable() {
   // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
   function uSetStyle(
     target: HTMLElement,
-    delta: { [propname: string]: any },
+    delta: ShowData,
   ) {
-    // debugger
     const id = target.id
-    // 拿到targetComponent
+    // 根据id修改componnets中对应的component
+    viewStore.changeComponents(id, delta)
+    // 获取component
     const targetComponent = viewStore.getTarget(`#${id}`)
-    // 拿到transform对应属性
-    const { dx, dy, rotate, scale } = delta
-
-    // 处理targetComponent的属性
-    if (dx)
-      targetComponent!.x += dx
-    if (dy)
-      targetComponent!.y += dy
-    if (rotate)
-      targetComponent!.rotate = rotate
-    if (scale) {
-      targetComponent!.scale[0] *= scale[0]
-      targetComponent!.scale[1] *= scale[1]
-    }
     // 通过对象实例改变对象style.position的属性
     const [scalex = 1, scaley = 1] = targetComponent!.scale
     target.style.top = `${targetComponent!.y}px`
@@ -230,7 +220,6 @@ export function useMoveable() {
     const areaRect = area.getBoundingClientRect()
     const canvas = document.querySelector('#canvas')!
     const canvasRect = canvas.getBoundingClientRect()
-    console.log(canvasRect, areaRect, 'uuiuiuiiu')
     return {
       x: areaRect.left - canvasRect.left,
       y: areaRect.top - canvasRect.top,

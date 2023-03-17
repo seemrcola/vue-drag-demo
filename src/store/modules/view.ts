@@ -17,19 +17,14 @@ export interface IComponent {
   }
 }
 
-interface ShowData {
-  x: number
-  y: number
-  rotate: number
-  scale: [number, number]
+export interface ShowData {
+  x?: number
+  y?: number
+  rotate?: number
+  scale?: [number, number]
+  height?: number
+  width?: number
 }
-
-interface XYMap {
-  [propname: string]: { x: number; y: number }
-}
-
-// 这五个缩放方向会改变中心点坐标
-const SCALEDIRECTION = ['-1,-1', '0,-1', '1,-1', '-1,0', '-1,1']
 
 export const useViewStore = defineStore('view', () => {
   // 画布上的全部图表
@@ -37,10 +32,9 @@ export const useViewStore = defineStore('view', () => {
   // 画布上被选中的图表
   const taregtSelect = ref<IComponent[]>([])
   // 被选中图表的偏差记录
-  const transformXYMap = ref<XYMap>({})
   // 右侧用于展示的数据
-  const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1] }
-  const showDataTarget = ref<ShowData>({ x: 0, y: 0, rotate: 0, scale: [1, 1] })
+  const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 }
+  const showDataTarget = ref<ShowData>({ x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 })
 
   // 右侧栏setting的展示
   /**
@@ -48,52 +42,44 @@ export const useViewStore = defineStore('view', () => {
    * @param direction 缩放的方向
    * @description 组件坐标 = seeting展示的坐标 + 偏差值
   */
-  function setShowDataTargetForComp(data: any = undefined, direction = '') {
+  function setShowDataTargetForComp() {
     // 选择和变换两种情况 选择data和direction都是空 变换时都有值
-    const { x, y, rotate, scale, id } = taregtSelect.value[0]
-    // debugger
-    // case 选择 选择时要记得减去偏差map中的xy值
-    if (x)
-      showDataTarget.value.x = x - transformXYMap.value[id].x
-    if (y)
-      showDataTarget.value.y = y - transformXYMap.value[id].y
+    const { rotate, scale, id } = taregtSelect.value[0]
+    // 这两个直接赋值就行了
     if (rotate)
       showDataTarget.value.rotate = rotate
     if (scale) {
-      showDataTarget.value.scale[0] = scale[0]
-      showDataTarget.value.scale[1] = scale[1]
-      // case 2
-      if (data) {
-        // 拿到从translate那里分离出来的值，这个代表的是组件坐标中心点的位移
-        const { dx, dy } = data
-        // 1.此时showDataTarget.value.x拿到的是上一次操作结束的位置 我们将上一次的位置处理正确 就可以递推每一次都正确
-        // 2.如果减掉位移 此时又回到上一次的结束位置 所以我们需要知道什么时候要保持不变
-        // 3.如果加上位移，则显示我们处理之后的位置
-        // 4.保持不变即不在SCALEDIRECTION方向 SCALEDIRECTION的都需要改变
-        // todo : 旋转状态下做缩放的问题
-        if (!SCALEDIRECTION.includes(direction)) {
-          showDataTarget.value.x -= dx
-          showDataTarget.value.y -= dy
-          // 累加偏差
-          transformXYMap.value[id].x += dx
-          transformXYMap.value[id].y += dy
-        }
-        else {
-          showDataTarget.value.x += dx
-          showDataTarget.value.y += dy
-          // 累加偏差
-          transformXYMap.value[id].x -= dx
-          transformXYMap.value[id].y -= dy
-        }
-      }
+      showDataTarget.value.scale![0] = scale[0]
+      showDataTarget.value.scale![1] = scale[1]
     }
+    // xy需要处理一下
+    const { offsetX, offsetY } = uCalcCompXY(id)
+    showDataTarget.value.x = offsetX
+    showDataTarget.value.y = offsetY
+  }
+
+  function uCalcCompXY(tagetId: string) {
+    // xy处理一下
+    const dom = document.querySelector(`#${tagetId}`)!
+    const domRect = dom.getBoundingClientRect()
+    const canvas = document.querySelector('#canvas')!
+    const canvasRect = canvas.getBoundingClientRect()
+    // 中心点计算
+    const centerX = domRect.left + domRect.width / 2
+    const centerY = domRect.top + domRect.height / 2
+    // 与canvas画布的距离计算
+    const comp = getTarget(`#${tagetId}`)
+    const offsetX = centerX - canvasRect.left - comp!.width / 2
+    const offsetY = centerY - canvasRect.top - comp!.height / 2
+
+    return { offsetX, offsetY }
   }
 
   /**
    * @param data 数据
    * @param direction 缩放的方向
   */
-  function setShowDataTargetForGroup(data: any, direction = '') {
+  function setShowDataTargetForGroup(data: any) {
     // 如果组合被改变了，则重制
     if (data.change)
       return showDataTarget.value = { ...initData, ...data }
@@ -107,8 +93,8 @@ export const useViewStore = defineStore('view', () => {
     if (rotate)
       showDataTarget.value.rotate = rotate
     if (scale) {
-      showDataTarget.value.scale[0] *= scale[0]
-      showDataTarget.value.scale[1] *= scale[1]
+      showDataTarget.value.scale![0] *= scale[0]
+      showDataTarget.value.scale![1] *= scale[1]
     }
   }
 
@@ -126,8 +112,23 @@ export const useViewStore = defineStore('view', () => {
     // 把compnent属性变成非响应式
     component.component = markRaw(component.component)
     components.value.push(component)
-    // 同时也将这个组件的偏差进行初始化
-    transformXYMap.value[component.id] = { x: 0, y: 0 }
+  }
+
+  function changeComponents(componentId: string, data: ShowData) {
+    const item = components.value.find(item => componentId === item.id)!
+    const { x, y, rotate, scale } = data
+    if (x)
+      item.x += x
+    if (y)
+      item.y += y
+    if (rotate)
+      item.rotate = rotate
+    if (scale) {
+      item.scale[0] *= scale[0]
+      item.scale[1] *= scale[1]
+      item.width *= scale[0]
+      item.height *= scale[1]
+    }
   }
 
   function removeComponent<T extends IComponent>(component: T) {
@@ -155,5 +156,6 @@ export const useViewStore = defineStore('view', () => {
     showDataTarget,
     setShowDataTargetForComp,
     setShowDataTargetForGroup,
+    changeComponents,
   }
 })
