@@ -56,6 +56,10 @@ export const useViewStore = defineStore('view', () => {
     const { offsetX, offsetY } = uCalcCompXY(id)
     showDataTarget.value.x = offsetX
     showDataTarget.value.y = offsetY
+    // 宽高直接赋值
+    const comp = getTarget(`#${id}`)!
+    showDataTarget.value.width = comp.width
+    showDataTarget.value.height = comp.height
   }
 
   function uCalcCompXY(tagetId: string) {
@@ -68,9 +72,9 @@ export const useViewStore = defineStore('view', () => {
     const centerX = domRect.left + domRect.width / 2
     const centerY = domRect.top + domRect.height / 2
     // 与canvas画布的距离计算
-    const comp = getTarget(`#${tagetId}`)
-    const offsetX = centerX - canvasRect.left - comp!.width / 2
-    const offsetY = centerY - canvasRect.top - comp!.height / 2
+    const comp = getTarget(`#${tagetId}`)!
+    const offsetX = centerX - canvasRect.left - comp.width / 2
+    const offsetY = centerY - canvasRect.top - comp.height / 2
 
     return { offsetX, offsetY }
   }

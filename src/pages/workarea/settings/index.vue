@@ -14,8 +14,8 @@ watch(
       <div>x: {{ viewStore.showDataTarget?.x }} </div>
       <div>y: {{ viewStore.showDataTarget?.y }} </div>
       <div>rotate: {{ viewStore.showDataTarget?.rotate }} </div>
-      <div>scaleX: {{ viewStore.showDataTarget?.scale[0] }} </div>
-      <div>scaleY: {{ viewStore.showDataTarget?.scale[1] }} </div>
+      <div>width: {{ viewStore.showDataTarget?.width }} </div>
+      <div>height: {{ viewStore.showDataTarget?.height }} </div>
     </div>
   </div>
 </template>
