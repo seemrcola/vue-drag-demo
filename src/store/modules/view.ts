@@ -53,30 +53,13 @@ export const useViewStore = defineStore('view', () => {
       showDataTarget.value.scale![1] = scale[1]
     }
     // xy需要处理一下
-    const { offsetX, offsetY } = uCalcCompXY(id)
+    const { offsetX, offsetY } = uCalcCompXY(`#${id}`)
     showDataTarget.value.x = offsetX
     showDataTarget.value.y = offsetY
     // 宽高直接赋值
     const comp = getTarget(`#${id}`)!
     showDataTarget.value.width = comp.width
     showDataTarget.value.height = comp.height
-  }
-
-  function uCalcCompXY(tagetId: string) {
-    // xy处理一下
-    const dom = document.querySelector(`#${tagetId}`)!
-    const domRect = dom.getBoundingClientRect()
-    const canvas = document.querySelector('#canvas')!
-    const canvasRect = canvas.getBoundingClientRect()
-    // 中心点计算
-    const centerX = domRect.left + domRect.width / 2
-    const centerY = domRect.top + domRect.height / 2
-    // 与canvas画布的距离计算
-    const comp = getTarget(`#${tagetId}`)!
-    const offsetX = centerX - canvasRect.left - comp.width / 2
-    const offsetY = centerY - canvasRect.top - comp.height / 2
-
-    return { offsetX, offsetY }
   }
 
   /**
@@ -89,17 +72,36 @@ export const useViewStore = defineStore('view', () => {
       return showDataTarget.value = { ...initData, ...data }
 
     // 组合没有被改变， 则在基础上运算
-    const { x, y, rotate, scale } = data
-    if (x)
-      showDataTarget.value.x += x
-    if (y)
-      showDataTarget.value.y += y
-    if (rotate)
-      showDataTarget.value.rotate = rotate
-    if (scale) {
-      showDataTarget.value.scale![0] *= scale[0]
-      showDataTarget.value.scale![1] *= scale[1]
-    }
+    setTimeout(() => {
+      const { rotate, scale } = data
+      if (rotate)
+        showDataTarget.value.rotate = rotate
+      if (scale) {
+        showDataTarget.value.scale![0] *= scale[0]
+        showDataTarget.value.scale![1] *= scale[1]
+      }
+      // xy需要处理一下
+      const { offsetX, offsetY } = uCalcCompXY('.moveable-area')
+      showDataTarget.value.x = offsetX
+      showDataTarget.value.y = offsetY
+    })
+  }
+
+  function uCalcCompXY(selector: string) {
+    // xy处理一下
+    const dom = document.querySelector(`${selector}`)!
+    const domRect = dom.getBoundingClientRect()
+    const canvas = document.querySelector('#canvas')!
+    const canvasRect = canvas.getBoundingClientRect()
+    // 中心点计算
+    const centerX = domRect.left + domRect.width / 2
+    const centerY = domRect.top + domRect.height / 2
+    // 与canvas画布的距离计算
+    const comp = getTarget(`${selector}`) || { width: 0, height: 0 } // fixme:这里是因为懒得处理组合了
+    const offsetX = centerX - canvasRect.left - comp.width / 2
+    const offsetY = centerY - canvasRect.top - comp.height / 2
+
+    return { offsetX, offsetY }
   }
 
   function setTarget(targetId: string, isGroup = false) {

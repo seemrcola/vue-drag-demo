@@ -256,27 +256,20 @@
   "better-comments.tags": [
     {
       "tag": "todo",
-      "color": "#FFA500",
-      "strikethrough": false,
-      "backgroundColor": "transparent",
-      "bold": false,
-      "italic": false
+      "color": "#FFA500"
     },
     {
       "tag": "!!",
-      "color": "#996666",
-      "strikethrough": false,
-      "backgroundColor": "transparent",
-      "bold": false,
-      "italic": false
+      "color": "#996666"
+    },
+    {
+      "tag": "fixme",
+      "color": "#fff",
+      "backgroundColor": "#000"
     },
     {
       "tag": "case",
-      "color": "#996",
-      "strikethrough": false,
-      "backgroundColor": "transparent",
-      "bold": false,
-      "italic": false
+      "color": "#996"
     }
   ]
 }
