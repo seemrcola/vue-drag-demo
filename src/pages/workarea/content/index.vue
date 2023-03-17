@@ -170,7 +170,7 @@ onUnmounted(() => {
   <!-- 最外层的包裹容器 -->
   <div ref="wrapperRef" class="wrapper">
     <div
-      h-10 w-10 rounded="50%" bg="#fff"
+      h-10 w-10 rounded="50%" bg="#eee"
       absolute left-10 top-10 z-99999 cursor-pointer
       @click="dropComponent"
     />
@@ -250,6 +250,15 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .wrapper {
   position: relative;
+  background: rgba($color: #000, $alpha: 0.9) ;
+    background-image:
+        linear-gradient(rgba(255,255,255,.3) 1px, transparent 0),
+        linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 0),
+        linear-gradient(white 1px, transparent 0),
+        linear-gradient(90deg, white 1px, transparent 0);
+    background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
+    width: 450px;
+    height: 450px;
   /*
    * 特别注意,这个width要和传入组件的width成对应关系,
    * 也就是 580width +thick20 = 600
@@ -257,8 +266,19 @@ onUnmounted(() => {
    */
   width: 100%;
   height: 100%;
-  background-color: #333;
   border: 1px solid #dadadc;
+
+  #canvas {
+    background: rgba($color: #fff, $alpha: 1.0) ;
+    background-image:
+        linear-gradient(rgba(0,0,0,.1) 1px, transparent 0),
+        linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 0),
+        linear-gradient(white 1px, transparent 0),
+        linear-gradient(90deg, white 1px, transparent 0);
+    background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
+    width: 450px;
+    height: 450px;
+  }
 }
 .component {
   &:hover {

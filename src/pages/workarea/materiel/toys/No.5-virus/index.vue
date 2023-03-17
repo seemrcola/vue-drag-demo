@@ -205,7 +205,9 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div>{{ day }}</div>
+    <strong>
+      <div>已经与疫情共处{{ day }}天</div>
+    </strong>
     <canvas ref="canvas" height="400" width="400" />
   </div>
 </template>
