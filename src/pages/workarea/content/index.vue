@@ -4,20 +4,20 @@ import { SketchRule } from 'vue3-sketch-ruler'
 import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
 import { useMoveable } from './hooks/useMoveable'
-import { useRulerStore, useViewStore } from '@/store/modules/index'
-
-/* useDrag */
-
+import { useEclipseStore, useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
 import type { IComponent } from '@/store/modules/view'
 
+/* viewStore */
 const viewStore = useViewStore()
-
+/* Eclipse */
+const { listener, setMoveableRef } = useEclipseStore()
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
 const canvasStyle = rulerStore.canvasStyle
 
+/* drag */
 const { handleMouseDown, getDerta } = useDrag()
 
 /* dom ref */
@@ -129,7 +129,6 @@ const {
   selectComponent,
   dropComponent,
   selectTarget,
-  setMoveableRef,
 }
 = useMoveable()
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
@@ -142,7 +141,7 @@ function MouseDownHandle(e: MouseEvent, comp: IComponent) {
 // 等比缩放
 const keepRatio = ref(false)
 function scaleHandle(e: any) {
-  const { space } = window.$KeyboardActive!
+  const { space } = window.$KeyboardActive
   keepRatio.value = space
   onScale(e)
 }
@@ -156,12 +155,14 @@ onMounted(() => {
   canvasInit() // 画布初始化
   eventInit() // 事件初始化，监听鼠标移动事件
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
-  setMoveableRef(moveable.value!) // 将moveable对象传入hooks
+  window.addEventListener('keydown', listener) // 鼠标按下监听
+  setMoveableRef(moveable.value!)
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
+  window.removeEventListener('keydown', listener)
 })
 </script>
 

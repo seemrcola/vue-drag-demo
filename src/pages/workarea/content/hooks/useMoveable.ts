@@ -18,14 +18,10 @@ export function useMoveable() {
 
   function getKeyStatus() {
     return {
-      isMeta: window.$KeyboardActive!.meta,
-      isCtrl: window.$KeyboardActive!.ctrl,
-      isSpace: window.$KeyboardActive!.space,
+      isMeta: window.$KeyboardActive.meta,
+      isCtrl: window.$KeyboardActive.ctrl,
+      isSpace: window.$KeyboardActive.space,
     }
-  }
-
-  function setMoveableRef(ref: VueMoveableInstance) {
-    moveableRef.value = ref
   }
 
   function selectComponent<T extends { id: string }>(comp: T) {
@@ -59,6 +55,7 @@ export function useMoveable() {
   }
 
   function dropComponent() {
+    console.log('drop')
     selectTarget.value = []
     viewStore.setShowDataTargetForGroup({ change: true })
   }
@@ -242,6 +239,5 @@ export function useMoveable() {
     selectTarget,
     selectComponent,
     dropComponent,
-    setMoveableRef,
   }
 }

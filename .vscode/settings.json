@@ -256,11 +256,13 @@
   "better-comments.tags": [
     {
       "tag": "todo",
-      "color": "#FFA500"
+      "color": "#fff",
+      "backgroundColor": "#FFA500"
     },
     {
       "tag": "!!",
-      "color": "#996666"
+      "color": "#fff",
+      "backgroundColor": "#996666"
     },
     {
       "tag": "fixme",
@@ -269,7 +271,8 @@
     },
     {
       "tag": "case",
-      "color": "#996"
+      "color": "#fff",
+      "backgroundColor": "#996"
     }
   ]
 }
