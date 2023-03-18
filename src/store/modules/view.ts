@@ -51,8 +51,12 @@ export const useViewStore = defineStore('view', () => {
       showDataTarget.value.scale![1] = scale[1]
     }
     // rotate 需要兼容结束时和操作中 不过两种状态下行为是一样的
-    if (rotate)
-      showDataTarget.value.rotate = Math.abs(rotate) % 360
+    if (rotate) {
+      showDataTarget.value.rotate
+      = rotate > 0
+          ? Math.abs(rotate) % 360
+          : -Math.abs(rotate)
+    }
 
     // xy需要处理一下 需要兼容结束时和操作中
     const { offsetX, offsetY } = uCalcCompXY(`#${id}`, type, scale)
