@@ -251,14 +251,14 @@ onUnmounted(() => {
 .wrapper {
   position: relative;
   background: rgba($color: #000, $alpha: 0.9) ;
-    background-image:
-        linear-gradient(rgba(255,255,255,.3) 1px, transparent 0),
-        linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 0),
-        linear-gradient(white 1px, transparent 0),
-        linear-gradient(90deg, white 1px, transparent 0);
-    background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
-    width: 450px;
-    height: 450px;
+  background-image:
+      linear-gradient(rgba(255,255,255,.3) 1px, transparent 0),
+      linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 0),
+      linear-gradient(white 1px, transparent 0),
+      linear-gradient(90deg, white 1px, transparent 0);
+  background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
+  width: 450px;
+  height: 450px;
   /*
    * 特别注意,这个width要和传入组件的width成对应关系,
    * 也就是 580width +thick20 = 600

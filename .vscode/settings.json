@@ -272,7 +272,12 @@
     {
       "tag": "case",
       "color": "#fff",
-      "backgroundColor": "#996"
+      "backgroundColor": "#f40"
+    },
+    {
+      "tag": "beta",
+      "color": "#fff",
+      "backgroundColor": "#007"
     }
   ]
 }

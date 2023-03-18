@@ -61,16 +61,25 @@ export function useMoveable() {
   }
 
   // !!单个组件操作-----------------------------------------------------------
-  function onDrag({ transform, target }: any) {
+  function onDrag({ transform, target, dist }: any) {
     target.style.transform = transform
+    // beta 实时修改右侧坐标
+    const [x, y] = dist
+    viewStore.setShowDataTargetForComp({ x, y, id: target.id }, 'ing')
   }
 
-  function onScale({ drag, target }: any) {
+  function onScale({ drag, target, dist }: any) {
     target.style.transform = drag.transform
+    // beta 实时修改右侧坐标
+    const scale = [...dist]
+    viewStore.setShowDataTargetForComp({ scale, id: target.id }, 'ing')
   }
 
-  function onRotate({ drag, target }: any) {
+  function onRotate({ drag, target, dist }: any) {
     target.style.transform = drag.transform
+    // beta 实时修改右侧坐标
+    const rotate = dist
+    viewStore.setShowDataTargetForComp({ rotate, id: target.id }, 'ing')
   }
   // !!----------------------------------------------------------------------
 
@@ -188,6 +197,7 @@ export function useMoveable() {
   ) {
     const id = target.id
     // 根据id修改componnets中对应的component
+    // !!只有操作结束的时候才需要去调用changeComponents，此时才会有完整的delta数据
     viewStore.changeComponents(id, delta)
     // 获取component
     const targetComponent = viewStore.getTarget(`#${id}`)
@@ -199,9 +209,14 @@ export function useMoveable() {
   }
 
   // translateXY 转化成 position 的 left 和 top
-  function uCalcTranslateXY(lastEvent: any) {
+  /**
+   * @param lastEvent    moveable事件的一个属性，里面有一个tranform字符串
+   * @param directValue  直接量，用户直接需要处理的tranform字符串 //暂时用不上这个属性，只是写在这里
+   * @returns
+   */
+  function uCalcTranslateXY<T extends { afterTransform: any }>(lastEvent: T, directValue?: string) {
     const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
-    const match = regex.exec(lastEvent.afterTransform)
+    const match = regex.exec((lastEvent?.afterTransform) || directValue)
     let dx = 0
     let dy = 0
     if (match) {
