@@ -50,15 +50,10 @@ export const useViewStore = defineStore('view', () => {
       showDataTarget.value.scale![0] = scale[0]
       showDataTarget.value.scale![1] = scale[1]
     }
-    // rotate 需要兼容结束时和操作中
-    if (rotate) {
-      // case 操作中
-      if (type === 'ing')
-        showDataTarget.value.rotate! += rotate
-      // case 操作结束
-      else
-        showDataTarget.value.rotate! = rotate
-    }
+    // rotate 需要兼容结束时和操作中 不过两种状态下行为是一样的
+    if (rotate)
+      showDataTarget.value.rotate = Math.abs(rotate) % 360
+
     // xy需要处理一下 需要兼容结束时和操作中
     const { offsetX, offsetY } = uCalcCompXY(`#${id}`, type, scale)
     showDataTarget.value.x! = offsetX
