@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { markRaw, ref } from 'vue'
+import { useRulerStore } from './ruler'
 
 export interface IComponent {
   id: string
@@ -27,6 +28,8 @@ export interface ShowData {
 }
 
 export const useViewStore = defineStore('view', () => {
+  // ruler
+  const rulerStore = useRulerStore()
   // 画布上的全部图表
   const components = ref<IComponent[]>([])
   // 画布上被选中的图表
@@ -36,7 +39,7 @@ export const useViewStore = defineStore('view', () => {
   const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 }
   const showDataTarget = ref<ShowData>({ x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 })
 
-  // 右侧栏setting的展示
+  // !!右侧栏setting的展示-------------------------------------------------------------
   /**
    * @param data 操作组件时的组件id xy rotate等值
    * @param type 操作类型，结束操作还是操作中，涉及到rotate的赋值问题
@@ -105,27 +108,31 @@ export const useViewStore = defineStore('view', () => {
     type: 'ing' | 'end' = 'end',
     scale: [number, number] | undefined = undefined,
   ) {
+    const canvasScale = rulerStore.rulerOptions.scale
     // xy处理一下
     const dom = document.querySelector(`${selector}`)! as HTMLElement
     const domRect = dom.getBoundingClientRect()
     const canvas = document.querySelector('#canvas')!
     const canvasRect = canvas.getBoundingClientRect()
     // 中心点计算
-    const centerX = domRect.left + domRect.width / 2
-    const centerY = domRect.top + domRect.height / 2
+    const centerX = (domRect.left + domRect.width / 2)
+    const centerY = (domRect.top + domRect.height / 2)
     // 与canvas画布的距离计算
     const comp = getTarget(`${selector}`) || { width: 0, height: 0 } // fixme:这里是因为懒得处理组合了
-    let centerToborderX = comp.width / 2
-    let centerToborderY = comp.height / 2
+    let centerToborderX = comp.width / 2 * canvasScale
+    let centerToborderY = comp.height / 2 * canvasScale
     // !! 仅当ing且scale不为空的时候
     if (type === 'ing' && scale) {
-      centerToborderX = comp.width / 2 * scale![0] // !!不加断言ts推断不出来scale是数组 没有收窄
-      centerToborderY = comp.height / 2 * scale![1]// !!不加断言ts推断不出来scale是数组 没有收窄
+      centerToborderX *= scale![0] // !!不加断言ts推断不出来scale是数组 没有收窄
+      centerToborderY *= scale![1] // !!不加断言ts推断不出来scale是数组 没有收窄
     }
-    const offsetX = centerX - canvasRect.left - centerToborderX
-    const offsetY = centerY - canvasRect.top - centerToborderY
+    // 算出的距离要根据画布缩放进行处理
+    const offsetX = (centerX - canvasRect.left - centerToborderX) / canvasScale
+    const offsetY = (centerY - canvasRect.top - centerToborderY) / canvasScale
     return { offsetX, offsetY }
   }
+
+  // !!-------------------------------------------------------------------------------
 
   function setTarget(targetId: string, isGroup = false) {
     if (!isGroup)

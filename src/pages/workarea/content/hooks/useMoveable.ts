@@ -5,15 +5,17 @@
 import { ref } from 'vue'
 /* 这个hooks需要用到useKeyBoard */
 /* 这个hooks需要用到store 改变view里面的属性 */
+/* 这个hooks需要用到store 使用ruler.rulerOptions */
 /* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
 import type { VueMoveableInstance } from 'vue3-moveable'
 import type { ShowData } from '@/store/modules/view'
-import { useViewStore } from '@/store/modules'
+import { useRulerStore, useViewStore } from '@/store/modules'
 
 export function useMoveable() {
   const selectTarget = ref<string[]>([])
   const viewStore = useViewStore()
-  const moveableRef = ref<VueMoveableInstance>()
+  const rulerStore = useRulerStore() // no use ref
+  const moveableRef = ref<VueMoveableInstance>() // no use ref
   let status: 'comp' | 'group' | undefined
 
   function getKeyStatus() {
@@ -113,7 +115,7 @@ export function useMoveable() {
     if (!lastEvent)
       return
     // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
-    const [dx, dy] = [...lastEvent.dist] as [number, number]
+    const [dx, dy] = [...lastEvent.dist]
     uSetStyle(target, { x: dx, y: dy })
     status === 'comp' && viewStore.setShowDataTargetForComp()
   }

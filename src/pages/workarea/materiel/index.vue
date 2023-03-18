@@ -83,12 +83,14 @@ function imgDragEnd(e: DragEvent, idx: number) {
   const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
   const { width, height } = toysComponentsConfig[idx]
   const { clientX, clientY } = e
+  const scale = rulerStore.rulerOptions.scale
   // 计算坐标点
   const x
-  = (clientX - left - window.$fixClientX) / rulerStore.rulerOptions.scale - width / 2
+  = (clientX - left - window.$fixClientX) / scale - (width / 2)
   const y
-  = (clientY - top + window.$fixClientY) / rulerStore.rulerOptions.scale - height / 2
+  = (clientY - top + window.$fixClientY) / scale - (height / 2)
   // 进入画布则收集该组件信息
+  console.log(x, y, 'hello world')
   if (
     (clientX - window.$fixClientX) > left
     && (clientY + window.$fixClientY) > top
