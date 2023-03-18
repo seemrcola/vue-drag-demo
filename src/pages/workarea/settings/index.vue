@@ -1,21 +1,52 @@
 <script setup lang='ts'>
-import { watch } from 'vue'
 import { useViewStore } from '@/store/modules/view'
 const viewStore = (useViewStore())
-watch(
-  () => viewStore.taregtSelect,
-  n => console.log(100),
-)
 </script>
 
 <template>
-  <div w-full h-full f-c-c>
+  <div w-full h-full overflow-hidden bg="#333" color="#fff" text="12px">
     <div>
-      <div>x: {{ viewStore.showDataTarget?.x }} </div>
-      <div>y: {{ viewStore.showDataTarget?.y }} </div>
-      <div>rotate: {{ viewStore.showDataTarget?.rotate }} </div>
-      <div>width: {{ viewStore.showDataTarget?.width }} </div>
-      <div>height: {{ viewStore.showDataTarget?.height }} </div>
+      <div flex my-4>
+        <label for="" flex-1 f-c-c>
+          <div w-8 mr-2>横轴</div>
+          <input
+            readonly input w-24
+            :value="~~viewStore.showDataTarget.x!"
+          >
+        </label>
+        <label for="" flex-1 f-c-c>
+          <div w-8 mr-2>纵轴</div>
+          <input
+            readonly input w-24
+            :value="~~viewStore.showDataTarget.y!"
+          >
+        </label>
+      </div>
+      <div flex my-4>
+        <label for="" flex-1 f-c-c>
+          <div w-8 mr-2>宽度</div>
+          <input
+            readonly input w-24
+            :value="~~viewStore.showDataTarget.width!"
+          >
+        </label>
+        <label for="" flex-1 f-c-c>
+          <div w-8 mr-2>高度</div>
+          <input
+            readonly input w-24
+            :value="~~viewStore.showDataTarget.height!"
+          >
+        </label>
+      </div>
+      <div flex my-4>
+        <label for="" flex-1 f-c-c>
+          <div w-8 mr-2>旋转</div>
+          <input readonly input w-24 :value="~~viewStore.showDataTarget.rotate!">
+        </label>
+        <label for="" flex-1>
+          <div />
+        </label>
+      </div>
     </div>
   </div>
 </template>
