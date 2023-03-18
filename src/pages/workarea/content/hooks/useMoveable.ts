@@ -7,14 +7,11 @@ import { ref } from 'vue'
 /* 这个hooks需要用到store 改变view里面的属性 */
 /* 这个hooks需要用到store 使用ruler.rulerOptions */
 /* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
-import type { VueMoveableInstance } from 'vue3-moveable'
-import { useRulerStore, useViewStore } from '@/store/modules'
+import { useViewStore } from '@/store/modules'
 
 export function useMoveable() {
   const selectTarget = ref<string[]>([])
   const viewStore = useViewStore()
-  const rulerStore = useRulerStore() // no use ref
-  const moveableRef = ref<VueMoveableInstance>() // no use ref
   let status: 'comp' | 'group' | undefined
 
   function getKeyStatus() {
@@ -110,17 +107,14 @@ export function useMoveable() {
 
   // !!单个组件操作结束--------------------------------------------------------
   function onDragEnd({ lastEvent, target }: any) {
-    // console.log(lastEvent, 'drag')
     if (!lastEvent)
       return
-    // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     const [dx, dy] = [...lastEvent.dist]
     viewStore.uSetStyle(target, { x: dx, y: dy })
     status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
   function onRotateEnd({ lastEvent, target }: any) {
-    // console.log(lastEvent, 'rotate')
     if (!lastEvent)
       return
     // ----------------这部分是为了处理组合旋转，单个旋转无需考虑translate ------------------
@@ -132,7 +126,6 @@ export function useMoveable() {
   }
 
   function onScaleEnd({ lastEvent, target }: any) {
-    // console.log(lastEvent, 'scale')
     if (!lastEvent)
       return
     // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况-------------------
@@ -154,7 +147,6 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    // console.log(lastEvent, 'drag')
     const [x, y] = [...lastEvent.dist]
     viewStore.setShowDataTargetForGroup({ x, y })
   }
@@ -168,9 +160,7 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    // console.log(lastEvent, 'rotate')
     const rotate = lastEvent.rotate
-    // const { dx, dy } = uCalcTranslateXY(lastEvent)
     viewStore.setShowDataTargetForGroup({ rotate })
   }
 
@@ -183,9 +173,7 @@ export function useMoveable() {
     })
     if (!lastEvent)
       return
-    // console.log(lastEvent, 'scale')
     const scale = [...lastEvent.dist]
-    // const { dx, dy } = uCalcTranslateXY(lastEvent)
     viewStore.setShowDataTargetForGroup({ scale })
   }
   // !!------------------------------------------------------------------------
