@@ -181,6 +181,26 @@ export const useViewStore = defineStore('view', () => {
     }
   }
 
+  // !! 样式改变----------------------------------------------------------------------
+  // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
+  function uSetStyle(
+    target: HTMLElement,
+    delta: ShowData,
+  ) {
+    const id = target.id
+    // 根据id修改componnets中对应的component
+    // !!只有操作结束的时候才需要去调用changeComponents，此时才会有完整的delta数据
+    changeComponents(id, delta)
+    // 获取component
+    const targetComponent = getTarget(`#${id}`)
+    // 通过对象实例改变对象style.position的属性
+    const [scalex = 1, scaley = 1] = targetComponent!.scale
+    target.style.top = `${targetComponent!.y}px`
+    target.style.left = `${targetComponent!.x}px`
+    target.style.transform = `rotate(${targetComponent!.rotate}deg) scale(${scalex}, ${scaley})`
+  }
+  // !!--------------------------------------------------------------------------
+
   return {
     components,
     removeComponent,
@@ -193,5 +213,6 @@ export const useViewStore = defineStore('view', () => {
     setShowDataTargetForComp,
     setShowDataTargetForGroup,
     changeComponents,
+    uSetStyle,
   }
 })

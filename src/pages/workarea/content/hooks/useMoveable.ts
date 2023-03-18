@@ -8,7 +8,6 @@ import { ref } from 'vue'
 /* 这个hooks需要用到store 使用ruler.rulerOptions */
 /* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
 import type { VueMoveableInstance } from 'vue3-moveable'
-import type { ShowData } from '@/store/modules/view'
 import { useRulerStore, useViewStore } from '@/store/modules'
 
 export function useMoveable() {
@@ -116,7 +115,7 @@ export function useMoveable() {
       return
     // target.style.transform = 'translate(0px, 0px)' // 来自gpt的方案，放止多次更新值造成双倍位移
     const [dx, dy] = [...lastEvent.dist]
-    uSetStyle(target, { x: dx, y: dy })
+    viewStore.uSetStyle(target, { x: dx, y: dy })
     status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
@@ -128,7 +127,7 @@ export function useMoveable() {
     const { dx, dy } = uCalcTranslateXY(lastEvent)
     // -------------------------------------------------------------------------------
     const rotate = lastEvent.rotate
-    uSetStyle(target, { x: dx, y: dy, rotate })
+    viewStore.uSetStyle(target, { x: dx, y: dy, rotate })
     status === 'comp' && viewStore.setShowDataTargetForComp()
   }
 
@@ -140,9 +139,8 @@ export function useMoveable() {
     const { dx, dy } = uCalcTranslateXY(lastEvent)
     // ----------------------------------------------------------------------
     const scale = [...lastEvent.dist] as [number, number]
-    uSetStyle(target, { scale, x: dx, y: dy })
-    status === 'comp'
-    && viewStore.setShowDataTargetForComp()
+    viewStore.uSetStyle(target, { scale, x: dx, y: dy })
+    status === 'comp' && viewStore.setShowDataTargetForComp()
   }
   // -------------------------------------------------------------------------
 
@@ -192,30 +190,12 @@ export function useMoveable() {
   }
   // !!------------------------------------------------------------------------
 
-  // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
-  function uSetStyle(
-    target: HTMLElement,
-    delta: ShowData,
-  ) {
-    const id = target.id
-    // 根据id修改componnets中对应的component
-    // !!只有操作结束的时候才需要去调用changeComponents，此时才会有完整的delta数据
-    viewStore.changeComponents(id, delta)
-    // 获取component
-    const targetComponent = viewStore.getTarget(`#${id}`)
-    // 通过对象实例改变对象style.position的属性
-    const [scalex = 1, scaley = 1] = targetComponent!.scale
-    target.style.top = `${targetComponent!.y}px`
-    target.style.left = `${targetComponent!.x}px`
-    target.style.transform = `rotate(${targetComponent!.rotate}deg) scale(${scalex}, ${scaley})`
-  }
-
   // translateXY 转化成 position 的 left 和 top
   /**
-   * @param lastEvent    moveable事件的一个属性，里面有一个tranform字符串
-   * @param directValue  直接量，用户直接需要处理的tranform字符串 //暂时用不上这个属性，只是写在这里
-   * @returns
-   */
+     * @param lastEvent    moveable事件的一个属性，里面有一个tranform字符串
+     * @param directValue  直接量，用户直接需要处理的tranform字符串 //暂时用不上这个属性，只是写在这里
+     * @returns
+     */
   function uCalcTranslateXY<T extends { afterTransform: any }>(lastEvent: T, directValue?: string) {
     const regex = /translate\(\s*(-?\d+(?:\.\d+)?)(px)?\s*,\s*(-?\d+(?:\.\d+)?)(px)?\s*\)/
     const match = regex.exec((lastEvent?.afterTransform) || directValue)
