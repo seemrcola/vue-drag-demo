@@ -54,7 +54,7 @@ function step(b: Line) {
   branches++
   drawLine(b)
   const end = getEndPoint(b)
-  if (branches < 6 || Math.random() > 0.5) {
+  if (branches < 4 || Math.random() > 0.5) {
     penddingTask.push(() => step({
       start: end,
       theta: b.theta - 0.2,
@@ -63,7 +63,7 @@ function step(b: Line) {
   }
   else { drawArc(end) }
 
-  if (branches < 3 || Math.random() < 0.5) {
+  if (branches < 4 || Math.random() < 0.5) {
     penddingTask.push(() => step({
       start: end,
       theta: b.theta + 0.2,

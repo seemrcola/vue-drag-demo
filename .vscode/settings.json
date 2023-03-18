@@ -254,27 +254,27 @@
     // "variables": "#f40"
   },
   "better-comments.tags": [
-    {
+    { // TODO
       "tag": "todo",
       "color": "#fff",
       "backgroundColor": "#FFA500"
     },
-    {
+    { // !!一些特殊说明
       "tag": "!!",
       "color": "#fff",
       "backgroundColor": "#996666"
     },
-    {
+    { // fixme 存在小问题待修复
       "tag": "fixme",
       "color": "#fff",
       "backgroundColor": "#000"
     },
-    {
+    { // case 一些值得写注释的分支情况
       "tag": "case",
       "color": "#fff",
       "backgroundColor": "#f40"
     },
-    {
+    { // beta预览版本的功能
       "tag": "beta",
       "color": "#fff",
       "backgroundColor": "#007"
