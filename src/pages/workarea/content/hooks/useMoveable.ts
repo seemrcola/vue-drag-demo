@@ -5,7 +5,6 @@
 import { ref } from 'vue'
 /* 这个hooks需要用到useKeyBoard */
 /* 这个hooks需要用到store 改变view里面的属性 */
-/* 这个hooks需要用到store 使用ruler.rulerOptions */
 /* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
 import { useViewStore } from '@/store/modules'
 

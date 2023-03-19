@@ -1,13 +1,10 @@
 import type { VueMoveableInstance } from 'vue3-moveable'
 import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import { useViewStore } from './view'
+import { useMoveable } from './useMoveable'
+import { useViewStore } from '@/store/modules'
 import { KeyCodeEnum } from '@/enum/keyboard.enum'
 
-// fixme 这里设计的有点问题，这个store需要使用到hooks的功能
-import { useMoveable } from '@/pages/workarea/content/hooks/useMoveable'
-
-export const useEclipseStore = defineStore('eclipse', () => {
+export function useEclipse() {
   const viewStore = useViewStore()
   const moveableRef = ref<VueMoveableInstance>()
   // execEcplise 执行组合快捷键 & 非组合快捷键
@@ -22,9 +19,6 @@ export const useEclipseStore = defineStore('eclipse', () => {
         case KeyCodeEnum.PASTE:
           paste()
           break
-        case KeyCodeEnum.DELETE || KeyCodeEnum.MACDEL:
-          del()
-          break
         default:
           void 0
       }
@@ -32,11 +26,23 @@ export const useEclipseStore = defineStore('eclipse', () => {
     else {
       console.log('非组合')
       switch (keycode) {
-        case KeyCodeEnum.DELETE:
+        case KeyCodeEnum.DELETE: // 删除组件
           del()
           break
-        case KeyCodeEnum.MACDEL:
+        case KeyCodeEnum.MACDEL: // mac端删除组件
           del()
+          break
+        case KeyCodeEnum.LEFT: // 组件左移
+          left()
+          break
+        case KeyCodeEnum.RIGHT: // 组件右移
+          right()
+          break
+        case KeyCodeEnum.UP: // 组件上移
+          up()
+          break
+        case KeyCodeEnum.DOWN: // 组件下移
+          down()
           break
         default:
           void 0
@@ -49,6 +55,14 @@ export const useEclipseStore = defineStore('eclipse', () => {
   // 粘贴 PASTE
   function paste() {
   }
+  // 组件左移
+  function left() {}
+  // 组件右移
+  function right() {}
+  // 组件上移
+  function up() {}
+  // 组件下移
+  function down() {}
   // 删除 DELETE
   function del() {
     const { dropComponent } = useMoveable()
@@ -79,4 +93,4 @@ export const useEclipseStore = defineStore('eclipse', () => {
     listener,
     setMoveableRef,
   }
-})
+}

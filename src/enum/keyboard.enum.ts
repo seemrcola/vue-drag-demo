@@ -12,6 +12,10 @@ export enum KeyboardEnum {
   UP = 'up',
   // 下移
   DOWN = 'down',
+  // 左移
+  LEFT = 'left',
+  // 右移
+  RIGHT = 'right',
   // 清空剪贴板
   CLEAR = 'clear',
   // 保存
@@ -39,9 +43,13 @@ export enum KeyCodeEnum {
   // 粘贴
   PASTE = 86,
   // 上移
-  UP = 'up',
+  UP = 38,
   // 下移
-  DOWN = 'down',
+  DOWN = 40,
+  // 左移
+  LEFT = 37,
+  // 右移
+  RIGHT = 39,
   // 清空剪贴板
   CLEAR = 'clear',
   // 保存

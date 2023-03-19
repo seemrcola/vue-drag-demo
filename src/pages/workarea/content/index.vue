@@ -4,14 +4,15 @@ import { SketchRule } from 'vue3-sketch-ruler'
 import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
 import { useMoveable } from './hooks/useMoveable'
-import { useEclipseStore, useRulerStore, useViewStore } from '@/store/modules/index'
+import { useEclipse } from './hooks/useEclipse'
+import { useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
 import type { IComponent } from '@/store/modules/view'
 
 /* viewStore */
 const viewStore = useViewStore()
 /* Eclipse */
-const { listener, setMoveableRef } = useEclipseStore()
+const { listener, setMoveableRef } = useEclipse()
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
