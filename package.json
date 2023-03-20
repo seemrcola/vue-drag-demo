@@ -12,8 +12,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/lodash-es": "^4.17.7",
     "@types/node": "^18.13.0",
     "@types/uuid": "^9.0.1",
+    "lodash-es": "^4.17.21",
     "moveable": "^0.43.1",
     "pinia": "^2.0.30",
     "tiny-compress-images": "^3.2.0",

@@ -34,7 +34,6 @@ export const useViewStore = defineStore('view', () => {
   const components = ref<IComponent[]>([])
   // 画布上被选中的图表
   const taregtSelect = ref<IComponent[]>([])
-  // 被选中图表的偏差记录
   // 右侧用于展示的数据
   const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 }
   const showDataTarget = ref<ShowData>({ x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 })

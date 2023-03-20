@@ -1,9 +1,7 @@
 import { toysComponents } from './comp.index'
 import type { IComponent } from '@/store/modules/view'
 
-interface ToysComponent extends IComponent {
-
-}
+interface ToysComponent extends IComponent {}
 
 export const toysComponentsConfig: ToysComponent[] = [
   // mines扫雷

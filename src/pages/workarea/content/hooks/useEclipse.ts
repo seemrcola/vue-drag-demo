@@ -1,13 +1,17 @@
 import type { VueMoveableInstance } from 'vue3-moveable'
 import { ref } from 'vue'
+import { v4 as uuid } from 'uuid'
 import { useMoveable } from './useMoveable'
 import { useViewStore } from '@/store/modules'
 import { KeyCodeEnum } from '@/enum/keyboard.enum'
+import type { IComponent } from '@/store/modules/view'
 
 // fixme 上下左右的移动第一次总会先移动组件再移动controller容器
 export function useEclipse() {
   const viewStore = useViewStore()
   const moveableRef = ref<VueMoveableInstance>()
+  const cacheComponents = ref<IComponent[]>()
+
   // execEcplise 执行组合快捷键 & 非组合快捷键
   function execEcplise(keycode: number, e: KeyboardEvent) {
     // 功能键是否按下
@@ -25,7 +29,6 @@ export function useEclipse() {
       }
     }
     else {
-      console.log('非组合')
       switch (keycode) {
         case KeyCodeEnum.DELETE: // 删除组件
           del(e)
@@ -52,9 +55,21 @@ export function useEclipse() {
   }
   // 复制 COPY
   function copy() {
+    let cache = viewStore.taregtSelect
+    cache = cache.map((comp: IComponent) => {
+      comp = { ...comp }
+      comp.id = `wrapper${uuid().split('-')[0]}`
+      comp.x += 5
+      comp.y += 5
+      return comp
+    })
+    cacheComponents.value = cache
   }
   // 粘贴 PASTE
   function paste() {
+    cacheComponents.value?.forEach((comp) => {
+      viewStore.addComponent(comp)
+    })
   }
   // 组件左移
   function left(e: KeyboardEvent) {
