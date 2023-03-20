@@ -132,6 +132,7 @@ const {
   selectTarget,
 }
 = useMoveable()
+// fixme 这部分特殊操作并没有想到好的方案，所以暂时放在了vue文件里，有点影响文件结构
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
 function MouseDownHandle(e: MouseEvent, comp: IComponent) {
   selectComponent(comp)
@@ -146,8 +147,8 @@ function scaleHandle(e: any) {
   keepRatio.value = space
   onScale(e)
 }
-// 点击取消选中
 // --------------------------------------------------------
+// fixme ---------------------------------------------------------------
 
 onMounted(() => {
   rulerInit() // 初始化尺子，尺子的宽高和screen可视容器px像素对应，先获取宽高再赋值给尺子

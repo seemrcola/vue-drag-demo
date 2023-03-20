@@ -4,6 +4,7 @@ import { useMoveable } from './useMoveable'
 import { useViewStore } from '@/store/modules'
 import { KeyCodeEnum } from '@/enum/keyboard.enum'
 
+// fixme 上下左右的移动第一次总会先移动组件再移动controller容器
 export function useEclipse() {
   const viewStore = useViewStore()
   const moveableRef = ref<VueMoveableInstance>()
