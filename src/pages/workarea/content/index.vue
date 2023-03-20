@@ -238,10 +238,7 @@ onUnmounted(() => {
               ...viewStore.initComponentStyle(componentItem),
             }"
             class="component"
-            @mousedown="(e: MouseEvent) => {
-              e.stopPropagation()
-              MouseDownHandle(e, componentItem)
-            }"
+            @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
           />
         </div>
       </div>
