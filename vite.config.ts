@@ -23,6 +23,8 @@ export default defineConfig({
       plugins: [
         ...rollupPluginSetup(),
       ],
+      output: {
+      },
     },
   },
 })

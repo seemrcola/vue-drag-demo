@@ -58,7 +58,7 @@ export const useViewStore = defineStore('view', () => {
       showDataTarget.value.rotate
       = rotate > 0
           ? Math.abs(rotate) % 360
-          : -Math.abs(rotate)
+          : -Math.abs(rotate) % 360
     }
 
     // xy需要处理一下 需要兼容结束时和操作中
