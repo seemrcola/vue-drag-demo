@@ -188,7 +188,7 @@ export const useViewStore = defineStore('view', () => {
   ) {
     const id = target.id
     // 根据id修改componnets中对应的component
-    // !!只有操作结束的时候才需要去调用changeComponents，此时才会有完整的delta数据
+    // !!只有操作结束的时候才需要去调用changeComponents，此时才会有完整的delta数据--------
     changeComponents(id, delta)
     // 获取component
     const targetComponent = getTarget(`#${id}`)

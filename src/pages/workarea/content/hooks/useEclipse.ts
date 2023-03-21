@@ -75,7 +75,6 @@ export function useEclipse() {
         comp.y += 5
         return comp
       })
-    console.log(e)
     added.forEach(comp => viewStore.addComponent(comp))
   }
   // 组件左移
@@ -108,6 +107,8 @@ export function useEclipse() {
   }
   // 删除 DELETE
   function del(e: KeyboardEvent) {
+    if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
+      return
     const { dropComponent } = useMoveable()
     const dels = viewStore.taregtSelect
     dels.forEach(comp => viewStore.removeComponent(comp))
