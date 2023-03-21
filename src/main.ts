@@ -10,7 +10,9 @@ import { setupRouter } from './router'
 import { setupStore } from './store'
 // global hooks
 import { useKeyboard } from '@/hooks/useFnKeyboard'
+import { useOS } from '@/hooks/useOS'
 useKeyboard()
+useOS()
 
 function setupApp() {
   const app = createApp(App)

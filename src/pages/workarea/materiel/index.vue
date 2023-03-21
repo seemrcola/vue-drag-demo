@@ -71,8 +71,13 @@ function dragHandle(e: DragEvent) {
   // ** 但是dragend绑定在和dragstart一样的元素上时就会造成clientX和clientY的偏移
   // ** fix: 但是为了记录这个操作，我决定在window上加个属性来打补丁，以提醒自己这个知识点。
   //* ******************************************************************
-  window.$fixClientX = target.width / 2
-  window.$fixClientY = target.height / 2
+  const os = window.$OS
+  window.$fixClientX = 0
+  window.$fixClientY = 0
+  if (os === 'MAC') {
+    window.$fixClientX = target.width / 2
+    window.$fixClientY = target.height / 2
+  }
   dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
 /********************************/

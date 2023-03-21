@@ -82,6 +82,7 @@ function screenInit() {
   nextTick(() => {
     const { height: containerHeight, width: containerWidth } = containerRef.value!.getBoundingClientRect()
     const { clientHeight, clientWidth } = canvasRef.value!
+    // console.log(clientHeight, containerWidth, clientWidth, clientWidth)
     screensRef.value!.scrollLeft = (containerWidth / 2 - clientWidth / 2)
     screensRef.value!.scrollTop = (containerHeight / 2 - clientHeight / 2)
   })
@@ -256,8 +257,6 @@ onUnmounted(() => {
       linear-gradient(white 1px, transparent 0),
       linear-gradient(90deg, white 1px, transparent 0);
   background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
-  width: 450px;
-  height: 450px;
   /*
    * 特别注意,这个width要和传入组件的width成对应关系,
    * 也就是 580width +thick20 = 600
@@ -275,8 +274,6 @@ onUnmounted(() => {
         linear-gradient(white 1px, transparent 0),
         linear-gradient(90deg, white 1px, transparent 0);
     background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
-    width: 450px;
-    height: 450px;
   }
 }
 .component {
