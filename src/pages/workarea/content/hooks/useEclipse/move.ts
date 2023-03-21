@@ -2,6 +2,7 @@ import type { VueMoveableInstance } from 'vue3-moveable'
 import { ref } from 'vue'
 import { useViewStore } from '@/store/modules'
 
+// fixme 上下左右的移动第一次总会先移动组件再移动controller容器
 export function useMove() {
   const viewStore = useViewStore()
   const moveableRef = ref<VueMoveableInstance>()

@@ -5,9 +5,9 @@ import { useCVX } from './cvx'
 import { useDel } from './del'
 import { KeyCodeEnum } from '@/enum/keyboard.enum'
 
-// fixme 上下左右的移动第一次总会先移动组件再移动controller容器
 export function useEclipse() {
   const moveableRef = ref<VueMoveableInstance>()
+
   // 各个功能快捷键
   const { del } = useDel()
   const { copy, paste } = useCVX()
