@@ -180,7 +180,7 @@ export const useViewStore = defineStore('view', () => {
       position: 'absolute',
       left: `${component.x}px`,
       top: `${component.y}px`,
-      transform: `rotate(${component.rotate}))`,
+      transform: `rotate(${component.rotate}deg) scale(${component.scale[0]}, ${component.scale[1]})`,
     }
   }
 
