@@ -136,6 +136,7 @@ const {
 // fixme 这部分特殊操作并没有想到好的方案，所以暂时放在了vue文件里，有点影响文件结构
 // 实现按下即拖动，这个功能相当于对hooks的补充，就不写进hooks了
 function MouseDownHandle(e: MouseEvent, comp: IComponent) {
+  e.stopPropagation()
   selectComponent(comp)
   nextTick(() => {
     moveable.value!.dragStart(e)
@@ -148,6 +149,12 @@ function scaleHandle(e: any) {
   keepRatio.value = space
   onScale(e)
 }
+// 点击画布别处取消所有选中
+function clickForDrop() {
+  canvasRef.value?.addEventListener('click', () => {
+    dropComponent()
+  })
+}
 // --------------------------------------------------------
 // fixme ---------------------------------------------------------------
 
@@ -157,6 +164,7 @@ onMounted(() => {
   containerInit() // 背景初始化
   canvasInit() // 画布初始化
   eventInit() // 事件初始化，监听鼠标移动事件
+  clickForDrop() // 点击空白处取消选中
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
   window.addEventListener('keydown', listener) // 鼠标按下监听
   setMoveableRef(moveable.value!)
@@ -172,11 +180,11 @@ onUnmounted(() => {
 <template>
   <!-- 最外层的包裹容器 -->
   <div ref="wrapperRef" class="wrapper">
-    <div
+    <!-- <div
       h-10 w-10 rounded="50%" bg="#eee"
       absolute left-10 top-10 z-99999 cursor-pointer
       @click="dropComponent"
-    />
+    /> -->
     <!-- 标尺容器 -->
     <SketchRule
       :thick="state.thick"
@@ -235,10 +243,9 @@ onUnmounted(() => {
             v-for="componentItem in viewStore.components"
             :id="componentItem.id"
             :key="componentItem.name"
-            :style="{
-              ...viewStore.initComponentStyle(componentItem),
-            }"
+            :style="{ ...viewStore.initComponentStyle(componentItem) }"
             class="component"
+            @click.stop
             @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
           />
         </div>
