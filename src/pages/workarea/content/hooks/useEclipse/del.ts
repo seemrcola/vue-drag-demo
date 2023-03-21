@@ -1,5 +1,6 @@
 import { useMoveable } from '../useMoveable'
 import { useViewStore } from '@/store/modules'
+import { isEmpty } from '@/utils/is'
 
 export function useDel() {
   const viewStore = useViewStore()
@@ -7,6 +8,8 @@ export function useDel() {
   // 删除 DELETE
   function del(e: KeyboardEvent) {
     if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
+      return
+    if (isEmpty(viewStore.taregtSelect))
       return
 
     const dels = viewStore.taregtSelect
