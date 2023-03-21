@@ -2,6 +2,7 @@ import type { VueMoveableInstance } from 'vue3-moveable'
 import { ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import { useMoveable } from './useMoveable'
+import { isEmpty } from '@/utils/is'
 import { useViewStore } from '@/store/modules'
 import { KeyCodeEnum } from '@/enum/keyboard.enum'
 import type { IComponent } from '@/store/modules/view'
@@ -10,7 +11,7 @@ import type { IComponent } from '@/store/modules/view'
 export function useEclipse() {
   const viewStore = useViewStore()
   const moveableRef = ref<VueMoveableInstance>()
-  const cacheComponents = ref<IComponent[]>()
+  const cacheComponents = ref<IComponent[]>([])
 
   // execEcplise 执行组合快捷键 & 非组合快捷键
   function execEcplise(keycode: number, e: KeyboardEvent) {
@@ -19,10 +20,10 @@ export function useEclipse() {
     if (isCtrlActive) {
       switch (keycode) {
         case KeyCodeEnum.COPY:
-          copy()
+          copy(e)
           break
         case KeyCodeEnum.PASTE:
-          paste()
+          paste(e)
           break
         default:
           void 0
@@ -54,22 +55,28 @@ export function useEclipse() {
     }
   }
   // 复制 COPY
-  function copy() {
-    let cache = viewStore.taregtSelect
-    cache = cache.map((comp: IComponent) => {
-      comp = { ...comp }
-      comp.id = `wrapper${uuid().split('-')[0]}`
-      comp.x += 5
-      comp.y += 5
-      return comp
-    })
+  function copy(e: KeyboardEvent) {
+    const cache = viewStore.taregtSelect
+    if (isEmpty(cache))
+      return
     cacheComponents.value = cache
   }
   // 粘贴 PASTE
-  function paste() {
-    cacheComponents.value?.forEach((comp) => {
-      viewStore.addComponent(comp)
-    })
+  function paste(e: KeyboardEvent) {
+    if (isEmpty(cacheComponents.value))
+      return
+    if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
+      return
+    const added = cacheComponents.value!
+      .map((comp: IComponent) => {
+        comp = { ...comp }
+        comp.id = `wrapper${uuid().split('-')[0]}`
+        comp.x += 5
+        comp.y += 5
+        return comp
+      })
+    console.log(e)
+    added.forEach(comp => viewStore.addComponent(comp))
   }
   // 组件左移
   function left(e: KeyboardEvent) {

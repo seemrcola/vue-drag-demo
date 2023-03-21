@@ -164,7 +164,7 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
-  window.removeEventListener('keydown', listener)
+  canvasRef.value!.removeEventListener('keydown', listener)
 })
 </script>
 
