@@ -15,7 +15,7 @@ const routes = [
   },
 ]
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHashHistory(),
   routes,
 })

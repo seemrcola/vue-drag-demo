@@ -143,6 +143,15 @@ export const useViewStore = defineStore('view', () => {
     return components.value.find(component => `#${component.id}` === targetId)
   }
 
+  function dropComponent() {
+    taregtSelect.value = []
+  }
+
+  function removeComponent<T extends IComponent>(component: T) {
+    const index = components.value.findIndex(comp => comp.id === component.id)
+    components.value.splice(index, 1)
+  }
+
   function addComponent<T extends IComponent>(component: T) {
     // 把compnent属性变成非响应式
     component.component = markRaw(component.component)
@@ -164,11 +173,6 @@ export const useViewStore = defineStore('view', () => {
       item.width *= scale[0]
       item.height *= scale[1]
     }
-  }
-
-  function removeComponent<T extends IComponent>(component: T) {
-    const index = components.value.findIndex(comp => comp.id === component.id)
-    components.value.splice(index, 1)
   }
 
   function initComponentStyle<T extends IComponent>(component: T) {
@@ -212,6 +216,7 @@ export const useViewStore = defineStore('view', () => {
     setShowDataTargetForComp,
     setShowDataTargetForGroup,
     changeComponents,
+    dropComponent,
     uSetStyle,
   }
 })

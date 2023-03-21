@@ -9,6 +9,7 @@ export function useDel() {
   function del(e: KeyboardEvent) {
     if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
       return
+    console.log(viewStore.taregtSelect)
     if (isEmpty(viewStore.taregtSelect))
       return
 

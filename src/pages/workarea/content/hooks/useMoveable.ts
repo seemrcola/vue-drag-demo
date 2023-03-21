@@ -54,6 +54,7 @@ export function useMoveable() {
   function dropComponent() {
     console.log('drop')
     selectTarget.value = []
+    viewStore.dropComponent()
     viewStore.setShowDataTargetForGroup({ change: true })
   }
 
