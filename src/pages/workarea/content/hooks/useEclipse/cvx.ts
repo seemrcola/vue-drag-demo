@@ -30,7 +30,6 @@ export function useCVX() {
         comp.y += 5
         return comp
       })
-    console.log(added)
     added.forEach(comp => viewStore.addComponent(comp))
   }
 

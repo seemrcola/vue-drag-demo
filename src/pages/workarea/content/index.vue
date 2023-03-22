@@ -5,6 +5,7 @@ import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
 import { useMoveable } from './hooks/useMoveable'
 import { useEclipse } from './hooks/useEclipse'
+import { useSeleto } from './hooks/useSelecto'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
 import type { IComponent } from '@/store/modules/view'
@@ -13,6 +14,8 @@ import type { IComponent } from '@/store/modules/view'
 const viewStore = useViewStore()
 /* Eclipse */
 const { listener, setMoveableRef } = useEclipse()
+/* Selecto */
+const { selectoDown, setSelectoRef, setStyle } = useSeleto({ container: '#canvas' })
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
@@ -26,6 +29,7 @@ const wrapperRef = ref<null | HTMLElement>()
 const screensRef = ref<null | HTMLElement>()
 const containerRef = ref<null | HTMLElement>()
 const canvasRef = ref<null | HTMLElement>()
+const selecto = ref<null | HTMLElement>()
 
 // 滚动监听
 const handleScroll = () => {
@@ -151,9 +155,10 @@ function scaleHandle(e: any) {
 }
 // 点击画布别处取消所有选中
 function clickForDrop() {
-  canvasRef.value?.addEventListener('click', () => {
-    dropComponent()
-  })
+  canvasRef.value?.addEventListener(
+    'click', () => {
+      dropComponent()
+    })
 }
 // --------------------------------------------------------
 // fixme ---------------------------------------------------------------
@@ -168,6 +173,7 @@ onMounted(() => {
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
   window.addEventListener('keydown', listener) // 鼠标按下监听
   setMoveableRef(moveable.value!)
+  setSelectoRef(selecto.value!)
 })
 
 onUnmounted(() => {
@@ -179,12 +185,10 @@ onUnmounted(() => {
 
 <template>
   <!-- 最外层的包裹容器 -->
-  <div ref="wrapperRef" class="wrapper">
-    <!-- <div
-      h-10 w-10 rounded="50%" bg="#eee"
-      absolute left-10 top-10 z-99999 cursor-pointer
-      @click="dropComponent"
-    /> -->
+  <div
+    ref="wrapperRef" class="wrapper" relative
+    @mousedown="selectoDown"
+  >
     <!-- 标尺容器 -->
     <SketchRule
       :thick="state.thick"
@@ -217,6 +221,7 @@ onUnmounted(() => {
           @mousedown="handleMouseDown"
           @dragover="e => e.preventDefault()"
         >
+          <div id="selecto" ref="selecto" absolute :style="setStyle" />
           <Moveable
             ref="moveable"
             :target="selectTarget"

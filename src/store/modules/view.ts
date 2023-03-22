@@ -175,6 +175,7 @@ export const useViewStore = defineStore('view', () => {
     }
   }
 
+  /* 只用于初始化样式，后续啊的样式更改将直接在e.target上改 */
   function initComponentStyle<T extends IComponent>(component: T) {
     return {
       position: 'absolute',

@@ -44,10 +44,10 @@
   "tinifyCompress": {
     "key": "Kp18lq72QcVR8blR8PDnLL1qwqLvs5cq",
     "filesExclude": "",
-    "filePath": "src",
-    "output2md": false,
+    "filePath": "assets",
+    "output2md": true,
     "cache": true,
     "sync": true,
-    "syncCount": 3
+    "syncCount": 5
   }
 }

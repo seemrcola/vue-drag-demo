@@ -38,16 +38,16 @@ export function useMoveable() {
     else {
       status = 'group'
       const ifHasId = selectTarget.value.find(compId => compId === id)
-      if (!ifHasId) {
-        // view中的选中数组处理
-        selectTarget.value = [...selectTarget.value, id]
-        viewStore.setTarget(id, true) // isGroup = true
-        // view中的展示数组处理
-        setTimeout(() => {
-          const { x, y } = uCalcXY()
-          viewStore.setShowDataTargetForGroup({ x, y, change: true })
-        })
-      }
+      if (ifHasId)
+        return
+      // view中的选中数组处理
+      selectTarget.value = [...selectTarget.value, id]
+      viewStore.setTarget(id, true) // isGroup = true
+      // view中的展示数组处理
+      setTimeout(() => {
+        const { x, y } = uCalcXY()
+        viewStore.setShowDataTargetForGroup({ x, y, change: true })
+      })
     }
   }
 
