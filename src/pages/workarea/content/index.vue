@@ -153,6 +153,15 @@ function scaleHandle(e: any) {
   keepRatio.value = space
   onScale(e)
 }
+// 最外层wrapper的按下事件
+function selectoDownHandler(e: MouseEvent) {
+  // 判断是否点击在范围内
+  const id = (e.target as HTMLElement).id
+  if (id !== 'canvas' && id !== 'container')
+    return
+  selectoDown(e)
+  clearSelect()
+}
 // --------------------------------------------------------
 // fixme ---------------------------------------------------------------
 
@@ -185,7 +194,7 @@ onUnmounted(() => {
   <!-- 最外层的包裹容器 -->
   <div
     id="wrapper" ref="wrapperRef" class="wrapper" relative
-    @mousedown="selectoDown"
+    @mousedown="selectoDownHandler"
   >
     <!-- 标尺容器 -->
     <SketchRule

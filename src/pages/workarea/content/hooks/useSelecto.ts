@@ -28,10 +28,6 @@ export function useSeleto(options: Options) {
   const start = ref<Point>({ x: 0, y: 0 })
   const end = ref<Point>({ x: 0, y: 0 })
   function handleMouseDown(e: MouseEvent) {
-    // 判断是否点击在范围内
-    const id = (e.target as HTMLElement).id
-    if (id !== 'canvas' && id !== 'container')
-      return
     // 打开拖拽锁
     lock = false
     // 将鼠标样式改成cross标识
@@ -76,6 +72,13 @@ export function useSeleto(options: Options) {
   }
 
   function getWrapperedComps() {
+    // 如果都是空 就不用计算了
+    if (
+      (end.value.x === 0 && end.value.y === 0)
+      || (start.value.x === 0 && start.value.y === 0)
+    )
+      return []
+
     const components = viewStore.components
     const ans: Array<{ id: string }> = []
     // 选框的坐标-------------------------------------
@@ -95,6 +98,7 @@ export function useSeleto(options: Options) {
       )
         ans.push({ id: `${component.id}` })
     })
+    ans.forEach(item => viewStore.setTarget(`#${item.id}`, true))
     return ans
   }
 

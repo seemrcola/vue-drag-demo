@@ -11,7 +11,6 @@ export function useCVX() {
   // 复制 COPY
   function copy(e: KeyboardEvent) {
     const cache = viewStore.taregtSelect
-    console.log(cache)
     if (isEmpty(cache))
       return
     cacheComponents.value = cache
@@ -30,6 +29,7 @@ export function useCVX() {
         comp.y += 5
         return comp
       })
+    cacheComponents.value = added
     added.forEach(comp => viewStore.addComponent(comp))
   }
 

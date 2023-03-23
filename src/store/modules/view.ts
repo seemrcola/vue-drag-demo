@@ -70,12 +70,10 @@ export const useViewStore = defineStore('view', () => {
     showDataTarget.value.y! = offsetY
     // 宽高处理 需要兼容结束时和操作中
     const comp = getTarget(`#${id}`)!
-    // case 操作中
     if (type === 'ing' && scale) {
       showDataTarget.value.width! = comp.width * scale[0]
       showDataTarget.value.height! = comp.height * scale[1]
     }
-    // case 操作结束
     else {
       showDataTarget.value.width! = comp.width
       showDataTarget.value.height! = comp.height
@@ -93,16 +91,24 @@ export const useViewStore = defineStore('view', () => {
     // 组合没有被改变， 则在基础上运算
     setTimeout(() => {
       const { rotate, scale } = data
-      if (rotate)
-        showDataTarget.value.rotate! = rotate
+      if (rotate) {
+        showDataTarget.value.rotate
+        = rotate > 0
+            ? Math.abs(rotate) % 360
+            : -Math.abs(rotate) % 360
+      }
       if (scale) {
         showDataTarget.value.scale![0] *= scale[0]
         showDataTarget.value.scale![1] *= scale[1]
       }
+      // 宽高获取
+      const dom = document.querySelector('.moveable-area')
+      showDataTarget.value.height = dom?.clientHeight || 0
+      showDataTarget.value.width = dom?.clientWidth || 0
       // xy需要处理一下
       const { offsetX, offsetY } = uCalcCompXY('.moveable-area')
-      showDataTarget.value.x! = offsetX
-      showDataTarget.value.y! = offsetY
+      showDataTarget.value.x = offsetX
+      showDataTarget.value.y = offsetY
     })
   }
 
@@ -111,7 +117,6 @@ export const useViewStore = defineStore('view', () => {
     type: 'ing' | 'end' = 'end',
     scale: [number, number] | undefined = undefined,
   ) {
-    const canvasScale = rulerStore.rulerOptions.scale
     // xy处理一下
     const dom = document.querySelector(`${selector}`)! as HTMLElement
     const domRect = dom.getBoundingClientRect()
@@ -121,13 +126,16 @@ export const useViewStore = defineStore('view', () => {
     const centerX = (domRect.left + domRect.width / 2)
     const centerY = (domRect.top + domRect.height / 2)
     // 与canvas画布的距离计算
-    const comp = getTarget(`${selector}`) || { width: 0, height: 0 } // fixme:这里是因为懒得处理组合了
+    const canvasScale = rulerStore.rulerOptions.scale
+    let comp: any = getTarget(`${selector}`)
+    if (selector === '.moveable-area') // 分组情况下 由于后面会统一乘以缩放，所以这里乘以一个缩放
+      comp = { width: dom.clientWidth, height: dom.clientHeight }
     let centerToborderX = comp.width / 2 * canvasScale
     let centerToborderY = comp.height / 2 * canvasScale
-    // !! 仅当ing且scale不为空的时候
+    // 仅当ing且scale不为空的时候
     if (type === 'ing' && scale) {
-      centerToborderX *= scale![0] // !!不加断言ts推断不出来scale是数组 没有收窄
-      centerToborderY *= scale![1] // !!不加断言ts推断不出来scale是数组 没有收窄
+      centerToborderX *= scale![0]
+      centerToborderY *= scale![1]
     }
     // 算出的距离要根据画布缩放进行处理
     const offsetX = (centerX - canvasRect.left - centerToborderX) / canvasScale
@@ -147,7 +155,7 @@ export const useViewStore = defineStore('view', () => {
     return components.value.find(component => `#${component.id}` === targetId)
   }
 
-  function dropComponent() {
+  function clearSelect() {
     taregtSelect.value = []
   }
 
@@ -221,7 +229,7 @@ export const useViewStore = defineStore('view', () => {
     setShowDataTargetForComp,
     setShowDataTargetForGroup,
     changeComponents,
-    dropComponent,
+    clearSelect,
     uSetStyle,
   }
 })
