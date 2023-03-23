@@ -85,7 +85,7 @@ function screenInit() {
   // 滚动居中, 由于containerRef的值是动态赋值的，所以这里nextTick一下
   nextTick(() => {
     const { height: containerHeight, width: containerWidth } = containerRef.value!.getBoundingClientRect()
-    const { clientHeight, clientWidth } = canvasRef.value!
+    const { clientHeight, clientWidth } = wrapperRef.value!
     // console.log(clientHeight, containerWidth, clientWidth, clientWidth)
     screensRef.value!.scrollLeft = (containerWidth / 2 - clientWidth / 2)
     screensRef.value!.scrollTop = (containerHeight / 2 - clientHeight / 2)
