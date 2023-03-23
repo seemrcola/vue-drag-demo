@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
 import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
@@ -15,7 +15,7 @@ const viewStore = useViewStore()
 /* Eclipse */
 const { listener, setMoveableRef } = useEclipse()
 /* Selecto */
-const { selectoDown, setSelectoRef, setStyle } = useSeleto({ container: '#canvas' })
+const { selectoDown, setStyle, selected } = useSeleto({ container: '#canvas' })
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
@@ -133,7 +133,7 @@ const {
   onScaleGroupEnd,
   onRotateGroupEnd,
   selectComponent,
-  dropComponent,
+  clearSelect,
   selectTarget,
 }
 = useMoveable()
@@ -153,15 +153,15 @@ function scaleHandle(e: any) {
   keepRatio.value = space
   onScale(e)
 }
-// 点击画布别处取消所有选中
-function clickForDrop() {
-  canvasRef.value?.addEventListener(
-    'click', () => {
-      dropComponent()
-    })
-}
 // --------------------------------------------------------
 // fixme ---------------------------------------------------------------
+
+// -框选----------------------------------------------------------------
+watch(
+  () => selected.value,
+  n => selectComponent(n, 'selecto'),
+)
+// -框选end--------------------------------------------------------------------
 
 onMounted(() => {
   rulerInit() // 初始化尺子，尺子的宽高和screen可视容器px像素对应，先获取宽高再赋值给尺子
@@ -169,24 +169,22 @@ onMounted(() => {
   containerInit() // 背景初始化
   canvasInit() // 画布初始化
   eventInit() // 事件初始化，监听鼠标移动事件
-  clickForDrop() // 点击空白处取消选中
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
   window.addEventListener('keydown', listener) // 鼠标按下监听
   setMoveableRef(moveable.value!)
-  setSelectoRef(selecto.value!)
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
-  canvasRef.value!.removeEventListener('keydown', listener)
+  canvasRef.value?.removeEventListener('keydown', listener)
 })
 </script>
 
 <template>
   <!-- 最外层的包裹容器 -->
   <div
-    ref="wrapperRef" class="wrapper" relative
+    id="wrapper" ref="wrapperRef" class="wrapper" relative
     @mousedown="selectoDown"
   >
     <!-- 标尺容器 -->
@@ -211,7 +209,7 @@ onUnmounted(() => {
       @mousedown="handleMouseDown"
     >
       <!-- 一个宽高很大的容器，作为背景板 -->
-      <div ref="containerRef">
+      <div id="container" ref="containerRef">
         <!-- 画布 -->
         <div
           id="canvas"

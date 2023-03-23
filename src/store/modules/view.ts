@@ -2,6 +2,10 @@ import { defineStore } from 'pinia'
 import { markRaw, ref } from 'vue'
 import { useRulerStore } from './ruler'
 
+/* usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
+ * view里面的selectTarget是用来渲染这些组件，让它们显示在正确的位置
+*/
+
 export interface IComponent {
   id: string
   type: string
@@ -185,7 +189,7 @@ export const useViewStore = defineStore('view', () => {
     }
   }
 
-  // !! 样式改变----------------------------------------------------------------------
+  // !! 样式改变-------------------------------------------------------------------
   // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
   function uSetStyle(
     target: HTMLElement,

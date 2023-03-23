@@ -1,5 +1,5 @@
 import { computed, onUnmounted, ref } from 'vue'
-import { useRulerStore } from '@/store/modules'
+import { useRulerStore, useViewStore } from '@/store/modules'
 
 interface Point {
   x: number
@@ -9,22 +9,29 @@ interface Options {
   color?: string
   container: string
 }
-
+/* 这个hooks需要用到store 需要view里面的属性 */
+/* 这种需要依赖外部store的函数组合，就不写进全局的hooks中 */
 export function useSeleto(options: Options) {
   // ruler
   const rulerStore = useRulerStore()
-  // 测试用的selectoRef
-  const selectoRef = ref<HTMLElement>()
+  // view
+  const viewStore = useViewStore()
   // container Rect
   let containerRect: DOMRect
   // 边框
   const COLOR = options?.color || '#4af'
   // 拖拽锁
   let lock = true
+  // 被选中的元素
+  const selected = ref<Array<{ id: string }>>([])
   // 开始坐标
   const start = ref<Point>({ x: 0, y: 0 })
   const end = ref<Point>({ x: 0, y: 0 })
   function handleMouseDown(e: MouseEvent) {
+    // 判断是否点击在范围内
+    const id = (e.target as HTMLElement).id
+    if (id !== 'canvas' && id !== 'container')
+      return
     // 打开拖拽锁
     lock = false
     // 将鼠标样式改成cross标识
@@ -38,7 +45,6 @@ export function useSeleto(options: Options) {
     }
     // 拿到container的Rect
     containerRect = getContainerRect()
-    console.log(containerRect)
     // 事件绑定
     document.body.addEventListener('mousemove', handleMouseMove)
     document.body.addEventListener('mouseup', handleMouseUp)
@@ -53,11 +59,13 @@ export function useSeleto(options: Options) {
       return
     const { clientX, clientY } = e
     end.value = { x: clientX, y: clientY }
-    // deflateRaw()  //用于测试的
   }
 
   function handleMouseUp(e: MouseEvent) {
     lock = false
+    // 计算哪些倒霉蛋被框选住了
+    selected.value = getWrapperedComps()
+    // 清空一些乱七八糟的
     start.value = { x: 0, y: 0 }
     end.value = { x: 0, y: 0 }
     document.body.removeEventListener('mousemove', handleMouseMove)
@@ -67,34 +75,33 @@ export function useSeleto(options: Options) {
     target.style.cursor = ''
   }
 
-  /**
-   * 这里的写法和viewStore里有点区别，view中是直接修改的e.target，而这里是修改一个对象
-   * 按理说数据驱动视图应该更好，所以view中应该也用这种方式
-   * 不过考虑到view中修改e.target的样式仅仅发生在拖拽旋转和缩放结束，所以不会有太大影响，方便起见就没有多写一个computed
-   * 而这里不一样，这里move操作会频繁触发，直接更改样式就会频繁回流
-   * 不过测试上体验差距不大
-   * 我把代码放在下面，后续有空再体验到底有没有差距
-  */
-  // function deflateRaw() {
-  //   const left = Math.min(start.value.x, end.value.x) - containerRect?.left || 0
-  //   const top = Math.min(start.value.y, end.value.y) - containerRect?.top || 0
-  //   const width = Math.abs(end.value.x - start.value.x)
-  //   const height = Math.abs(end.value.y - start.value.y)
-  //   selectoRef.value!.style.left = `${left}px`
-  //   selectoRef.value!.style.top = `${top}px`
-  //   selectoRef.value!.style.width = `${width}px`
-  //   selectoRef.value!.style.height = `${height}px`
-  //   selectoRef.value!.style.border = `2px solid ${COLOR}`
-  //   selectoRef.value!.style.zIndex = '1000'
-  // }
+  function getWrapperedComps() {
+    const components = viewStore.components
+    const ans: Array<{ id: string }> = []
+    // 选框的坐标-------------------------------------
+    const { left, top, height, width } = calcXY()
+    const startx = left
+    const starty = top
+    const endx = startx + width
+    const endy = starty + height
+    // -------------------------------------------
+    components.forEach((component) => {
+      const { x, y, width, height } = component
+      if (
+        startx < x
+        && starty < y
+        && endx > (x + width)
+        && endy > (y + height)
+      )
+        ans.push({ id: `${component.id}` })
+    })
+    return ans
+  }
+
   const setStyle = computed(() => {
     if (end.value.x === 0 && end.value.y === 0)
       return {}
-    const { scale } = rulerStore.rulerOptions
-    const left = (Math.min(start.value.x, end.value.x) - containerRect?.left || 0) / scale
-    const top = (Math.min(start.value.y, end.value.y) - containerRect?.top || 0) / scale
-    const width = Math.abs(end.value.x - start.value.x) / scale
-    const height = Math.abs(end.value.y - start.value.y) / scale
+    const { left, top, width, height } = calcXY()
     return {
       'left': `${left}px`,
       'top': `${top}px`,
@@ -113,19 +120,26 @@ export function useSeleto(options: Options) {
     return rect
   }
 
-  function setSelectoRef(ref: HTMLElement) {
-    selectoRef.value = ref
+  function calcXY() {
+    const { scale } = rulerStore.rulerOptions
+    const left = (Math.min(start.value.x, end.value.x) - containerRect?.left || 0) / scale
+    const top = (Math.min(start.value.y, end.value.y) - containerRect?.top || 0) / scale
+    const width = Math.abs(end.value.x - start.value.x) / scale
+    const height = Math.abs(end.value.y - start.value.y) / scale
+    return {
+      left, top, width, height,
+    }
   }
 
   onUnmounted(() => {
-    document.removeEventListener('mousedown', handleMouseDown)
     document.removeEventListener('mousemove', handleMouseMove)
     document.removeEventListener('mouseup', handleMouseUp)
   })
 
   return {
     selectoDown: handleMouseDown,
-    setSelectoRef,
     setStyle,
+    getWrapperedComps,
+    selected,
   }
 }

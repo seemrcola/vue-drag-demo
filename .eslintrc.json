@@ -3,6 +3,7 @@
   "rules": {
     "no-console": "off",
     "no-debugger": "off",
-    "no-restricted-syntax": "warn"
+    "no-restricted-syntax": "warn",
+    "vue/no-deprecated-v-on-native-modifier": "off"
   }
 }

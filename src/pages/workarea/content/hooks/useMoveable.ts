@@ -1,11 +1,11 @@
+import { ref } from 'vue'
 /*
  * uSetStyle 用来处理单个组件的位置【在拖拽操作结束之后处理】
  * view.setShowDataTarget 用来处理seetings.vue文件展示的数值【在拖拽结束之后处理】
  */
-import { ref } from 'vue'
 /* 这个hooks需要用到useKeyBoard */
 /* 这个hooks需要用到store 改变view里面的属性 */
-/* 这种需要以来外部的函数组合，就不写进全局的hooks中 */
+/* 这种需要依赖外部store的函数组合，就不写进全局的hooks中 */
 import { useViewStore } from '@/store/modules'
 
 export function useMoveable() {
@@ -21,37 +21,56 @@ export function useMoveable() {
     }
   }
 
-  function selectComponent<T extends { id: string }>(comp: T) {
+  function selectComponent<T extends { id: string }>(
+    comp: T | T[],
+    type: 'click' | 'selecto' = 'click',
+  ) {
+    if (type === 'click')
+      selectByClick(comp as T)
+    if (type === 'selecto')
+      selectBySelecto(comp as T[])
+  }
+
+  function selectBySelecto<T extends { id: string }>(comps: T[]) {
+    status = undefined
+    selectTarget.value = comps.map(comp => `#${comp.id}`)
+  }
+
+  function selectByClick<T extends { id: string }>(comp: T) {
     const { isMeta, isCtrl } = getKeyStatus()
     const id = `#${(comp).id}`
-    // note: 每次必须要更换数组指向，否则不生效，就离谱----
-    // 不按住ctrl 或者按住ctrl但是target列表长度为0
+    // !!: 每次必须要更换数组指向，否则不生效，就离谱----
     const noCtrl = !isCtrl && !isMeta
-    if (noCtrl || (!noCtrl && selectTarget.value.length === 0)) {
+    if (noCtrl || (!noCtrl && selectTarget.value.length === 0)) { // 不按住ctrl 或者按住ctrl但是target列表长度为0
       status = 'comp'
-      // view中的选中数组处理
       selectTarget.value = [id]
-      viewStore.setTarget(id, false) // isGroup = false
-      // view中的展示数组处理
-      viewStore.setShowDataTargetForComp()
+      DuetoSelectedInView(id, false)// isGroup = false
     }
     else {
       status = 'group'
       const ifHasId = selectTarget.value.find(compId => compId === id)
       if (ifHasId)
         return
-      // view中的选中数组处理
       selectTarget.value = [...selectTarget.value, id]
+      DuetoSelectedInView(id, true)// isGroup = true    fixme there
+    }
+  }
+
+  function DuetoSelectedInView(id: string, isGroup: boolean) {
+    if (isGroup) {
       viewStore.setTarget(id, true) // isGroup = true
-      // view中的展示数组处理
-      setTimeout(() => {
+      setTimeout(() => { // view中的展示数组处理
         const { x, y } = uCalcXY()
         viewStore.setShowDataTargetForGroup({ x, y, change: true })
       })
     }
+    else {
+      viewStore.setTarget(id, false) // isGroup = false
+      viewStore.setShowDataTargetForComp() // view中的展示数组处理
+    }
   }
 
-  function dropComponent() {
+  function clearSelect() {
     console.log('drop')
     selectTarget.value = []
     viewStore.dropComponent()
@@ -117,9 +136,7 @@ export function useMoveable() {
   function onRotateEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    // ----------------这部分是为了处理组合旋转，单个旋转无需考虑translate ------------------
     const { dx, dy } = uCalcTranslateXY(lastEvent)
-    // -------------------------------------------------------------------------------
     const rotate = lastEvent.rotate
     viewStore.uSetStyle(target, { x: dx, y: dy, rotate })
     status === 'comp' && viewStore.setShowDataTargetForComp()
@@ -128,9 +145,7 @@ export function useMoveable() {
   function onScaleEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
-    // 单个组件缩放会造成坐标xy也有所更改，所以需要额外处理这个情况-------------------
     const { dx, dy } = uCalcTranslateXY(lastEvent)
-    // ----------------------------------------------------------------------
     const scale = [...lastEvent.dist] as [number, number]
     viewStore.uSetStyle(target, { scale, x: dx, y: dy })
     status === 'comp' && viewStore.setShowDataTargetForComp()
@@ -223,6 +238,6 @@ export function useMoveable() {
     onScaleGroupEnd,
     selectTarget,
     selectComponent,
-    dropComponent,
+    clearSelect,
   }
 }
