@@ -1,4 +1,5 @@
 import { computed, onUnmounted, ref } from 'vue'
+import { isEmpty } from '@/utils/is'
 import { useRulerStore, useViewStore } from '@/store/modules'
 
 interface Point {
@@ -47,6 +48,7 @@ export function useSeleto(options: Options) {
   }
 
   function handleMouseMove(e: MouseEvent) {
+    // 未解锁直接return
     if (lock)
       return
     const { shift, ctrl, space } = window.$KeyboardActive
@@ -58,6 +60,8 @@ export function useSeleto(options: Options) {
     // 计算哪些倒霉蛋被框选住了
     const ans = getWrapperedComps()
     // 被框选住的要加box-shadow来标记一下框选到了
+    if (isEmpty(viewStore.components))
+      return
     viewStore.components.forEach((comp) => {
       comp.selecto = false
       ans.forEach((sel) => {
@@ -94,6 +98,9 @@ export function useSeleto(options: Options) {
       return []
 
     const components = viewStore.components
+    // 如果无组件 则直接return
+    if (isEmpty(components))
+      return []
     const ans: Array<{ id: string }> = []
     // 选框的坐标-------------------------------------
     const { left, top, height, width } = calcXY()

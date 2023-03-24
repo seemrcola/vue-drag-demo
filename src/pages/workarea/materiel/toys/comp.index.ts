@@ -1,5 +1,5 @@
 import type { Component } from 'vue'
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, markRaw } from 'vue'
 const requireComponent = import.meta.glob(
   './**/index.vue',
   {},
@@ -22,6 +22,6 @@ export const toysComponents: { name: string; component: Component }[]
 
     return {
       name,
-      component,
+      component: markRaw(component),
     }
   })

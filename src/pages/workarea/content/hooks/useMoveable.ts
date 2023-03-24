@@ -1,4 +1,4 @@
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 import { isEmpty } from '@/utils/is'
 /*
  * uSetStyle 用来处理单个组件的位置【在拖拽操作结束之后处理】
@@ -7,10 +7,11 @@ import { isEmpty } from '@/utils/is'
  * 这个hooks需要用到store 改变view里面的属性
  * 这种需要依赖外部store的函数组合，就不写进全局的hooks中
  */
-import { useViewStore } from '@/store/modules'
+import { useHistoryStore, useViewStore } from '@/store/modules'
 
 export function useMoveable() {
   const selectTarget = ref<string[]>([])
+  const { track } = useHistoryStore()
   const viewStore = useViewStore()
   let oprateMode: 'comp' | 'group' // 操作类型 是分组操作还是单个操作
 
@@ -67,7 +68,7 @@ export function useMoveable() {
   function DuetoSelectedInView(id: string) {
     viewStore.setTarget(id, isGroup())
     if (isGroup()) {
-      nextTick(() => {
+      setTimeout(() => { // 这里用定时器是为了保证能获取到movable-area元素
         // view中的展示数组处理 针对组合选中
         const { x, y } = uCalcXY()
         viewStore.setShowDataTargetForGroup({ x, y, change: true })
@@ -85,6 +86,16 @@ export function useMoveable() {
   }
 
   // !!单个组件操作-----------------------------------------------------------
+
+  function singleHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (type === 'scale')
+      onScale(e)
+    if (type === 'drag')
+      onDrag(e)
+    if (type === 'rotate')
+      onRotate(e)
+  }
+
   function onDrag({ transform, target, dist }: any) {
     target.style.transform = transform
     const [x, y] = dist
@@ -107,6 +118,14 @@ export function useMoveable() {
   // !!组合操作----------------------------------------------------------------
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
   // 组合操作要记得变更x，y的坐标----------
+  function groupHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (type === 'scale')
+      onScaleGroup(e)
+    if (type === 'drag')
+      onDragGroup(e)
+    if (type === 'rotate')
+      onRotateGroup(e)
+  }
   function onDragGroup({ events, dist }: any) {
     events.forEach((event: any) => {
       event.target.style.transform = event.style.transform
@@ -135,6 +154,16 @@ export function useMoveable() {
   // !!---------------------------------------------------------------------
 
   // !!单个组件操作结束--------------------------------------------------------
+  function singleEndHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (type === 'scale')
+      onScaleEnd(e)
+    if (type === 'drag')
+      onDragEnd(e)
+    if (type === 'rotate')
+      onRotateEnd(e)
+    setTimeout(() => track())
+  }
+
   function onDragEnd({ lastEvent, target }: any) {
     if (!lastEvent)
       return
@@ -163,6 +192,15 @@ export function useMoveable() {
   // -------------------------------------------------------------------------
 
   // !!多个组件操作结束---------------------------------------------------------
+  function groupEndHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (type === 'scale')
+      onScaleGroupEnd(e)
+    if (type === 'drag')
+      onDragGroupEnd(e)
+    if (type === 'rotate')
+      onRotateGroupEnd(e)
+    setTimeout(() => track())
+  }
   function onDragGroupEnd({ events }: any) {
     events.forEach((event: any) => {
       const { lastEvent, target } = event
@@ -222,20 +260,12 @@ export function useMoveable() {
   }
 
   return {
-    onRotate,
-    onDrag,
-    onScale,
-    onDragGroup,
-    onRotateGroup,
-    onScaleGroup,
-    onDragEnd,
-    onRotateEnd,
-    onScaleEnd,
-    onDragGroupEnd,
-    onRotateGroupEnd,
-    onScaleGroupEnd,
     selectTarget,
     selectComponent,
     clearSelect,
+    singleHandler,
+    groupHandler,
+    singleEndHandler,
+    groupEndHandler,
   }
 }

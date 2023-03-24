@@ -120,18 +120,10 @@ function eventInit() {
 // moveable------------------------------------------------
 const moveable = ref<null | VueMoveableInstance>(null)
 const {
-  onDrag,
-  onRotate,
-  onScale,
-  onDragGroup,
-  onRotateGroup,
-  onScaleGroup,
-  onDragEnd,
-  onRotateEnd,
-  onScaleEnd,
-  onDragGroupEnd,
-  onScaleGroupEnd,
-  onRotateGroupEnd,
+  singleHandler,
+  singleEndHandler,
+  groupHandler,
+  groupEndHandler,
   selectComponent,
   clearSelect,
   selectTarget,
@@ -151,7 +143,7 @@ const keepRatio = ref(false)
 function scaleHandle(e: any) {
   const { space } = window.$KeyboardActive
   keepRatio.value = space
-  onScale(e)
+  singleHandler(e, 'scale')
 }
 // 最外层wrapper的按下事件
 function selectoDownHandler(e: MouseEvent) {
@@ -238,18 +230,18 @@ onUnmounted(() => {
             :scrollable="true"
             :snappable="true"
             :keep-ratio="keepRatio"
-            @drag="onDrag"
             @scale="scaleHandle"
-            @rotate="onRotate"
-            @drag-group="onDragGroup"
-            @scale-group="onScaleGroup"
-            @rotate-group="onRotateGroup"
-            @drag-end="onDragEnd"
-            @rotate-end="onRotateEnd"
-            @scale-end="onScaleEnd"
-            @drag-group-end="onDragGroupEnd"
-            @rotate-group-end="onRotateGroupEnd"
-            @scale-group-end="onScaleGroupEnd"
+            @drag="(e) => singleHandler(e, 'drag')"
+            @rotate="(e) => singleHandler(e, 'rotate')"
+            @drag-group="(e) => groupHandler(e, 'drag')"
+            @scale-group="(e) => groupHandler(e, 'scale')"
+            @rotate-group="(e) => groupHandler(e, 'rotate')"
+            @drag-end="(e) => singleEndHandler(e, 'drag')"
+            @rotate-end="(e) => singleEndHandler(e, 'rotate')"
+            @scale-end="(e) => singleEndHandler(e, 'scale')"
+            @drag-group-end="(e) => groupEndHandler(e, 'drag')"
+            @rotate-group-end="(e) => groupEndHandler(e, 'rotate')"
+            @scale-group-end="(e) => groupEndHandler(e, 'scale')"
           />
           <component
             :is="componentItem.component.component"

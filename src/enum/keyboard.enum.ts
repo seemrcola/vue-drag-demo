@@ -18,6 +18,10 @@ export enum KeyCodeEnum {
   LEFT = 37,
   // 右移
   RIGHT = 39,
+  // 撤销
+  UNDO = 90,
+  // 重做
+  REDO = 89,
   // 清空剪贴板
   CLEAR = 'clear',
   // 保存

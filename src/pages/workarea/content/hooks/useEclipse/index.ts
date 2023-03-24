@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useMove } from './move'
 import { useCVX } from './cvx'
 import { useDel } from './del'
+import { useHistory } from './history'
 import { KeyCodeEnum } from '@/enum/keyboard.enum'
 
 export function useEclipse() {
@@ -12,6 +13,7 @@ export function useEclipse() {
   const { del } = useDel()
   const { copy, paste } = useCVX()
   const { left, right, up, down, setMoveableRef: setMoveRef } = useMove()
+  const { redo, undo } = useHistory()
 
   // execEcplise 执行组合快捷键 & 非组合快捷键
   function execEcplise(keycode: number, e: KeyboardEvent) {
@@ -24,6 +26,12 @@ export function useEclipse() {
           break
         case KeyCodeEnum.PASTE:
           paste(e)
+          break
+        case KeyCodeEnum.UNDO:
+          undo()
+          break
+        case KeyCodeEnum.REDO:
+          redo()
           break
         default:
           void 0

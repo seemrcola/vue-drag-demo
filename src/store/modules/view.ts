@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { markRaw, nextTick, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { useRulerStore } from './ruler'
+import { useHistoryStore } from './history'
 
 /* usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
  * view里面的selectTarget是用来渲染这些组件，让它们显示在正确的位置
@@ -35,6 +36,8 @@ export interface ShowData {
 export const useViewStore = defineStore('view', () => {
   // ruler
   const rulerStore = useRulerStore()
+  // history
+  const historyStore = useHistoryStore()
   // 画布上的全部图表
   const components = ref<IComponent[]>([])
   // 画布上被选中的图表
@@ -167,8 +170,8 @@ export const useViewStore = defineStore('view', () => {
 
   function addComponent<T extends IComponent>(component: T) {
     // 把compnent属性变成非响应式
-    component.component = markRaw(component.component)
     components.value.push(component)
+    setTimeout(() => historyStore.track())
   }
 
   function changeComponents(componentId: string, data: ShowData) {
