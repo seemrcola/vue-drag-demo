@@ -257,7 +257,10 @@ onUnmounted(() => {
             :id="componentItem.id"
             :key="componentItem.name"
             :style="{ ...viewStore.initComponentStyle(componentItem) }"
-            :class="{ component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id) }"
+            :class="{
+              component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
+              selecto: componentItem.selecto,
+            }"
             @click.stop
             @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
           />
@@ -298,10 +301,23 @@ onUnmounted(() => {
 }
 .component {
   &:hover {
-    box-shadow: 0px 0px 2px 2px #4af;
+    box-shadow: 0px 0px 2px 2px rgb(68, 170, 255);
   }
   &:active {
     box-shadow: 0 0 0 0 ;
+  }
+}
+.selecto {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: rgba(68, 170, 255, 0.1);
+    box-shadow: 0px 0px 3px 3px rgb(68, 170, 255);
   }
 }
 </style>

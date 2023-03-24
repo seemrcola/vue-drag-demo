@@ -15,6 +15,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     y: 0,
     rotate: 0,
     scale: [1, 1],
+    selecto: false,
     component: toysComponents[0],
   },
   // plums 梅花生长
@@ -28,6 +29,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     y: 0,
     rotate: 0,
     scale: [1, 1],
+    selecto: false,
     component: toysComponents[1],
   },
   // 随机数
@@ -41,6 +43,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     y: 0,
     rotate: 0,
     scale: [1, 1],
+    selecto: false,
     component: toysComponents[2],
   },
   // 元胞自动机-生命游戏
@@ -54,6 +57,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     y: 0,
     rotate: 0,
     scale: [1, 1],
+    selecto: false,
     component: toysComponents[3],
   },
   // 疫情元胞自动机
@@ -67,6 +71,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     y: 0,
     rotate: 0,
     scale: [1, 1],
+    selecto: false,
     component: toysComponents[4],
   },
 ]

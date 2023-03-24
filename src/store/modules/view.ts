@@ -16,6 +16,7 @@ export interface IComponent {
   scale: number[]
   height: number
   width: number
+  selecto: boolean // 是否被框选
   component: {
     component: any
     name: string

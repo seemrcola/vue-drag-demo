@@ -55,12 +55,25 @@ export function useSeleto(options: Options) {
       return
     const { clientX, clientY } = e
     end.value = { x: clientX, y: clientY }
+    // 计算哪些倒霉蛋被框选住了
+    const ans = getWrapperedComps()
+    // 被框选住的要加box-shadow来标记一下框选到了
+    viewStore.components.forEach((comp) => {
+      ans.forEach((sel) => {
+        if (sel.id === comp.id)
+          comp.selecto = true
+      })
+    })
   }
 
   function handleMouseUp(e: MouseEvent) {
     lock = false
     // 计算哪些倒霉蛋被框选住了
     selected.value = getWrapperedComps()
+    // 通知view这些组件被选中了 也需要通知moveable 所以通过导出selected这个属性去处理
+    selected.value.forEach(item => viewStore.setTarget(`#${item.id}`, true))
+    // 清掉框住的状态
+    viewStore.components.forEach(comp => comp.selecto = false)
     // 清空一些乱七八糟的
     start.value = { x: 0, y: 0 }
     end.value = { x: 0, y: 0 }
@@ -98,7 +111,6 @@ export function useSeleto(options: Options) {
       )
         ans.push({ id: `${component.id}` })
     })
-    ans.forEach(item => viewStore.setTarget(`#${item.id}`, true))
     return ans
   }
 
