@@ -128,7 +128,7 @@ export const useViewStore = defineStore('view', () => {
     // 与canvas画布的距离计算
     const canvasScale = rulerStore.rulerOptions.scale
     let comp: any = getTarget(`${selector}`)
-    if (selector === '.moveable-area') // 分组情况下 由于后面会统一乘以缩放，所以这里乘以一个缩放
+    if (selector === '.moveable-area')
       comp = { width: dom.clientWidth, height: dom.clientHeight }
     let centerToborderX = comp.width / 2 * canvasScale
     let centerToborderY = comp.height / 2 * canvasScale
