@@ -59,6 +59,7 @@ export function useSeleto(options: Options) {
     const ans = getWrapperedComps()
     // 被框选住的要加box-shadow来标记一下框选到了
     viewStore.components.forEach((comp) => {
+      comp.selecto = false
       ans.forEach((sel) => {
         if (sel.id === comp.id)
           comp.selecto = true
