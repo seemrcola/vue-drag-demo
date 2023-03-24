@@ -236,6 +236,7 @@ onUnmounted(() => {
             :scalable="true"
             :rotatable="true"
             :scrollable="true"
+            :snappable="true"
             :keep-ratio="keepRatio"
             @drag="onDrag"
             @scale="scaleHandle"
@@ -256,7 +257,7 @@ onUnmounted(() => {
             :id="componentItem.id"
             :key="componentItem.name"
             :style="{ ...viewStore.initComponentStyle(componentItem) }"
-            class="component"
+            :class="{ component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id) }"
             @click.stop
             @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
           />
@@ -298,6 +299,9 @@ onUnmounted(() => {
 .component {
   &:hover {
     box-shadow: 0px 0px 2px 2px #4af;
+  }
+  &:active {
+    box-shadow: 0 0 0 0 ;
   }
 }
 </style>
