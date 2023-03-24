@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { markRaw, ref } from 'vue'
+import { markRaw, nextTick, ref } from 'vue'
 import { useRulerStore } from './ruler'
 
 /* usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
@@ -90,7 +90,7 @@ export const useViewStore = defineStore('view', () => {
       return showDataTarget.value = { ...initData, ...data }
 
     // 组合没有被改变， 则在基础上运算
-    setTimeout(() => {
+    nextTick(() => {
       const { rotate, scale } = data
       if (rotate) {
         showDataTarget.value.rotate

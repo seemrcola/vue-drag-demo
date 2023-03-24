@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { isEmpty } from '@/utils/is'
 /*
  * uSetStyle 用来处理单个组件的位置【在拖拽操作结束之后处理】
@@ -67,7 +67,7 @@ export function useMoveable() {
   function DuetoSelectedInView(id: string) {
     viewStore.setTarget(id, isGroup())
     if (isGroup()) {
-      setTimeout(() => {
+      nextTick(() => {
         // view中的展示数组处理 针对组合选中
         const { x, y } = uCalcXY()
         viewStore.setShowDataTargetForGroup({ x, y, change: true })
