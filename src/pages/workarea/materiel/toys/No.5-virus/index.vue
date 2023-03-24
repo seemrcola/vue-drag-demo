@@ -205,9 +205,6 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div w-full>
-      <!-- <Head :day="day" /> -->
-    </div>
     <canvas ref="canvas" height="400" width="400" />
   </div>
 </template>
