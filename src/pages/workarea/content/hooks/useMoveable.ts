@@ -3,10 +3,10 @@ import { isEmpty } from '@/utils/is'
 /*
  * uSetStyle 用来处理单个组件的位置【在拖拽操作结束之后处理】
  * view.setShowDataTarget 用来处理seetings.vue文件展示的数值【在拖拽结束之后处理】
+ * 这个hooks需要用到useKeyBoard
+ * 这个hooks需要用到store 改变view里面的属性
+ * 这种需要依赖外部store的函数组合，就不写进全局的hooks中
  */
-/* 这个hooks需要用到useKeyBoard */
-/* 这个hooks需要用到store 改变view里面的属性 */
-/* 这种需要依赖外部store的函数组合，就不写进全局的hooks中 */
 import { useViewStore } from '@/store/modules'
 
 export function useMoveable() {
