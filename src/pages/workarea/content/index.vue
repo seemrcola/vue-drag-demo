@@ -317,7 +317,6 @@ onUnmounted(() => {
     bottom: 0;
     z-index: 1;
     background-color: rgba(68, 170, 255, 0.1);
-    box-shadow: 0px 0px 3px 3px rgb(68, 170, 255);
   }
 }
 </style>
