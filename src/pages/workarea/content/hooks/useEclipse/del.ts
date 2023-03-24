@@ -14,6 +14,7 @@ export function useDel() {
 
     const dels = viewStore.taregtSelect
     dels.forEach(comp => viewStore.removeComponent(comp))
+    viewStore.clearSelect()
 
     // fixme control-box不消失，只好强制让他消失了
     const controlElement = document.querySelector('.moveable-control-box') as HTMLElement
