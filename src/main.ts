@@ -22,7 +22,6 @@ function setupApp() {
   setupRouter(app)
   setupStore(app)
   setupToysComponents(app)
-  console.log(app.component('toysvirus'))
   app.mount('#app')
 }
 setupApp()

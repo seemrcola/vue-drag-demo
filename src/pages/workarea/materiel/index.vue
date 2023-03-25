@@ -67,7 +67,6 @@ function dragHandle(e: DragEvent) {
     window.$fixClientX = target.width / 2
     window.$fixClientY = target.height / 2
   }
-  console.log(target.width / 2, target.height / 2)
   dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
 /********************************/

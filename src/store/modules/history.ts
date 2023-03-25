@@ -20,7 +20,6 @@ export const useHistoryStore = defineStore('history', () => {
     historyList.value.push(disk)
     // 指针自加
     pointer.value++
-    console.log(historyList.value)
   }
 
   function undo() {
