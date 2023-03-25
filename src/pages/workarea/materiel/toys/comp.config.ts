@@ -2,7 +2,6 @@ import type { IComponent } from '@/store/modules/view'
 import { compType } from '@/enum/materiel.enum'
 interface ToysComponent extends IComponent {}
 
-// 目前这里的顺序要和toys文件夹下的顺序一致
 export const toysComponentsConfig: ToysComponent[] = [
   // 元胞自动机-生命游戏
   {

@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import { toysComponentsConfig } from './toys/comp.config'
+import { componentsConfig } from './comp.config'
 import { compType } from '@/enum/materiel.enum'
 import { imgGlob } from '@/utils/index'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
@@ -18,39 +18,28 @@ interface Icon {
   icon: string
   text: string
   type: compType
+  imgList: string[]
 }
 const icons = reactive<Icon[]>([
-  { icon: 'i-icon-park-solid:game', text: '玩具', type: compType.TOYS },
-  { icon: 'i-simple-icons:soundcharts', text: '图表', type: compType.CHART },
-  { icon: 'i-ic:twotone-media-bluetooth-on', text: '媒体', type: compType.MEDIA },
-  { icon: 'i-carbon:shape-intersect', text: '形状', type: compType.SHAPE },
+  { icon: 'i-icon-park-solid:game', text: '玩具', type: compType.TOYS, imgList: toysModules },
+  { icon: 'i-simple-icons:soundcharts', text: '图表', type: compType.CHART, imgList: chartModules },
+  { icon: 'i-ic:twotone-media-bluetooth-on', text: '媒体', type: compType.MEDIA, imgList: mediaModules },
+  { icon: 'i-carbon:shape-intersect', text: '形状', type: compType.SHAPE, imgList: shapeModules },
 ])
 
 /** ****** 鼠标移入显示类型 *********/
-const curIcon = ref<Icon | undefined>(undefined)
-function overIcon(item: Icon) {
-  curIcon.value = item
-}
-function leaveIcon() {
-  curIcon.value = undefined
-}
+const curIcon: Icon = icons[0]
 /*********************************/
 /** ********* 初始化显示 **********/
-const imgListMap = {
-  shape: shapeModules,
-  media: mediaModules,
-  toys: toysModules,
-  chart: chartModules,
-}
 const checkArr = ref<boolean[]>([true, false, false, false])
-const curImgList = ref<string[]>(imgListMap.toys)
+const curImgList = ref<string[]>(icons[0].imgList)
 /*********************************/
 
 /* *** 鼠标点击icon右侧显示缩略图 ***/
 function linkPreviewImg(icon: Icon, idx: number) {
   checkArr.value = [false, false, false, false]
   checkArr.value[idx] = true
-  curImgList.value = imgListMap[icon.type]
+  curImgList.value = icon.imgList
 }
 /********************************/
 
@@ -64,7 +53,7 @@ function dragHandle(e: DragEvent) {
   const { dataTransfer } = e
   const target = e.target as HTMLImageElement
   // *******************************************************************
-  // ** !!这里做个解释
+  // ** !!这里做个解释 [这是貌似是一个mac专属bug]
   // ** 当drag操作自定义拖动图片，并且改变了dataTransfer!.setDragImage(img, x, y)
   // ** 此时当drag操作结束时，dragend获取clientX喝clientY都会受到这个x和y的影响
   // ** 把dragend绑定在document上就不会有这个问题
@@ -78,6 +67,7 @@ function dragHandle(e: DragEvent) {
     window.$fixClientX = target.width / 2
     window.$fixClientY = target.height / 2
   }
+  console.log(target.width / 2, target.height / 2)
   dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
 /********************************/
@@ -86,22 +76,23 @@ function dragHandle(e: DragEvent) {
 function imgDragEnd(e: DragEvent, idx: number) {
   // 判断一下是否进入画布内
   const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
-  const { width, height } = toysComponentsConfig[idx]
+  const { width, height } = componentsConfig[curIcon.type][idx]
   const { clientX, clientY } = e
   const scale = rulerStore.rulerOptions.scale
   // 计算坐标点
-  const x
-  = (clientX - left - window.$fixClientX) / scale - (width / 2)
-  const y
-  = (clientY - top + window.$fixClientY) / scale - (height / 2)
+  const x = (clientX - left - window.$fixClientX) / scale - (width / 2)
+  const y = (clientY - top + window.$fixClientY) / scale - (height / 2)
   // 进入画布则收集该组件信息
   if (
     (clientX - window.$fixClientX) > left
     && (clientY + window.$fixClientY) > top
   ) {
-    console.log(toysComponentsConfig[idx], 'xxx')
+    // 靠名字找到组件的config信息
+    const imgname = imgsrc.value.split('/').pop()?.split('.')[0]
+    const compnentConfig = componentsConfig[curIcon.type]
+      .find(comp => comp.component.includes(imgname!))!
     const targetComponent = {
-      ...toysComponentsConfig[idx],
+      ...compnentConfig,
       id: `wrapper${uuidv4().split('-')[0]}`,
       scale: [1, 1], // 因为我引入的是同一个组件，共享同一个模板数据，所以引用类型的数据要注意，需要覆盖一下
       x,
@@ -120,12 +111,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
       w-full h="40px" leading="40px"
       border="#fff 1px solid" color="#fff"
     >
-      <div
-        border="#fff 1px solid"
-        f-c-c w-16 h="80%" rounded-1
-      >
-        {{ curIcon?.text }}
-      </div>
+      <strong text="0.9rem">组件列表</strong>
     </div>
 
     <div flex w-full h="[calc(100%-40px)]">
@@ -139,8 +125,6 @@ function imgDragEnd(e: DragEvent, idx: number) {
           v-for="(item, idx) in icons"
           :key="idx" :class="{ click: checkArr[idx] }"
           border="#fff 1px solid" mb-2 rounded-1
-          @mouseover="overIcon(item)"
-          @mouseleave="leaveIcon"
           @click="linkPreviewImg(item, idx)"
         >
           <div h-6 w-6 color="#fff" :class="item.icon" />
