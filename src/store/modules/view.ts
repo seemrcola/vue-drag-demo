@@ -18,10 +18,7 @@ export interface IComponent {
   height: number
   width: number
   selecto: boolean // 是否被框选
-  component: {
-    component: any
-    name: string
-  }
+  component: string // 组件名称 由TYPE加name拼接而成
 }
 
 export interface ShowData {
@@ -169,6 +166,7 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function addComponent<T extends IComponent>(component: T) {
+    console.log(component, 'sdsdsdsd')
     // 把compnent属性变成非响应式
     components.value.push(component)
     setTimeout(() => historyStore.track())

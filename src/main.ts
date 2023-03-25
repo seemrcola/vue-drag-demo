@@ -11,6 +11,9 @@ import { setupStore } from './store'
 // global hooks
 import { useKeyboard } from '@/hooks/useFnKeyboard'
 import { useOS } from '@/hooks/useOS'
+// global components
+import { setupToysComponents } from '@/pages/workarea/materiel/toys/comp.index'
+
 useKeyboard()
 useOS()
 
@@ -18,6 +21,8 @@ function setupApp() {
   const app = createApp(App)
   setupRouter(app)
   setupStore(app)
+  setupToysComponents(app)
+  console.log(app.component('toysvirus'))
   app.mount('#app')
 }
 setupApp()

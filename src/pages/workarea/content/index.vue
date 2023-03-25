@@ -244,10 +244,10 @@ onUnmounted(() => {
             @scale-group-end="(e) => groupEndHandler(e, 'scale')"
           />
           <component
-            :is="componentItem.component.component"
+            :is="componentItem.component"
             v-for="componentItem in viewStore.components"
             :id="componentItem.id"
-            :key="componentItem.name"
+            :key="componentItem.id"
             :style="{ ...viewStore.initComponentStyle(componentItem) }"
             :class="{
               component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),

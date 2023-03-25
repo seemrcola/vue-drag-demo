@@ -99,11 +99,11 @@ function imgDragEnd(e: DragEvent, idx: number) {
     (clientX - window.$fixClientX) > left
     && (clientY + window.$fixClientY) > top
   ) {
+    console.log(toysComponentsConfig[idx], 'xxx')
     const targetComponent = {
       ...toysComponentsConfig[idx],
       id: `wrapper${uuidv4().split('-')[0]}`,
-      // 因为我引入的是同一个组件，共享同一个模板数据，所以引用类型的数据要注意，需要覆盖一下
-      scale: [1, 1],
+      scale: [1, 1], // 因为我引入的是同一个组件，共享同一个模板数据，所以引用类型的数据要注意，需要覆盖一下
       x,
       y,
     }

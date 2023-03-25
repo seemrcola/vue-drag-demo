@@ -1,6 +1,6 @@
-import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { markRaw, ref } from 'vue'
+import { cloneDeep } from 'lodash-es'
 import type { IComponent } from './view'
 import { useViewStore } from './view'
 
@@ -15,10 +15,9 @@ export const useHistoryStore = defineStore('history', () => {
   }
 
   function track() {
-    // 从当前步到后面的步骤全部清掉
-    // historyList.value.splice(0, pointer.value + 1)
     // 将当前状态收集进来
-    historyList.value.push(cloneDeep(viewStore.components))
+    const disk = markRaw(cloneDeep(viewStore.components))
+    historyList.value.push(disk)
     // 指针自加
     pointer.value++
     console.log(historyList.value)
