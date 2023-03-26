@@ -90,6 +90,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
     const imgname = imgsrc.value.split('/').pop()?.split('.')[0]
     const compnentConfig = componentsConfig[curIcon.type]
       .find(comp => comp.component.includes(imgname!))!
+    console.log(compnentConfig)
     const targetComponent = {
       ...compnentConfig,
       id: `wrapper${uuidv4().split('-')[0]}`,
