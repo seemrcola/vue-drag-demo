@@ -168,6 +168,7 @@ export const useViewStore = defineStore('view', () => {
   function addComponent<T extends IComponent>(component: T) {
     // 把compnent属性变成非响应式
     components.value.push(component)
+    console.log(components.value)
     setTimeout(() => historyStore.track())
   }
 
