@@ -140,10 +140,13 @@ function MouseDownHandle(e: MouseEvent, comp: IComponent) {
 }
 // 等比缩放
 const keepRatio = ref(false)
-function scaleHandle(e: any) {
+function scaleHandle(e: any, type = '') {
   const { space } = window.$KeyboardActive
   keepRatio.value = space
-  singleHandler(e, 'scale')
+  if (type)
+    groupHandler(e, 'scale')
+  else
+    singleHandler(e, 'scale')
 }
 // 最外层wrapper的按下事件
 function selectoDownHandler(e: MouseEvent) {
@@ -230,11 +233,11 @@ onUnmounted(() => {
             :scrollable="true"
             :snappable="true"
             :keep-ratio="keepRatio"
-            @scale="scaleHandle"
+            @scale="(e) => scaleHandle(e)"
+            @scale-group="(e) => scaleHandle(e, 'group')"
             @drag="(e) => singleHandler(e, 'drag')"
             @rotate="(e) => singleHandler(e, 'rotate')"
             @drag-group="(e) => groupHandler(e, 'drag')"
-            @scale-group="(e) => groupHandler(e, 'scale')"
             @rotate-group="(e) => groupHandler(e, 'rotate')"
             @drag-end="(e) => singleEndHandler(e, 'drag')"
             @rotate-end="(e) => singleEndHandler(e, 'rotate')"
