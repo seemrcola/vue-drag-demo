@@ -87,7 +87,9 @@ function imgDragEnd(e: DragEvent, idx: number) {
     && (clientY + window.$fixClientY) > top
   ) {
     // 靠名字找到组件的config信息
+    console.log(imgsrc.value)
     const imgname = imgsrc.value.split('/').pop()?.split('.')[0]
+    console.log(imgname, curIcon, componentsConfig[curIcon.type])
     const compnentConfig = componentsConfig[curIcon.type]
       .find(comp => comp.component.includes(imgname!))!
     console.log(compnentConfig)
