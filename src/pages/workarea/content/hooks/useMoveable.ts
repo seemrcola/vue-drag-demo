@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { isEmpty } from '@/utils/is'
 /*
  * uSetStyle 用来处理单个组件的位置【在拖拽操作结束之后处理】
@@ -6,6 +6,8 @@ import { isEmpty } from '@/utils/is'
  * 这个hooks需要用到useKeyBoard
  * 这个hooks需要用到store 改变view里面的属性
  * 这种需要依赖外部store的函数组合，就不写进全局的hooks中
+ * // !! 注意:
+ * 由于操作结束之后组件的位置要改成用position去处理，所以需要将moveable的target同步给views的target 一边viewStore去处理
  */
 import { useHistoryStore, useViewStore } from '@/store/modules'
 
@@ -45,6 +47,7 @@ export function useMoveable() {
     if (isEmpty(comps))
       return
     selectTarget.value = comps.map(comp => `#${comp.id}`)
+    DuetoSelectedInView()
   }
 
   function selectByClick<T extends { id: string }>(comp: T) {
@@ -55,25 +58,25 @@ export function useMoveable() {
     if (noCtrl || (!noCtrl && selectTarget.value.length === 0)) { // 不按住ctrl 或者按住ctrl但是target列表长度为0
       oprateMode = 'comp'
       selectTarget.value = [id]
-      DuetoSelectedInView(id)
+      DuetoSelectedInView()
     }
     else {
       oprateMode = 'group'
-      const ifHasId = selectTarget.value.find(compId => compId === id)
-      if (ifHasId)
-        return
       selectTarget.value = [...selectTarget.value, id]
-      DuetoSelectedInView(id)
+      DuetoSelectedInView()
     }
   }
 
-  function DuetoSelectedInView(id: string) {
-    viewStore.setTarget(id, isGroup())
+  function DuetoSelectedInView() {
+    // 区分组合状态和不组合状态 view中的target根据是否组合来确认如何保存数据
+    viewStore.setTarget(selectTarget.value)
     if (isGroup()) {
-      setTimeout(() => { // 这里用定时器是为了保证能获取到movable-area元素
-        // view中的展示数组处理 针对组合选中
-        const { x, y } = uCalcXY()
-        viewStore.setShowDataTargetForGroup({ x, y, change: true })
+      nextTick(() => { // 这里要这么套才行，原因未知 fixme
+        setTimeout(() => { // 这里用定时器是为了保证能获取到movable-area元素
+          // view中的展示数组处理 针对组合选中
+          const { x, y } = uCalcXY()
+          viewStore.setShowDataTargetForGroup({ x, y, change: true })
+        })
       })
     }
 

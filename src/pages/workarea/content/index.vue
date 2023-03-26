@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { SketchRule } from 'vue3-sketch-ruler'
 import type { VueMoveableInstance } from 'vue3-moveable'
 import Moveable from 'vue3-moveable'
@@ -15,7 +15,7 @@ const viewStore = useViewStore()
 /* Eclipse */
 const { listener, setMoveableRef } = useEclipse()
 /* Selecto */
-const { selectoDown, setStyle, selected } = useSeleto({ container: '#canvas' })
+const { selectoDown, setStyle } = useSeleto({ container: '#canvas' })
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
@@ -157,13 +157,6 @@ function selectoDownHandler(e: MouseEvent) {
   clearSelect()
 }
 // fixme ---------------------------------------------------------------
-
-// -框选----------------------------------------------------------------
-watch(
-  () => selected.value,
-  n => selectComponent(n, 'selecto'),
-)
-// -框选end--------------------------------------------------------------------
 
 onMounted(() => {
   rulerInit() // 初始化尺子，尺子的宽高和screen可视容器px像素对应，先获取宽高再赋值给尺子

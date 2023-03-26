@@ -5,8 +5,8 @@ import { useHistoryStore } from './history'
 
 /*
  * usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
- * view里面的selectTarget是用来渲染这些组件的数据，让它们显示正确的位置坐标
- * 但是真正控制右侧数据显示是showDataTarget属性 这个属性根据selectTarget计算而来 设计上存在一定问题 >>> fixme
+ * view里面的selectTarget是用来渲染这些组件的数据，让它们去往正确的显示正确的位置坐标，同时让他们在移动的时候可以正确被处理position
+ * 设计上可能存在一定问题 >>> fixme
 */
 
 export interface IComponent {
@@ -148,10 +148,13 @@ export const useViewStore = defineStore('view', () => {
 
   // !!-------------------------------------------------------------------------------
 
-  function setTarget(targetId: string, isGroup = false) {
-    if (!isGroup)
-      taregtSelect.value.length = 0
-    taregtSelect.value.push(getTarget(targetId)!)
+  function setTarget(targetId: string[]) {
+    // 清空数组
+    taregtSelect.value = []
+    // 重新给数组赋值
+    targetId.forEach((id) => {
+      taregtSelect.value.push(getTarget(id)!)
+    })
   }
 
   function getTarget(targetId: string) {

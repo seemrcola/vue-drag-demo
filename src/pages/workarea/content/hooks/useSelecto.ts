@@ -1,4 +1,5 @@
 import { computed, onUnmounted, ref } from 'vue'
+import { useMoveable } from './useMoveable'
 import { isEmpty } from '@/utils/is'
 import { useRulerStore, useViewStore } from '@/store/modules'
 
@@ -13,6 +14,8 @@ interface Options {
 /* 这个hooks需要用到store 需要view里面的属性 */
 /* 这种需要依赖外部store的函数组合，就不写进全局的hooks中 */
 export function useSeleto(options: Options) {
+  // moveable
+  const moveable = useMoveable()
   // ruler
   const rulerStore = useRulerStore()
   // view
@@ -75,8 +78,9 @@ export function useSeleto(options: Options) {
     lock = false
     // 计算哪些倒霉蛋被框选住了
     selected.value = getWrapperedComps()
-    // 通知view这些组件被选中了 也需要通知moveable 所以通过导出selected这个属性去处理
-    selected.value.forEach(item => viewStore.setTarget(`#${item.id}`, true))
+    // 通知moveable
+    const ids = selected.value
+    moveable.selectComponent(ids, 'selecto')
     // 清掉框住的状态
     viewStore.components.forEach(comp => comp.selecto = false)
     // 清空一些乱七八糟的
