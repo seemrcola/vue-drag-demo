@@ -10,6 +10,6 @@ export function setupToysComponents(app: any) {
       loader: () => import(`./${name}/index.vue`),
       onError: () => { console.log('[Error] render failed') },
     })
-    app.component(`${compType.TOYS}${name}`, instance)
+    app.component(`${compType.TOYS}-${name}`, instance)
   })
 }

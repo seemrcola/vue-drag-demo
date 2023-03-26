@@ -15,7 +15,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     rotate: 0, // 旋转角度
     scale: [1, 1], // 缩放
     selecto: false, // 是否选中
-    component: `${compType.TOYS}automaton`, // 为防止名称重复 组件注册时候的名称就用类型+名称来表示
+    component: `${compType.TOYS}-automaton`, // 为防止名称重复 组件注册时候的名称就用类型+名称来表示
   },
   // mines扫雷
   {
@@ -29,7 +29,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     rotate: 0,
     scale: [1, 1],
     selecto: false,
-    component: `${compType.TOYS}mines`,
+    component: `${compType.TOYS}-mines`,
   },
   // plum 梅花生长
   {
@@ -43,7 +43,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     rotate: 0,
     scale: [1, 1],
     selecto: false,
-    component: `${compType.TOYS}plum`,
+    component: `${compType.TOYS}-plum`,
   },
   // 随机数
   {
@@ -57,7 +57,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     rotate: 0,
     scale: [1, 1],
     selecto: false,
-    component: `${compType.TOYS}random`,
+    component: `${compType.TOYS}-random`,
   },
   // 疫情元胞自动机
   {
@@ -71,6 +71,6 @@ export const toysComponentsConfig: ToysComponent[] = [
     rotate: 0,
     scale: [1, 1],
     selecto: false,
-    component: `${compType.TOYS}virus`,
+    component: `${compType.TOYS}-virus`,
   },
 ]
