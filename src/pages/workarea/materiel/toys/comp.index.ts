@@ -5,8 +5,8 @@ import { compType } from '@/enum/materiel.enum'
 const components = toysComponentsConfig.map(config => config.name)
 
 export function setupToysComponents(app: any) {
-  components.forEach(async (name) => {
-    const instance = await defineAsyncComponent(() => import(`./${name}/index.vue`))
+  components.forEach((name) => {
+    const instance = defineAsyncComponent(() => import(`./${name}/index.vue`))
     console.log('000000')
     app.component(`${compType.TOYS}${name}`, instance)
   })
