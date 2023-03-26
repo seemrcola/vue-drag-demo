@@ -245,19 +245,19 @@ onUnmounted(() => {
             @rotate-group-end="(e) => groupEndHandler(e, 'rotate')"
             @scale-group-end="(e) => groupEndHandler(e, 'scale')"
           />
-          <component
-            :is="componentItem.component"
-            v-for="componentItem in viewStore.components"
-            :id="componentItem.id"
-            :key="componentItem.id"
-            :style="{ ...viewStore.initComponentStyle(componentItem) }"
-            :class="{
-              component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
-              selecto: componentItem.selecto,
-            }"
-            @click.stop
-            @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
-          />
+          <template v-for="componentItem in viewStore.components" :key="componentItem.id">
+            <component
+              :is="componentItem.component"
+              :id="componentItem.id"
+              :style="{ ...viewStore.initComponentStyle(componentItem) }"
+              :class="{
+                component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
+                selecto: componentItem.selecto,
+              }"
+              @click.stop
+              @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
+            />
+          </template>
         </div>
       </div>
     </div>
