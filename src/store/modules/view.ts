@@ -6,6 +6,7 @@ import { useHistoryStore } from './history'
 /*
  * usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
  * view里面的selectTarget是用来渲染这些组件的数据，让它们显示正确的位置坐标
+ * 但是真正控制右侧数据显示是showDataTarget属性 这个属性根据selectTarget计算而来 设计上存在一定问题 >>> fixme
 */
 
 export interface IComponent {
