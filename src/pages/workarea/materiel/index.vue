@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { componentsConfig } from './comp.config'
 import { compType } from '@/enum/materiel.enum'
+import type { ImgGlobResult } from '@/utils/glob'
 import { imgGlob } from '@/utils/index'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 
@@ -18,7 +19,7 @@ interface Icon {
   icon: string
   text: string
   type: compType
-  imgList: string[]
+  imgList: ImgGlobResult[]
 }
 const icons = reactive<Icon[]>([
   { icon: 'i-icon-park-solid:game', text: '玩具', type: compType.TOYS, imgList: toysModules },
@@ -32,7 +33,7 @@ const curIcon: Icon = icons[0]
 /*********************************/
 /** ********* 初始化显示 **********/
 const checkArr = ref<boolean[]>([true, false, false, false])
-const curImgList = ref<string[]>(icons[0].imgList)
+const curImgList = ref<ImgGlobResult[]>(icons[0].imgList)
 /*********************************/
 
 /* *** 鼠标点击icon右侧显示缩略图 ***/
@@ -44,8 +45,8 @@ function linkPreviewImg(icon: Icon, idx: number) {
 /********************************/
 
 /** 鼠标始终在图片中心的拖拽方案*******/
-const imgsrc = ref<string>('')
-function changeImgSrc(imgSrc: string) {
+const imgsrc = ref<ImgGlobResult>()
+function changeImgSrc(imgSrc: ImgGlobResult) {
   imgsrc.value = imgSrc
 }
 function dragHandle(e: DragEvent) {
@@ -87,12 +88,8 @@ function imgDragEnd(e: DragEvent, idx: number) {
     && (clientY + window.$fixClientY) > top
   ) {
     // 靠名字找到组件的config信息
-    console.log(imgsrc.value)
-    const imgname = imgsrc.value.split('/').pop()?.split('.')[0]
-    console.log(imgname, curIcon, componentsConfig[curIcon.type])
     const compnentConfig = componentsConfig[curIcon.type]
-      .find(comp => comp.component.includes(imgname!))!
-    console.log(compnentConfig)
+      .find(comp => comp.component.includes(imgsrc.value!.name))!
     const targetComponent = {
       ...compnentConfig,
       id: `wrapper${uuidv4().split('-')[0]}`,
@@ -142,7 +139,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
           f-c-c p-1 my-2 b="1px #fff solid" rounded-1 relative
         >
           <img
-            :src="item"
+            :src="item.img"
             h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
             @dragstart="dragHandle"
             @dragend="imgDragEnd($event, idx)"
