@@ -17,6 +17,7 @@ export function imgGlob(dir: compType): string[] {
     case compType.MEDIA:
       ans = import.meta.glob('/src/assets/img/media/*.png', { eager: true })
   }
+  console.log(toArray(ans))
   return toArray(ans)
 }
 
