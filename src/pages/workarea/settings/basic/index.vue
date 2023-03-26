@@ -1,7 +1,7 @@
 <script setup lang='ts'>
-import { useRulerStore, useViewStore } from '@/store/modules'
-const viewStore = (useViewStore())
-const rulerStore = (useRulerStore())
+import { useRulerStore, useSettingStore } from '@/store/modules'
+const settingStore = useSettingStore()
+const rulerStore = useRulerStore()
 </script>
 
 <template>
@@ -19,14 +19,14 @@ const rulerStore = (useRulerStore())
           <div w-8 mr-2>横轴</div>
           <input
             readonly input w-24
-            :value="~~viewStore.showDataTarget.x!"
+            :value="~~settingStore.showDataTarget.x!"
           >
         </label>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>纵轴</div>
           <input
             readonly input w-24
-            :value="~~viewStore.showDataTarget.y!"
+            :value="~~settingStore.showDataTarget.y!"
           >
         </label>
       </div>
@@ -35,21 +35,21 @@ const rulerStore = (useRulerStore())
           <div w-8 mr-2>宽度</div>
           <input
             readonly input w-24
-            :value="~~viewStore.showDataTarget.width!"
+            :value="~~settingStore.showDataTarget.width!"
           >
         </label>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>高度</div>
           <input
             readonly input w-24
-            :value="~~viewStore.showDataTarget.height!"
+            :value="~~settingStore.showDataTarget.height!"
           >
         </label>
       </div>
       <div flex my-4>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>旋转</div>
-          <input readonly input w-24 :value="~~viewStore.showDataTarget.rotate!">
+          <input readonly input w-24 :value="~~settingStore.showDataTarget.rotate!">
         </label>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>画布</div>

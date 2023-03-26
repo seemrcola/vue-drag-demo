@@ -78,7 +78,7 @@ export function useSeleto(options: Options) {
     lock = false
     // 计算哪些倒霉蛋被框选住了
     selected.value = getWrapperedComps()
-    // 通知moveable
+    // 通知moveable moveable会主动通知view
     const ids = selected.value
     moveable.selectComponent(ids, 'selecto')
     // 清掉框住的状态
