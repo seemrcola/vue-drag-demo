@@ -6,7 +6,11 @@ export interface ImgGlobResult {
 }
 
 export type GlobResult = Record<string, unknown>
-
+/**
+ * 这里要注意：我们如果ans直接返回一个src路径字符串 在打包之后会处理成一个base64
+ * 后续我们需要根据src路径来拿到图片名称 并根据图片名称找到对应的组件
+ * 如果变成base64就找不到了
+ */
 export function imgGlob(dir: compType): ImgGlobResult[] {
   let ans: GlobResult
   switch (dir) {

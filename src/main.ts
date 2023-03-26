@@ -22,11 +22,6 @@ function setupApp() {
   setupRouter(app)
   setupStore(app)
   setupToysComponents(app)
-  console.log(app.component('toys-virus'))
-  console.log(app.component('toys-automaton'))
-  console.log(app.component('toys-plum'))
-  console.log(app.component('toys-random'))
-  console.log(app.component('toys-mines'))
   app.mount('#app')
 }
 setupApp()

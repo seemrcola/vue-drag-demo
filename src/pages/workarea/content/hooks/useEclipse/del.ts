@@ -8,7 +8,6 @@ export function useDel() {
   function del(e: KeyboardEvent) {
     if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
       return
-    console.log(viewStore.taregtSelect, 'sdscsdvd')
     if (isEmpty(viewStore.taregtSelect))
       return
 
