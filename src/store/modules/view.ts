@@ -3,8 +3,9 @@ import { nextTick, ref } from 'vue'
 import { useRulerStore } from './ruler'
 import { useHistoryStore } from './history'
 
-/* usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
- * view里面的selectTarget是用来渲染这些组件，让它们显示在正确的位置
+/*
+ * usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作
+ * view里面的selectTarget是用来渲染这些组件的数据，让它们显示正确的位置坐标
 */
 
 export interface IComponent {

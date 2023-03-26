@@ -28,10 +28,10 @@ export function useEclipse() {
           paste(e)
           break
         case KeyCodeEnum.UNDO:
-          undo()
+          undo(e)
           break
         case KeyCodeEnum.REDO:
-          redo()
+          redo(e)
           break
         default:
           void 0

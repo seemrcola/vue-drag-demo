@@ -1,8 +1,10 @@
+import { useMoveable } from '../useMoveable'
 import { useViewStore } from '@/store/modules'
 import { isEmpty } from '@/utils/is'
 
 export function useDel() {
   const viewStore = useViewStore()
+  const moveable = useMoveable()
 
   // 删除 DELETE
   function del(e: KeyboardEvent) {
@@ -11,13 +13,11 @@ export function useDel() {
     if (isEmpty(viewStore.taregtSelect))
       return
 
+    // 删除掉views中对应的数据
     const dels = viewStore.taregtSelect
     dels.forEach(comp => viewStore.removeComponent(comp))
-    viewStore.clearSelect()
-
-    // fixme control-box不消失，只好强制让他消失了
-    const controlElement = document.querySelector('.moveable-control-box') as HTMLElement
-    controlElement.style.display = 'none'
+    // 处理掉选中框
+    moveable.clearSelect()
   }
 
   return { del }

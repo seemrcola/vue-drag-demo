@@ -98,7 +98,6 @@ function canvasInit() {
   nextTick(() => {
     const { clientHeight, clientWidth } = canvasRef.value!
     // clientHeight, clientWidth是可视宽高
-    // console.log(clientHeight, clientWidth)
     canvasRef.value!.style.marginLeft = `${state.thick + clientWidth / 2}px`
     canvasRef.value!.style.marginTop = `${state.thick + clientHeight / 2}px`
   })

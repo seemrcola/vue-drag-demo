@@ -9,8 +9,10 @@ import { isEmpty } from '@/utils/is'
  */
 import { useHistoryStore, useViewStore } from '@/store/modules'
 
+// 被选中的元素
+const selectTarget = ref<string[]>([])
+
 export function useMoveable() {
-  const selectTarget = ref<string[]>([])
   const { track } = useHistoryStore()
   const viewStore = useViewStore()
   let oprateMode: 'comp' | 'group' // 操作类型 是分组操作还是单个操作
