@@ -12,6 +12,7 @@ import { isEmpty } from '@/utils/is'
  * 这种需要依赖外部store的函数组合，就不写进全局的hooks中
  */
 import { useSettingStore, useViewStore } from '@/store/modules'
+
 // 被选中的元素
 const selectTarget = ref<string[]>([])
 
