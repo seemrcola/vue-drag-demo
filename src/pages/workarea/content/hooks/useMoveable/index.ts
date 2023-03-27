@@ -51,10 +51,13 @@ export function useMoveable() {
   }
 
   function selectBySelecto<T extends { id: string }>(comps: T[]) {
-    oprateMode = 'group' // 框选也视为组合选中
     if (isEmpty(comps))
       return
     selectTarget.value = comps.map(comp => `#${comp.id}`)
+    if (selectTarget.value.length > 1)
+      oprateMode = 'group'
+    else
+      oprateMode = 'comp'
     DuetoSelectedInView()
   }
 
