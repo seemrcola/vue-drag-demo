@@ -51,6 +51,7 @@ export function useSeleto(options: Options) {
   }
 
   function handleMouseMove(e: MouseEvent) {
+    e.preventDefault() // 阻止滚动条滚动
     // 未解锁直接return
     if (lock)
       return
