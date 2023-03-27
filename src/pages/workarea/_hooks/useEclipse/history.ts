@@ -5,11 +5,11 @@ export function useHistory() {
   const moveable = useMoveable()
   const { redo: REDO, undo: UNDO } = useHistoryStore()
 
-  function redo(e: KeyboardEvent) {
+  function redo<T extends Event>(e: T) {
     REDO(e)
     moveable.clearSelect()
   }
-  function undo(e: KeyboardEvent) {
+  function undo<T extends Event>(e: T) {
     UNDO(e)
     moveable.clearSelect()
   }

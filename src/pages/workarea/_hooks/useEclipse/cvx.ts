@@ -9,18 +9,24 @@ export function useCVX() {
   const viewStore = useViewStore()
   const cacheComponents = ref<IComponent[]>([])
   // 复制 COPY
-  function copy(e: KeyboardEvent) {
+  function copy<T extends Event>(e: T) {
+    console.log('copy')
     const cache = viewStore.taregtSelect
     if (isEmpty(cache))
       return
     cacheComponents.value = cache
   }
   // 粘贴 PASTE
-  function paste(e: KeyboardEvent) {
+  function paste<T extends Event>(e: T) {
     if (isEmpty(cacheComponents.value))
       return
-    if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
+    if (
+      e instanceof KeyboardEvent
+      && (e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY'
+    )
       return
+    console.log(cacheComponents.value, 'paste')
+
     const added = cacheComponents.value!
       .map((comp: IComponent) => {
         comp = cloneDeep(comp)

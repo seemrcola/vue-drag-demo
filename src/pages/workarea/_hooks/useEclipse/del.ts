@@ -7,8 +7,11 @@ export function useDel() {
   const moveable = useMoveable()
 
   // 删除 DELETE
-  function del(e: KeyboardEvent) {
-    if ((e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
+  function del<T extends Event>(e: T) {
+    if (
+      e instanceof KeyboardEvent
+      && (e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY'
+    )
       return
     if (isEmpty(viewStore.taregtSelect))
       return

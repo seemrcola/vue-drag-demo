@@ -57,6 +57,6 @@ const rulerStore = useRulerStore()
         </label>
       </div>
     </div>
-    <input w="95%" m-auto h-10 type="text">
+    <!-- <input w="95%" m-auto h-10 type="text"> -->
   </div>
 </template>

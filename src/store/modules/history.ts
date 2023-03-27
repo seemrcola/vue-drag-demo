@@ -24,7 +24,7 @@ export const useHistoryStore = defineStore('history', () => {
     pointer.value++
   }
 
-  function undo(e: KeyboardEvent) {
+  function undo<T extends Event>(e: T) {
     e.preventDefault()
     if (pointer.value <= 0)
       return viewStore.components = []
@@ -35,7 +35,7 @@ export const useHistoryStore = defineStore('history', () => {
     viewStore.components = current
   }
 
-  function redo(e: KeyboardEvent) {
+  function redo<T extends Event>(e: T) {
     e.preventDefault()
     // 指针自加
     if (pointer.value >= historyList.value.length - 1)

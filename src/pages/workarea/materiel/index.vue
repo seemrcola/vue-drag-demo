@@ -112,17 +112,17 @@ function imgDragEnd(e: DragEvent, idx: number) {
       <strong text="0.9rem">组件列表</strong>
     </div>
 
-    <div flex w-full h="[calc(100%-40px)]">
+    <div flex w-full h="[calc(100%-40px)]" relative>
       <div
         class="icons"
         flex flex-col items-center
-        w="40px" h-full
+        w="40px" h-full b
         py-2 border="#fff 1px solid"
       >
         <div
           v-for="(item, idx) in icons"
           :key="idx" :class="{ click: checkArr[idx] }"
-          border="#fff 1px solid" mb-2 rounded-1
+          mb-2 rounded-1
           @click="linkPreviewImg(item, idx)"
         >
           <div h-6 w-6 color="#fff" :class="item.icon" />
