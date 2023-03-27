@@ -70,22 +70,21 @@ function dragHandle(e: DragEvent) {
   }
   dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
 }
-/********************************/
+/***************************************************************/
 
-/** * 拖拽结束时组件放入画布 *******/
+/** ***************** 拖拽结束时组件放入画布 ***********************/
 function imgDragEnd(e: DragEvent, idx: number) {
+  const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
   // 计算坐标点
   const { clientX, clientY } = e
   const scale = rulerStore.rulerOptions.scale
   const { width, height } = componentsConfig[curIcon.type][idx]
-  const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
   const x = (clientX - left - window.$fixClientX) / scale - (width / 2)
   const y = (clientY - top + window.$fixClientY) / scale - (height / 2)
   // 进入画布则收集该组件信息
-  const { left: viewLeft, top: viewTop } = document.querySelector('#wrapper')!.getBoundingClientRect()
   if (
-    (clientX - window.$fixClientX) > viewLeft
-    && (clientY + window.$fixClientY) > viewTop
+    (clientX - window.$fixClientX) > left
+    && (clientY + window.$fixClientY) > top
   ) {
     // 靠名字找到组件的config信息
     const compnentConfig = componentsConfig[curIcon.type]
@@ -100,7 +99,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
     viewStore.addComponent(targetComponent)
   }
 }
-/*******************************/
+/*******************************************************************/
 </script>
 
 <template>
