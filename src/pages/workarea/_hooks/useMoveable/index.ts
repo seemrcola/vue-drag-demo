@@ -51,7 +51,7 @@ export function useMoveable() {
       return
     selectTarget.value = comps.map(comp => `#${comp.id}`)
     viewStore.setTarget(selectTarget.value) // 同步给view
-    settingStore.init(viewStore.taregtSelect) // 通知 setting
+    settingStore.init() // 通知 setting
   }
 
   function selectByClick<T extends { id: string }>(comp: T) {
@@ -65,7 +65,7 @@ export function useMoveable() {
     else
       selectTarget.value = [...selectTarget.value, id]
     viewStore.setTarget(selectTarget.value) // 同步给view
-    settingStore.init(viewStore.taregtSelect) // 通知 setting
+    settingStore.init() // 通知 setting
   }
 
   function clearSelect() {

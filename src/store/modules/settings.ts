@@ -27,18 +27,35 @@ export const useSettingStore = defineStore('settings', () => {
   const rulerStore = useRulerStore()
   // view
   const viewStore = useViewStore()
-
   // 右侧用于展示的数据
   const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 } // 初始化数据做个参考
   const showDataTarget = ref<ShowData>(initData)
+  // 选中时的初始化
+  function getInitData() {
+    const initData = cloneDeep(viewStore.taregtSelect)
+    // 单个选中
+    if (initData.length === 1) {
+      // 很重要的一步 由于是缩放改变了组件宽高 所以实际上的position是根据组件原大小来定的 所以选中的时候我们要做个减法
+      const data = initData[0]
+      data.x -= (data.width - data.initWidth) / 2
+      data.y -= (data.height - data.initHeight) / 2
+    }
+    // 多个选中 todo
+    if (initData.length > 1)
+      console.log('todo')
+
+    return initData
+  }
 
   // 初始化组件的信息
-  function init(init: ShowData[]) {
-    if (isEmpty(init))
+  function init() {
+    const data = getInitData()
+
+    if (isEmpty(data))
       return
 
-    if (init.length === 1)
-      return showDataTarget.value = cloneDeep(init[0])
+    if (data.length === 1)
+      showDataTarget.value = data[0]
 
     if (init.length > 1)
       console.log('todo')
@@ -46,25 +63,24 @@ export const useSettingStore = defineStore('settings', () => {
 
   // 计算单个组件的位置 展示给右边
   function settingDataForSingle(delta: DeltaData) {
-    // todo
-    // const { x, y, rotate, scale } = delta
-    // const id = `#${viewStore.taregtSelect[0].id}`
-    // const target = viewStore.getTarget(id)!
-    // if (x || y) { // drag
-    //   showDataTarget.value.x = target.x + (x || 0)
-    //   showDataTarget.value.y = target.y + (y || 0)
-    // }
-    // if (rotate) { // rotate
-    //   showDataTarget.value.rotate = (target.rotate + rotate) % 360
-    // }
-    // if (scale) { // scale
-    //   // console.log(target, 'xxxxxpppppppp')
-    //   // showDataTarget.value.scale[0] = scale[0]
-    //   // showDataTarget.value.scale[1] = scale[1]
-    //   const { x, y } = calcXY(id, target, scale)
-    //   showDataTarget.value.x = x
-    //   showDataTarget.value.y = y
-    // }
+    const { x, y, rotate, scale } = delta
+    const id = `#${viewStore.taregtSelect[0].id}`
+    const target = getInitData()[0]
+
+    if (x || y) { // drag
+      showDataTarget.value.x = target.x + (x || 0)
+      showDataTarget.value.y = target.y + (y || 0)
+    }
+    if (rotate) { // rotate
+      showDataTarget.value.rotate = (target.rotate + rotate) % 360
+    }
+    if (scale) { // scale
+      const { x, y } = calcXY(id, target, scale)
+      showDataTarget.value.x = x
+      showDataTarget.value.y = y
+      showDataTarget.value.width = target.width * scale[0]
+      showDataTarget.value.height = target.height * scale[1]
+    }
   }
 
   // 计算moveable-area组件的位置 展示给右边
@@ -73,27 +89,24 @@ export const useSettingStore = defineStore('settings', () => {
   }
 
   function calcXY(selector: string, target: any, curScale: [number, number]) {
-    // todo
+    const canvasScale = rulerStore.rulerOptions.scale
     // xy处理一下
-    // const dom = document.querySelector(selector) as HTMLElement
-    // const domRect = dom.getBoundingClientRect()
-    // const canvas = document.querySelector('#canvas')!
-    // const canvasRect = canvas.getBoundingClientRect()
-    // // 中心点计算
-    // const centerX = (domRect.left - canvasRect.left + domRect.width / 2)
-    // const centerY = (domRect.top - canvasRect.top + domRect.height / 2)
-    // // 与canvas画布的距离计算
-    // // const canvasScale = rulerStore.rulerOptions.scale
-    // const compRealWidth = target.width * (target.scale[0] * curScale[0])
-    // const compRealHeight = target.height * (target.scale[1] * curScale[1])
-
-    // console.log(compRealWidth, compRealHeight, centerX, centerY, 'xxxxxx')
-    // const centerToborderX = compRealWidth / 2
-    // const centerToborderY = compRealHeight / 2
-    // // 算出的距离要根据画布缩放进行处理
-    // const x = (centerX - centerToborderX)
-    // const y = (centerY - centerToborderY)
-    // return { x, y }
+    const dom = document.querySelector(selector) as HTMLElement
+    const domRect = dom.getBoundingClientRect()
+    const canvas = document.querySelector('#canvas')!
+    const canvasRect = canvas.getBoundingClientRect()
+    // 中心点计算
+    const centerX = (domRect.left - canvasRect.left + domRect.width / 2)
+    const centerY = (domRect.top - canvasRect.top + domRect.height / 2)
+    // 与canvas画布的距离计算
+    const compRealWidth = target.initWidth * (target.scale[0] * curScale[0])
+    const compRealHeight = target.initHeight * (target.scale[1] * curScale[1])
+    const centerToborderX = compRealWidth / 2 * canvasScale
+    const centerToborderY = compRealHeight / 2 * canvasScale
+    // 算出的距离要根据画布缩放进行处理
+    const x = (centerX - centerToborderX) / canvasScale
+    const y = (centerY - centerToborderY) / canvasScale
+    return { x, y }
   }
 
   return {

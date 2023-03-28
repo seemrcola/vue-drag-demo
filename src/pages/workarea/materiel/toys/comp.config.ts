@@ -9,6 +9,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: compType.TOYS, // 组件类型
     name: 'automaton', // 组件名称
     id: '', // 组件id
+    initHeight: 400, // 组件初始高度
+    initWidth: 400, // 组件初始宽度
     height: 400, // 组件高度
     width: 400, // 组件宽度
     x: 0, // 相对画布的x距离
@@ -23,6 +25,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: compType.TOYS,
     name: 'mines',
     id: '',
+    initHeight: 400,
+    initWidth: 400,
     height: 400,
     width: 350,
     x: 0,
@@ -37,6 +41,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: compType.TOYS,
     name: 'plum',
     id: '',
+    initHeight: 400,
+    initWidth: 400,
     height: 400,
     width: 400,
     x: 0,
@@ -51,6 +57,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: compType.TOYS,
     name: 'random',
     id: '',
+    initHeight: 200,
+    initWidth: 200,
     height: 200,
     width: 200,
     x: 0,
@@ -65,6 +73,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     type: compType.TOYS,
     name: 'virus',
     id: '',
+    initHeight: 400,
+    initWidth: 400,
     height: 400,
     width: 400,
     x: 0,

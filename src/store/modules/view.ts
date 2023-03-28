@@ -16,8 +16,10 @@ export interface IComponent {
   y: number
   rotate: number
   scale: [number, number]
-  height: number
-  width: number
+  initHeight: number // 元素初始化时的宽高
+  initWidth: number // 元素初始化时的宽高
+  height: number // 元素变换之后的宽高
+  width: number // 元素变换之后的宽高
   selecto: boolean // 是否被框选
   component: string // 组件名称 由TYPE加name拼接而成
 }
@@ -81,6 +83,8 @@ export const useViewStore = defineStore('view', () => {
     if (scale) {
       item.scale[0] *= scale[0]
       item.scale[1] *= scale[1]
+      item.width *= scale[0]
+      item.height *= scale[1]
     }
   }
 

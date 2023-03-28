@@ -6,7 +6,7 @@ import Event from './events/index.vue'
 <template>
   <div
     w-full h-full overflow-hidden text="12px"
-    border="1px solid #fff" color="#fff" bg="#111"
+    border="1px solid #fff" color="#fff" bg="#222"
   >
     <Basic />
     <Event />
