@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { useRulerStore } from './ruler'
 import { useViewStore } from './view'
-import { isEmpty } from '@/utils/is'
 
 export interface ShowData {
   x: number
@@ -22,7 +21,7 @@ export interface DeltaData {
   scale?: [number, number]
 }
 
-export const useSettingStore = defineStore('settings', () => {
+export const useCoord = defineStore('base-single', () => {
   // ruler
   const rulerStore = useRulerStore()
   // view
@@ -30,42 +29,29 @@ export const useSettingStore = defineStore('settings', () => {
   // 右侧用于展示的数据
   const initData: ShowData = { x: 0, y: 0, rotate: 0, scale: [1, 1], height: 0, width: 0 } // 初始化数据做个参考
   const showDataTarget = ref<ShowData>(initData)
+
   // 选中时的初始化
   function getInitData() {
-    const initData = cloneDeep(viewStore.taregtSelect)
-    // 单个选中
-    if (initData.length === 1) {
-      // 很重要的一步 由于是缩放改变了组件宽高 所以实际上的position是根据组件原大小来定的 所以选中的时候我们要做个减法
-      const data = initData[0]
-      data.x -= (data.width - data.initWidth) / 2
-      data.y -= (data.height - data.initHeight) / 2
-    }
-    // 多个选中 todo
-    if (initData.length > 1)
-      console.log('todo')
-
-    return initData
+    const initdata = cloneDeep(viewStore.taregtSelect[0])
+    // 很重要的一步 由于是缩放改变了组件宽高 所以实际上的position是根据组件原大小来定的 所以选中的时候我们要做个减法
+    initdata.x -= (initdata.width - initdata.initWidth) / 2
+    initdata.y -= (initdata.height - initdata.initHeight) / 2
+    return initdata
   }
 
   // 初始化组件的信息
   function init() {
     const data = getInitData()
-
-    if (isEmpty(data))
+    if (!data)
       return
-
-    if (data.length === 1)
-      showDataTarget.value = data[0]
-
-    if (init.length > 1)
-      console.log('todo')
+    showDataTarget.value = data
   }
 
   // 计算单个组件的位置 展示给右边
   function settingDataForSingle(delta: DeltaData) {
     const { x, y, rotate, scale } = delta
     const id = `#${viewStore.taregtSelect[0].id}`
-    const target = getInitData()[0]
+    const target = getInitData()!
 
     if (x || y) { // drag
       showDataTarget.value.x = target.x + (x || 0)
@@ -81,11 +67,6 @@ export const useSettingStore = defineStore('settings', () => {
       showDataTarget.value.width = target.width * scale[0]
       showDataTarget.value.height = target.height * scale[1]
     }
-  }
-
-  // 计算moveable-area组件的位置 展示给右边
-  function settingDataForGroup(delta: DeltaData) {
-
   }
 
   function calcXY(selector: string, target: any, curScale: [number, number]) {
@@ -112,7 +93,6 @@ export const useSettingStore = defineStore('settings', () => {
   return {
     showDataTarget,
     settingDataForSingle,
-    settingDataForGroup,
     init,
   }
 })

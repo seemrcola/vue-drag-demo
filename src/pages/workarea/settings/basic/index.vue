@@ -1,6 +1,6 @@
 <script setup lang='ts'>
-import { useRulerStore, useSettingStore } from '@/store/modules'
-const settingStore = useSettingStore()
+import { useCoord, useRulerStore } from '@/store/modules'
+const coordStore = useCoord()
 const rulerStore = useRulerStore()
 </script>
 
@@ -19,14 +19,14 @@ const rulerStore = useRulerStore()
           <div w-8 mr-2>横轴</div>
           <input
             readonly input w-24
-            :value="~~settingStore.showDataTarget.x!"
+            :value="~~coordStore.showDataTarget.x!"
           >
         </label>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>纵轴</div>
           <input
             readonly input w-24
-            :value="~~settingStore.showDataTarget.y!"
+            :value="~~coordStore.showDataTarget.y!"
           >
         </label>
       </div>
@@ -35,21 +35,21 @@ const rulerStore = useRulerStore()
           <div w-8 mr-2>宽度</div>
           <input
             readonly input w-24
-            :value="~~settingStore.showDataTarget.width!"
+            :value="~~coordStore.showDataTarget.width!"
           >
         </label>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>高度</div>
           <input
             readonly input w-24
-            :value="~~settingStore.showDataTarget.height!"
+            :value="~~coordStore.showDataTarget.height!"
           >
         </label>
       </div>
       <div flex my-4>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>旋转</div>
-          <input readonly input w-24 :value="~~settingStore.showDataTarget.rotate!">
+          <input readonly input w-24 :value="~~coordStore.showDataTarget.rotate!">
         </label>
         <label for="" flex-1 f-c-c>
           <div w-8 mr-2>画布</div>

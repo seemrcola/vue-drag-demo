@@ -138,7 +138,8 @@ function checkGameStatus() {
     <div v-for="(list, index) of state" :key="index" flex="~">
       <Block
         v-for="(block, idx) of list" :key="idx"
-        :block="block" @block-click="blockClick"
+        :block="block"
+        @block-click="blockClick"
         @right-click="rightClick"
       />
     </div>

@@ -1,10 +1,5 @@
-import { useSettingStore } from '@/store/modules'
-
 export function useGroup() {
-  const settingStore = useSettingStore()
-
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
-  // 组合操作要记得变更x，y的坐标----------
   function groupHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
     if (type === 'scale')
       onScaleGroup(e)

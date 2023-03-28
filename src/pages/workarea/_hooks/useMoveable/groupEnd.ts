@@ -16,7 +16,7 @@ export function useGroupEnd() {
     setTimeout(() => track())
   }
 
-  function onDragGroupEnd({ events }: any) {
+  function onDragGroupEnd({ events, lastEvent }: any) {
     events.forEach((event: any) => {
       const { lastEvent, target } = event
       if (!lastEvent)

@@ -12,7 +12,7 @@ import { isEmpty } from '@/utils/is'
  * 这个hooks需要用到store 改变view里面的属性
  * 这种需要依赖外部store的函数组合，就不写进全局的hooks中
  */
-import { useSettingStore, useViewStore } from '@/store/modules'
+import { useCoord, useViewStore } from '@/store/modules'
 
 type SelectMode = 'click' | 'selecto'
 
@@ -23,7 +23,7 @@ const moveableRef = ref<VueMoveableInstance>()
 // 这里主要做两个操作 选中和清空
 export function useMoveable() {
   const viewStore = useViewStore()
-  const settingStore = useSettingStore()
+  const coordStore = useCoord()
 
   const { groupHandler } = useGroup()
   const { singleHandler } = useSingle()
@@ -50,8 +50,9 @@ export function useMoveable() {
     if (isEmpty(comps))
       return
     selectTarget.value = comps.map(comp => `#${comp.id}`)
+
     viewStore.setTarget(selectTarget.value) // 同步给view
-    settingStore.init() // 通知 setting
+    coordStore.init() // 通知 setting
   }
 
   function selectByClick<T extends { id: string }>(comp: T) {
@@ -64,12 +65,13 @@ export function useMoveable() {
       selectTarget.value = [id]
     else
       selectTarget.value = [...selectTarget.value, id]
+
     viewStore.setTarget(selectTarget.value) // 同步给view
-    settingStore.init() // 通知 setting
+    coordStore.init() // 通知 setting
   }
 
   function clearSelect() {
-    console.log('drop!!!!')
+    console.log('drop!!!')
     selectTarget.value = []
     viewStore.clearSelect() // 清空时同步给view
   }

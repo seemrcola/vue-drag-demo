@@ -1,7 +1,7 @@
-import { useSettingStore } from '@/store/modules'
+import { useCoord } from '@/store/modules'
 
 export function useSingle() {
-  const settingStore = useSettingStore()
+  const coordStore = useCoord()
 
   function singleHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
     if (type === 'scale')
@@ -15,19 +15,19 @@ export function useSingle() {
   function onDrag({ transform, target, dist }: any) {
     target.style.transform = transform
     const [dx, dy] = dist
-    settingStore.settingDataForSingle({ x: dx, y: dy })
+    coordStore.settingDataForSingle({ x: dx, y: dy })
   }
 
   function onScale({ drag, target, dist }: any) {
     target.style.transform = drag.transform
     const scale = dist
-    settingStore.settingDataForSingle({ scale })
+    coordStore.settingDataForSingle({ scale })
   }
 
   function onRotate({ drag, target, dist }: any) {
     target.style.transform = drag.transform
     const rotate = dist
-    settingStore.settingDataForSingle({ rotate })
+    coordStore.settingDataForSingle({ rotate })
   }
 
   return {
