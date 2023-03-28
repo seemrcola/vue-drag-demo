@@ -14,20 +14,20 @@ export function useSingle() {
 
   function onDrag({ transform, target, dist }: any) {
     target.style.transform = transform
-    const [x, y] = dist
-    settingStore.setShowDataTargetForComp({ x, y, id: target.id }, 'ing')
+    const [dx, dy] = dist
+    settingStore.settingDataForSingle({ x: dx, y: dy })
   }
 
   function onScale({ drag, target, dist }: any) {
     target.style.transform = drag.transform
-    const scale = [...dist]
-    settingStore.setShowDataTargetForComp({ scale, id: target.id }, 'ing')
+    const scale = dist
+    settingStore.settingDataForSingle({ scale })
   }
 
   function onRotate({ drag, target, dist }: any) {
     target.style.transform = drag.transform
     const rotate = dist
-    settingStore.setShowDataTargetForComp({ rotate, id: target.id }, 'ing')
+    settingStore.settingDataForSingle({ rotate })
   }
 
   return {

@@ -15,14 +15,14 @@ export interface IComponent {
   x: number
   y: number
   rotate: number
-  scale: number[]
+  scale: [number, number]
   height: number
   width: number
   selecto: boolean // 是否被框选
   component: string // 组件名称 由TYPE加name拼接而成
 }
 
-export interface ShowData {
+export interface DertaData {
   x?: number
   y?: number
   rotate?: number
@@ -69,7 +69,7 @@ export const useViewStore = defineStore('view', () => {
     setTimeout(() => historyStore.track())
   }
 
-  function transformcomponent(componentId: string, data: ShowData) {
+  function transformcomponent(componentId: string, data: DertaData) {
     const item = components.value.find(item => componentId === item.id)!
     const { x, y, rotate, scale } = data
     if (x)
@@ -77,12 +77,10 @@ export const useViewStore = defineStore('view', () => {
     if (y)
       item.y += y
     if (rotate)
-      item.rotate = rotate
+      item.rotate = rotate % 360
     if (scale) {
       item.scale[0] *= scale[0]
       item.scale[1] *= scale[1]
-      item.width *= scale[0]
-      item.height *= scale[1]
     }
   }
 
@@ -98,13 +96,10 @@ export const useViewStore = defineStore('view', () => {
 
   // 样式改变相关-------------------------------------------------------------------
   // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
-  function uSetStyle(
-    target: HTMLElement,
-    delta: ShowData,
-  ) {
+  function uSetStyle(target: HTMLElement, delta: DertaData) {
     const id = target.id
     // 根据id修改componnets中对应的component
-    // 只有操作结束的时候才需要去调用transformcomponent，此时才会有完整的delta数据--------
+    // 只有操作结束的时候才需要去调用transformcomponent,此时才会有完整的delta数据, 用于记录组件相关的位置信息--------
     transformcomponent(id, delta)
     // 获取component
     const targetComponent = getTarget(`#${id}`)

@@ -37,11 +37,15 @@ export function useMove() {
     moveableRef.value?.updateTarget()
   }
 
-  function setMoveableRef(ref: VueMoveableInstance) {
+  function injectMoveRef(ref: VueMoveableInstance) {
     moveableRef.value = ref
   }
 
   return {
-    left, up, right, down, setMoveableRef,
+    left,
+    up,
+    right,
+    down,
+    injectMoveRef,
   }
 }

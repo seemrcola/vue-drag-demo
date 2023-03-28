@@ -1,4 +1,5 @@
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
+import type { VueMoveableInstance } from 'vue3-moveable'
 import { useGroup } from './group'
 import { useSingle } from './single'
 import { useSingleEnd } from './singleEnd'
@@ -13,9 +14,13 @@ import { isEmpty } from '@/utils/is'
  */
 import { useSettingStore, useViewStore } from '@/store/modules'
 
+type SelectMode = 'click' | 'selecto'
+
 // 被选中的元素
 const selectTarget = ref<string[]>([])
+const moveableRef = ref<VueMoveableInstance>()
 
+// 这里主要做两个操作 选中和清空
 export function useMoveable() {
   const viewStore = useViewStore()
   const settingStore = useSettingStore()
@@ -25,8 +30,6 @@ export function useMoveable() {
   const { groupEndHandler } = useGroupEnd()
   const { singleEndHandler } = useSingleEnd()
 
-  let oprateMode: 'comp' | 'group' // 操作类型 是分组操作还是单个操作
-
   function getKeyStatus() {
     return {
       isMeta: window.$KeyboardActive.meta,
@@ -35,15 +38,8 @@ export function useMoveable() {
     }
   }
 
-  function isGroup() {
-    return oprateMode === 'group'
-  }
-
   // 选中组件的方法有两种 一种是框选 还有一种是点击
-  function selectComponent<T extends { id: string }>(
-    comp: T | T[],
-    type: 'click' | 'selecto' = 'click',
-  ) {
+  function selectComponent<T extends { id: string }>(comp: T | T[], type: SelectMode = 'click') {
     if (type === 'click')
       selectByClick(comp as T)
     if (type === 'selecto')
@@ -54,66 +50,36 @@ export function useMoveable() {
     if (isEmpty(comps))
       return
     selectTarget.value = comps.map(comp => `#${comp.id}`)
-    if (selectTarget.value.length > 1)
-      oprateMode = 'group'
-    else
-      oprateMode = 'comp'
-    DuetoSelectedInView()
+    viewStore.setTarget(selectTarget.value) // 同步给view
+    settingStore.init(viewStore.taregtSelect) // 通知 setting
   }
 
   function selectByClick<T extends { id: string }>(comp: T) {
     const { isMeta, isCtrl } = getKeyStatus()
     const id = `#${(comp).id}`
-    // 每次必须要更换数组指向，否则不生效，就离谱----
+    // 每次必须要更换数组指向 moveable 设计如此
     const noCtrl = !isCtrl && !isMeta
-    if (noCtrl || (!noCtrl && selectTarget.value.length === 0)) { // 不按住ctrl 或者按住ctrl但是target列表长度为0
-      oprateMode = 'comp'
+    // 不按住ctrl 或者按住ctrl但是target列表长度为0
+    if (noCtrl || (!noCtrl && selectTarget.value.length === 0))
       selectTarget.value = [id]
-      DuetoSelectedInView()
-    }
-    else {
-      oprateMode = 'group'
+    else
       selectTarget.value = [...selectTarget.value, id]
-      DuetoSelectedInView()
-    }
-  }
-
-  function DuetoSelectedInView() {
-    viewStore.setTarget(selectTarget.value) // 选择时同步给view
-    if (isGroup()) {
-      nextTick(() => { // 这里要这么套才行，原因未知 fixme
-        setTimeout(() => { // 这里用定时器是为了保证能获取到movable-area元素
-          // view中的展示数组处理 针对组合选中
-          const { x, y } = uCalcXY()
-          settingStore.setShowDataTargetForGroup({ x, y, change: true })
-        })
-      })
-    }
-    else { // view中的展示数组处理
-      settingStore.setShowDataTargetForComp()
-    }
+    viewStore.setTarget(selectTarget.value) // 同步给view
+    settingStore.init(viewStore.taregtSelect) // 通知 setting
   }
 
   function clearSelect() {
-    console.log('drop')
+    console.log('drop!!!!')
     selectTarget.value = []
     viewStore.clearSelect() // 清空时同步给view
-    settingStore.setShowDataTargetForGroup({ change: true })
   }
 
-  // 用来计算组合操作的xy坐标值
-  function uCalcXY() {
-    const area = document.getElementsByClassName('moveable-area')[0]!
-    const areaRect = area?.getBoundingClientRect()
-    const canvas = document.querySelector('#canvas')!
-    const canvasRect = canvas.getBoundingClientRect()
-    return {
-      x: areaRect.left - canvasRect.left,
-      y: areaRect.top - canvasRect.top,
-    }
+  function setMoveableRef(ref: VueMoveableInstance) {
+    moveableRef.value = ref
   }
 
   return {
+    setMoveableRef,
     selectTarget,
     selectComponent,
     clearSelect,

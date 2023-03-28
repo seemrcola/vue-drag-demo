@@ -1,5 +1,6 @@
 import type { IComponent } from '@/store/modules/view'
 import { compType } from '@/enum/materiel.enum'
+
 interface ToysComponent extends IComponent {}
 
 export const toysComponentsConfig: ToysComponent[] = [

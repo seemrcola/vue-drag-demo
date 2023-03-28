@@ -126,6 +126,7 @@ const {
   selectComponent,
   clearSelect,
   selectTarget,
+  setMoveableRef: setVueMoveableRef,
 }
 = useMoveable()
 // fixme 这部分特殊操作并没有想到好的方案，所以暂时放在了vue文件里，有点影响文件结构
@@ -167,6 +168,7 @@ onMounted(() => {
   window.addEventListener('resize', windowResizeHandle) // 监听窗口变化
   window.addEventListener('keydown', listener) // 鼠标按下监听
   setMoveableRef(moveable.value!)
+  setVueMoveableRef(moveable.value!)
 })
 
 onUnmounted(() => {

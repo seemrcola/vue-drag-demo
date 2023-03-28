@@ -12,7 +12,7 @@ export function useEclipse() {
   // 各个功能快捷键
   const { del } = useDel()
   const { copy, paste } = useCVX()
-  const { left, right, up, down, setMoveableRef: setMoveRef } = useMove()
+  const { left, right, up, down, injectMoveRef } = useMove()
   const { redo, undo } = useHistory()
 
   // execEcplise 执行组合快捷键 & 非组合快捷键
@@ -71,7 +71,7 @@ export function useEclipse() {
   // 做一个传递
   function setMoveableRef(ref: VueMoveableInstance) {
     moveableRef.value = ref
-    setMoveRef(moveableRef.value)
+    injectMoveRef(moveableRef.value)
   }
 
   function listener(e: KeyboardEvent) {

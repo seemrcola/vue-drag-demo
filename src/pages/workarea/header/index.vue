@@ -11,7 +11,7 @@ function goto() {
 </script>
 
 <template>
-  <div h-full w-full bg="#333" color="#fff" flex>
+  <div h-full w-full bg="#222" color="#fff" flex>
     <div h-full flex items-center cursor-pointer w="220px">
       <div i-prime:github text-2xl hover="color-#789" @click="goto" />
       <div text-xs p-2>

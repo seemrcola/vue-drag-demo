@@ -92,7 +92,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
     const targetComponent = {
       ...compnentConfig,
       id: `wrapper${uuidv4().split('-')[0]}`,
-      scale: [1, 1], // 因为我引入的是同一个组件，共享同一个模板数据，所以引用类型的数据要注意，需要覆盖一下
+      scale: [1, 1] as [number, number], // 因为我引入的是同一个组件，共享同一个模板数据，所以引用类型的数据要注意，需要覆盖一下
       x,
       y,
     }
@@ -103,7 +103,7 @@ function imgDragEnd(e: DragEvent, idx: number) {
 </script>
 
 <template>
-  <div wh-full bg="#333">
+  <div wh-full bg="#222">
     <div
       flex px-1 items-center
       w-full h="40px" leading="40px"

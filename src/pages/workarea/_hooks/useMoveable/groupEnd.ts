@@ -3,6 +3,7 @@ import { useHistoryStore } from '@/store/modules'
 
 export function useGroupEnd() {
   const { track } = useHistoryStore()
+
   const { onScaleEnd, onRotateEnd, onDragEnd } = useSingleEnd()
 
   function groupEndHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
@@ -14,7 +15,8 @@ export function useGroupEnd() {
       onRotateGroupEnd(e)
     setTimeout(() => track())
   }
-  function onDragGroupEnd({ events }: any) {
+
+  function onDragGroupEnd({ events, lastEvent }: any) {
     events.forEach((event: any) => {
       const { lastEvent, target } = event
       if (!lastEvent)

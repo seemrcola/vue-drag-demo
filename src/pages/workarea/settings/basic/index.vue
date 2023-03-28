@@ -7,7 +7,7 @@ const rulerStore = useRulerStore()
 <template>
   <div
     w-full overflow-hidden
-    bg="#333" color="#fff" text="12px"
+    bg="#222" color="#fff" text="12px"
     b-b="1px solid #000"
   >
     <div bg="#000" f-c-c color="#fff" h-8>
