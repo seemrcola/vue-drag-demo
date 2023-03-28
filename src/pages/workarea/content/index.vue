@@ -247,6 +247,7 @@ onUnmounted(() => {
               :class="{
                 component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
                 selecto: componentItem.selecto,
+                lock: componentItem.lock,
               }"
               @click.stop
               @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
@@ -305,6 +306,24 @@ onUnmounted(() => {
     bottom: 0;
     z-index: 1;
     background-color: rgba(68, 170, 255, 0.1);
+  }
+}
+.lock {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: rgba(241, 229, 123, 0.2);
+  }
+  &::after {
+    content:'🔒';
+    position: absolute;
+    bottom: 0.3rem;
+    right:0.3rem
   }
 }
 </style>

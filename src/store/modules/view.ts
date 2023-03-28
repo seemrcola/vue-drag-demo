@@ -21,6 +21,8 @@ export interface IComponent {
   height: number // 元素变换之后的宽高
   width: number // 元素变换之后的宽高
   selecto: boolean // 是否被框选
+  lock: boolean // 是否锁定
+  visible: boolean // 是否可见
   component: string // 组件名称 由TYPE加name拼接而成
 }
 

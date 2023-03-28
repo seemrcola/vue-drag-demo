@@ -5,6 +5,9 @@ export function useSingleEnd() {
   const viewStore = useViewStore()
 
   function singleEndHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (viewStore.taregtSelect[0]?.lock)
+      return
+
     if (type === 'scale')
       onScaleEnd(e)
     if (type === 'drag')

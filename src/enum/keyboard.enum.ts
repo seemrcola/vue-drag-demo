@@ -27,9 +27,9 @@ export enum KeyCodeEnum {
   // 保存
   SAVE = 'save',
   // 锁定
-  LOCK = 'lock',
+  LOCK = 76,
   // 解除锁定
-  UNLOCK = 'unLock',
+  UNLOCK = 79,
   // 隐藏
   HIDE = 'hide',
   // 显示

@@ -8,10 +8,7 @@ export function useDel() {
 
   // 删除 DELETE
   function del<T extends Event>(e: T) {
-    if (
-      e instanceof KeyboardEvent
-      && (e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY'
-    )
+    if (e instanceof KeyboardEvent && (e.target as HTMLElement).nodeName.toUpperCase() !== 'BODY')
       return
     if (isEmpty(viewStore.taregtSelect))
       return

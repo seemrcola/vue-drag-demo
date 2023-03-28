@@ -1,9 +1,13 @@
-import { useCoord } from '@/store/modules'
+import { useCoord, useViewStore } from '@/store/modules'
 
 export function useSingle() {
   const coordStore = useCoord()
+  const viewStore = useViewStore()
 
   function singleHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (viewStore.taregtSelect[0]?.lock)
+      return
+
     if (type === 'scale')
       onScale(e)
     if (type === 'drag')

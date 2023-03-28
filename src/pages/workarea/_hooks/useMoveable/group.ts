@@ -1,6 +1,13 @@
+import { useViewStore } from '@/store/modules'
+
 export function useGroup() {
+  const viewStore = useViewStore()
+
   // note: https://daybrush.com/moveable/storybook/?path=/story/snap-bound--bound-drag-rotate-group
   function groupHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (viewStore.taregtSelect.some(comp => comp.lock))
+      return
+
     if (type === 'scale')
       onScaleGroup(e)
     if (type === 'drag')

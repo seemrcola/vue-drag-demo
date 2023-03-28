@@ -1,12 +1,15 @@
 import { useSingleEnd } from './singleEnd'
-import { useHistoryStore } from '@/store/modules'
+import { useHistoryStore, useViewStore } from '@/store/modules'
 
 export function useGroupEnd() {
   const { track } = useHistoryStore()
-
+  const viewStore = useViewStore()
   const { onScaleEnd, onRotateEnd, onDragEnd } = useSingleEnd()
 
   function groupEndHandler(e: any, type: 'drag' | 'scale' | 'rotate') {
+    if (viewStore.taregtSelect.some(comp => comp.lock))
+      return
+
     if (type === 'scale')
       onScaleGroupEnd(e)
     if (type === 'drag')
