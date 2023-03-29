@@ -1,25 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { cloneDeep } from 'lodash-es'
+import type { DeltaData, ShowData } from '../types/coord.d'
 import { useRulerStore } from './ruler'
 import { useViewStore } from './view'
 
-export interface ShowData {
-  x: number
-  y: number
-  rotate: number
-  scale: [number, number]
-  height: number
-  width: number
-  [propname: string]: any
-}
-
-export interface DeltaData {
-  x?: number
-  y?: number
-  rotate?: number
-  scale?: [number, number]
-}
+export { DeltaData, ShowData }
 
 export const useCoord = defineStore('base-single', () => {
   // ruler

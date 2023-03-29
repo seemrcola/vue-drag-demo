@@ -309,6 +309,7 @@ onUnmounted(() => {
   }
 }
 .lock {
+  cursor: not-allowed;
   &::before {
     content: "";
     position: absolute;

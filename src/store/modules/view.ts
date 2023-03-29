@@ -1,39 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import type { DertaData, IComponent } from '../types/view.d'
 import { useRulerStore } from './ruler'
 import { useHistoryStore } from './history'
-
 /*
  * usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作，里面只有一个id属性
  * view里面的selectTarget内的数据更多，是把component的全部属性都保存下来形成的数组
 */
 
-export interface IComponent {
-  id: string
-  type: string
-  name: string
-  x: number
-  y: number
-  rotate: number
-  scale: [number, number]
-  initHeight: number // 元素初始化时的宽高
-  initWidth: number // 元素初始化时的宽高
-  height: number // 元素变换之后的宽高
-  width: number // 元素变换之后的宽高
-  selecto: boolean // 是否被框选
-  lock: boolean // 是否锁定
-  visible: boolean // 是否可见
-  component: string // 组件名称 由TYPE加name拼接而成
-}
-
-export interface DertaData {
-  x?: number
-  y?: number
-  rotate?: number
-  scale?: [number, number]
-  height?: number
-  width?: number
-}
+export { DertaData, IComponent }
 
 export const useViewStore = defineStore('view', () => {
   // ruler
@@ -68,7 +43,6 @@ export const useViewStore = defineStore('view', () => {
   }
 
   function addComponent<T extends IComponent>(component: T) {
-    // 把compnent属性变成非响应式
     components.value.push(component)
     setTimeout(() => historyStore.track())
   }

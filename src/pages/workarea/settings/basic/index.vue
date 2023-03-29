@@ -1,5 +1,7 @@
 <script setup lang='ts'>
-import { useCoord, useRulerStore } from '@/store/modules'
+import Label from './components/label.vue'
+import { useCoord, useRulerStore, useViewStore } from '@/store/modules'
+const viewStore = useViewStore()
 const coordStore = useCoord()
 const rulerStore = useRulerStore()
 </script>
@@ -13,50 +15,33 @@ const rulerStore = useRulerStore()
     <div bg="#000" f-c-c color="#fff" h-8>
       <strong>组件基本属性</strong>
     </div>
-    <div>
+    <div v-show="viewStore.taregtSelect.length === 1">
       <div flex my-4>
-        <label for="" flex-1 f-c-c>
-          <div w-8 mr-2>横轴</div>
-          <input
-            readonly input w-24
-            :value="~~coordStore.showDataTarget.x!"
-          >
-        </label>
-        <label for="" flex-1 f-c-c>
-          <div w-8 mr-2>纵轴</div>
-          <input
-            readonly input w-24
-            :value="~~coordStore.showDataTarget.y!"
-          >
-        </label>
+        <Label text="X轴" :value="~~coordStore.showDataTarget.x" />
+        <Label text="Y轴" :value="~~coordStore.showDataTarget.y" />
       </div>
       <div flex my-4>
-        <label for="" flex-1 f-c-c>
-          <div w-8 mr-2>宽度</div>
-          <input
-            readonly input w-24
-            :value="~~coordStore.showDataTarget.width!"
-          >
-        </label>
-        <label for="" flex-1 f-c-c>
-          <div w-8 mr-2>高度</div>
-          <input
-            readonly input w-24
-            :value="~~coordStore.showDataTarget.height!"
-          >
-        </label>
+        <Label text="宽度" :value="~~coordStore.showDataTarget.width" />
+        <Label text="高度" :value="~~coordStore.showDataTarget.height" />
       </div>
       <div flex my-4>
-        <label for="" flex-1 f-c-c>
-          <div w-8 mr-2>旋转</div>
-          <input readonly input w-24 :value="~~coordStore.showDataTarget.rotate!">
-        </label>
-        <label for="" flex-1 f-c-c>
-          <div w-8 mr-2>画布</div>
-          <input readonly input w-24 :value="rulerStore.rulerOptions.scale">
-        </label>
+        <Label text="角度" :value="~~coordStore.showDataTarget.rotate" />
+        <Label text="缩放" :value="rulerStore.rulerOptions.scale" />
       </div>
     </div>
-    <!-- <input w="95%" m-auto h-10 type="text"> -->
+    <div v-show="viewStore.taregtSelect.length !== 1">
+      <div flex my-4>
+        <Label text="X轴" value="N" />
+        <Label text="Y轴" value="N" />
+      </div>
+      <div flex my-4>
+        <Label text="宽度" value="N" />
+        <Label text="高度" value="N" />
+      </div>
+      <div flex my-4>
+        <Label text="角度" value="N" />
+        <Label text="缩放" :value="rulerStore.rulerOptions.scale" />
+      </div>
+    </div>
   </div>
 </template>

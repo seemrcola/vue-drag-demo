@@ -96,10 +96,7 @@ export function useSeleto(options: Options) {
 
   function getWrapperedComps() {
     // 如果都是空 就不用计算了
-    if (
-      (end.value.x === 0 && end.value.y === 0)
-      || (start.value.x === 0 && start.value.y === 0)
-    )
+    if ((end.value.x === 0 && end.value.y === 0) || (start.value.x === 0 && start.value.y === 0))
       return []
 
     const components = viewStore.components
