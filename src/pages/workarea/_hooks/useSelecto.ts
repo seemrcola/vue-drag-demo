@@ -104,7 +104,7 @@ export function useSeleto(options: Options) {
     if (isEmpty(components))
       return []
     const ans: Array<{ id: string }> = []
-    // 选框的坐标-------------------------------------
+    // 选框的坐标 拿到左上角坐标和宽高 就可以算出右下角坐标-------------------------------------
     const { left, top, height, width } = calcXY()
     const startx = left
     const starty = top
@@ -147,6 +147,7 @@ export function useSeleto(options: Options) {
   }
 
   function calcXY() {
+    // 计算出框选盒子的左上角坐标和盒子的宽高  [left, top]就是开始坐标
     const { scale } = rulerStore.rulerOptions
     const left = (Math.min(start.value.x, end.value.x) - containerRect?.left || 0) / scale
     const top = (Math.min(start.value.y, end.value.y) - containerRect?.top || 0) / scale
