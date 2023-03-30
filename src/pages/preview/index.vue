@@ -4,10 +4,11 @@ import { useRulerStore, useViewStore } from '@/store/modules'
 const viewStore = useViewStore()
 const rulerStore = useRulerStore()
 const scale = ref(1)
+const skewingX = ref(0)
+const skewingY = ref(0)
 
-onMounted(() => {
-  handleFilled()
-})
+onMounted(() => handleFilled())
+
 function handleFilled() {
   // 算出document的宽高比
   const vw = document.documentElement.clientWidth
@@ -20,21 +21,28 @@ function handleFilled() {
     scale.value = vw / rulerStore.canvasOptions.width
   else
     scale.value = vh / rulerStore.canvasOptions.height
+
+  const deltaH = (vh - (rulerStore.canvasOptions.height * scale.value)) / 2
+  skewingY.value = deltaH
+  const deltaW = (vw - (rulerStore.canvasOptions.width * scale.value)) / 2
+  skewingX.value = deltaW
 }
+
 window.addEventListener('resize', handleFilled)
 </script>
 
 <template>
-  <div bg="#000" wh-full overflow-hidden>
+  <div bg="#000" wh-full relative>
     <div
       :style="{
         height: `${rulerStore.canvasOptions.height}px`,
         width: `${rulerStore.canvasOptions.width}px`,
-        transform: `scale(${scale})`,
         position: 'absolute',
         overflow: 'hidden',
         backgroundColor: '#eee',
         transformOrigin: 'top left',
+        transform: `scale(${scale})`,
+        margin: `${skewingY}px  ${skewingX}px ${skewingY}px ${skewingX}px`,
       }"
     >
       <template v-for="componentItem in viewStore.components" :key="componentItem.id">
