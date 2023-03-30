@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
+import html2canvas from 'html2canvas'
 import { useDel } from '../_hooks/useEclipse/del'
 import { useCVX } from '../_hooks/useEclipse/cvx'
 import { useHistory } from '../_hooks/useEclipse/history'
@@ -21,7 +22,15 @@ function preview() {
   window.open(link, '_blank')
 }
 // 截图
-function screenshot() {}
+async function screenshot() {
+  const canvas = await html2canvas(document.querySelector('#container')!)
+  const img = document.createElement('a')
+  img.href = canvas
+    .toDataURL('image/jpeg')
+    .replace('image/jpeg', 'image/octet-stream')
+  img.download = 'case.jpg'
+  img.click()
+}
 </script>
 
 <template>

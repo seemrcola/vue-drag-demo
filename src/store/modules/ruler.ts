@@ -26,8 +26,8 @@ export const useRulerStore = defineStore('ruler', () => {
   })
 
   const canvasOptions = ref({
-    width: 1920,
-    height: 1080,
+    width: 4000,
+    height: 3000,
   })
 
   // canvas样式配置, 样式的动态属性都由其他配置计算得来
