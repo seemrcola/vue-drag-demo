@@ -12,6 +12,7 @@ specifiers:
   lodash-es: ^4.17.21
   moveable: ^0.43.1
   pinia: ^2.0.30
+  pinia-plugin-persistedstate: ^3.1.0
   rollup-plugin-visualizer: ^5.9.0
   sass: ^1.58.0
   tiny-compress-images: ^3.2.0
@@ -35,6 +36,7 @@ dependencies:
   lodash-es: 4.17.21
   moveable: 0.43.1
   pinia: 2.0.30_hmuptsblhheur2tugfgucj7gc4
+  pinia-plugin-persistedstate: 3.1.0_pinia@2.0.30
   tiny-compress-images: 3.2.0
   uuid: 9.0.0
   vue: 3.2.47
@@ -3633,6 +3635,14 @@ packages:
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+
+  /pinia-plugin-persistedstate/3.1.0_pinia@2.0.30:
+    resolution: {integrity: sha512-8UN+vYMEPBdgNLwceY08mi5olI0wkYaEb8b6hD6xW7SnBRuPydWHlEhZvUWgNb/ibuf4PvufpvtS+dmhYjJQOw==}
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: 2.0.30_hmuptsblhheur2tugfgucj7gc4
+    dev: false
 
   /pinia/2.0.30_hmuptsblhheur2tugfgucj7gc4:
     resolution: {integrity: sha512-q6DUmxWwe/mQgg+55QQjykpKC+aGeGdaJV3niminl19V08dE+LRTvSEuqi6/NLSGCKHI49KGL6tMNEOssFiMyA==}

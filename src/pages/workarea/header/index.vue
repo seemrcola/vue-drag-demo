@@ -1,13 +1,27 @@
 <script setup lang='ts'>
+import { useRouter } from 'vue-router'
 import { useDel } from '../_hooks/useEclipse/del'
 import { useCVX } from '../_hooks/useEclipse/cvx'
 import { useHistory } from '../_hooks/useEclipse/history'
 const { redo, undo } = useHistory()
 const { del } = useDel()
 const { copy, paste } = useCVX()
+
+const router = useRouter()
+
+// github 地址
 function goto() {
   window.open('https://github.com/seemrcola/datav')
 }
+// preview 新开tab
+function preview() {
+  const { href: link } = router.resolve({
+    path: '/preview',
+  })
+  window.open(link, '_blank')
+}
+// 截图
+function screenshot() {}
 </script>
 
 <template>
@@ -18,12 +32,16 @@ function goto() {
         VUE-DRAG-DEMO
       </div>
     </div>
-    <div class="icons" w-full flex items-center text-xl flex-1>
+    <div class="icons" flex items-center text-xl flex-1>
       <div w-14 i-ion:arrow-undo-circle-outline @click="undo" />
       <div w-14 i-ion:arrow-redo-circle-outline @click="redo" />
       <div w-14 i-material-symbols:file-copy-outline @click="copy" />
       <div w-14 i-ic:outline-content-paste-go @click="paste" />
       <div data-red w-14 i-ic:outline-delete-forever @click="del" />
+    </div>
+    <div class="icons" h-full w="300px" flex items-center text-xl>
+      <div i-ion:paper-plane-outline mx-4 @click="preview" />
+      <div i-iconoir:screenshot mx-4 @click="screenshot" />
     </div>
   </div>
 </template>

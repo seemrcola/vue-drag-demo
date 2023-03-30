@@ -243,7 +243,7 @@ onUnmounted(() => {
             <component
               :is="componentItem.component"
               :id="componentItem.id"
-              :style="{ ...viewStore.initComponentStyle(componentItem) }"
+              :style="{ ...viewStore.setComponentStyle(componentItem) }"
               :class="{
                 component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
                 selecto: componentItem.selecto,

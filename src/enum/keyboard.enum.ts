@@ -22,16 +22,8 @@ export enum KeyCodeEnum {
   UNDO = 90,
   // 重做
   REDO = 89,
-  // 清空剪贴板
-  CLEAR = 'clear',
-  // 保存
-  SAVE = 'save',
   // 锁定
   LOCK = 76,
   // 解除锁定
   UNLOCK = 79,
-  // 隐藏
-  HIDE = 'hide',
-  // 显示
-  SHOW = 'show',
 }

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { DertaData, IComponent } from '../types/view.d'
 import { useRulerStore } from './ruler'
 import { useHistoryStore } from './history'
@@ -10,97 +10,98 @@ import { useHistoryStore } from './history'
 
 export { DertaData, IComponent }
 
-export const useViewStore = defineStore('view', () => {
+export const useViewStore = defineStore(
+  'view',
+  () => {
   // ruler
-  const rulerStore = useRulerStore()
-  // history
-  const historyStore = useHistoryStore()
-  // 画布上的全部图表
-  const components = ref<IComponent[]>([])
-  // 画布上被选中的图表
-  const taregtSelect = ref<IComponent[]>([])
+    const rulerStore = useRulerStore()
+    // history
+    const historyStore = useHistoryStore()
+    // 画布上的全部图表
+    const components = ref<IComponent[]>([])
+    // 画布上被选中的图表
+    const taregtSelect = ref<IComponent[]>([])
 
-  function setTarget(targetId: string[]) {
+    function setTarget(targetId: string[]) {
     // 清空数组
-    taregtSelect.value = []
-    // 重新给数组赋值
-    targetId.forEach((id) => {
-      taregtSelect.value.push(getTarget(id)!)
-    })
-  }
-
-  function getTarget(targetId: string) {
-    return components.value.find(component => `#${component.id}` === targetId)
-  }
-
-  function clearSelect() {
-    taregtSelect.value = []
-  }
-
-  function removeComponent<T extends IComponent>(component: T) {
-    const index = components.value.findIndex(comp => comp.id === component.id)
-    components.value.splice(index, 1)
-  }
-
-  function addComponent<T extends IComponent>(component: T) {
-    components.value.push(component)
-    setTimeout(() => historyStore.track())
-  }
-
-  function transformcomponent(componentId: string, data: DertaData) {
-    const item = components.value.find(item => componentId === item.id)!
-    const { x, y, rotate, scale } = data
-    if (x)
-      item.x += x
-    if (y)
-      item.y += y
-    if (rotate)
-      item.rotate = rotate % 360
-    if (scale) {
-      item.scale[0] *= scale[0]
-      item.scale[1] *= scale[1]
-      item.width *= scale[0]
-      item.height *= scale[1]
+      taregtSelect.value = []
+      // 重新给数组赋值
+      targetId.forEach((id) => {
+        taregtSelect.value.push(getTarget(id)!)
+      })
     }
-  }
 
-  /* 只用于初始化样式，后续啊的样式更改将直接在e.target上改 */
-  function initComponentStyle<T extends IComponent>(component: T) {
+    function getTarget(targetId: string) {
+      return components.value.find(component => `#${component.id}` === targetId)
+    }
+
+    function clearSelect() {
+      taregtSelect.value = []
+    }
+
+    function removeComponent<T extends IComponent>(component: T) {
+      const index = components.value.findIndex(comp => comp.id === component.id)
+      components.value.splice(index, 1)
+    }
+
+    function addComponent<T extends IComponent>(component: T) {
+      components.value.push(component)
+      setTimeout(() => historyStore.track())
+    }
+
+    function transformcomponent(componentId: string, data: DertaData) {
+      const item = components.value.find(item => componentId === item.id)!
+      const { x, y, rotate, scale } = data
+      if (x)
+        item.x += x
+      if (y)
+        item.y += y
+      if (rotate)
+        item.rotate = rotate % 360
+      if (scale) {
+        item.scale[0] *= scale[0]
+        item.scale[1] *= scale[1]
+        item.width *= scale[0]
+        item.height *= scale[1]
+      }
+    }
+
+    function initComponentStyle<T extends IComponent>(component: T) {
+      return {
+        position: 'absolute',
+        left: `${component.x}px`,
+        top: `${component.y}px`,
+        transform: `rotate(${component.rotate}deg) scale(${component.scale[0]}, ${component.scale[1]})`,
+      }
+    }
+
+    const setComponentStyle = computed(
+      () => <T extends IComponent>(comp: T) => initComponentStyle(comp),
+    )
+
+    // 样式改变相关-------------------------------------------------------------------
+    // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
+    function uSetStyle(target: HTMLElement, delta: DertaData) {
+      const id = target.id
+      // 根据id修改componnets中对应的component
+      // 只有操作结束的时候才需要去调用transformcomponent,此时才会有完整的delta数据, 用于记录组件相关的位置信息--------
+      transformcomponent(id, delta)
+    }
+    // --------------------------------------------------------------------------
+
     return {
-      position: 'absolute',
-      left: `${component.x}px`,
-      top: `${component.y}px`,
-      transform: `rotate(${component.rotate}deg) scale(${component.scale[0]}, ${component.scale[1]})`,
+      components,
+      removeComponent,
+      addComponent,
+      setTarget,
+      getTarget,
+      taregtSelect,
+      transformcomponent,
+      clearSelect,
+      uSetStyle,
+      setComponentStyle,
     }
-  }
-
-  // 样式改变相关-------------------------------------------------------------------
-  // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
-  function uSetStyle(target: HTMLElement, delta: DertaData) {
-    const id = target.id
-    // 根据id修改componnets中对应的component
-    // 只有操作结束的时候才需要去调用transformcomponent,此时才会有完整的delta数据, 用于记录组件相关的位置信息--------
-    transformcomponent(id, delta)
-    // 获取component
-    const targetComponent = getTarget(`#${id}`)
-    // 通过对象实例改变对象style.position的属性
-    const [scalex = 1, scaley = 1] = targetComponent!.scale
-    target.style.top = `${targetComponent!.y}px`
-    target.style.left = `${targetComponent!.x}px`
-    target.style.transform = `rotate(${targetComponent!.rotate}deg) scale(${scalex}, ${scaley})`
-  }
-  // --------------------------------------------------------------------------
-
-  return {
-    components,
-    removeComponent,
-    addComponent,
-    initComponentStyle,
-    setTarget,
-    getTarget,
-    taregtSelect,
-    transformcomponent,
-    clearSelect,
-    uSetStyle,
-  }
-})
+  },
+  {
+    persist: true,
+  })
