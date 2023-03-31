@@ -23,7 +23,7 @@ function preview() {
 }
 // 截图
 async function screenshot() {
-  const canvas = await html2canvas(document.querySelector('#container')!)
+  const canvas = await html2canvas(document.querySelector('#canvas')!)
   const img = document.createElement('a')
   img.href = canvas
     .toDataURL('image/jpeg')

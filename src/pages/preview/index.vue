@@ -43,6 +43,7 @@ window.addEventListener('resize', handleFilled)
         transformOrigin: 'top left',
         transform: `scale(${scale})`,
         margin: `${skewingY}px  ${skewingX}px ${skewingY}px ${skewingX}px`,
+        transition: 'all .3s',
       }"
     >
       <template v-for="componentItem in viewStore.components" :key="componentItem.id">
