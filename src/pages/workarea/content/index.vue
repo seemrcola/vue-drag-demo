@@ -86,7 +86,6 @@ function screenInit() {
   nextTick(() => {
     const { height: containerHeight, width: containerWidth } = containerRef.value!.getBoundingClientRect()
     const { clientHeight, clientWidth } = wrapperRef.value!
-    // console.log(clientHeight, containerWidth, clientWidth, clientWidth)
     screensRef.value!.scrollLeft = (containerWidth / 2 - clientWidth / 2)
     screensRef.value!.scrollTop = (containerHeight / 2 - clientHeight / 2)
   })
@@ -122,6 +121,7 @@ const {
   singleHandler,
   singleEndHandler,
   groupHandler,
+  clickGroup,
   groupEndHandler,
   selectComponent,
   clearSelect,
@@ -238,6 +238,7 @@ onUnmounted(() => {
             @drag-group-end="(e) => groupEndHandler(e, 'drag')"
             @rotate-group-end="(e) => groupEndHandler(e, 'rotate')"
             @scale-group-end="(e) => groupEndHandler(e, 'scale')"
+            @click-group="clickGroup"
           />
           <template v-for="componentItem in viewStore.components" :key="componentItem.id">
             <component
