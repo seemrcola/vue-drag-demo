@@ -12,7 +12,7 @@ import { setupStore } from './store'
 import { useKeyboard } from '@/hooks/useFnKeyboard'
 import { useOS } from '@/hooks/useOS'
 // global components
-import { setupToysComponents } from '@/pages/workarea/materiel/toys/comp.index'
+import { materielSetup } from '@/pages/workarea/materiel/comp.index'
 
 useKeyboard()
 useOS()
@@ -21,7 +21,7 @@ function setupApp() {
   const app = createApp(App)
   setupRouter(app)
   setupStore(app)
-  setupToysComponents(app)
+  materielSetup(app)
   app.mount('#app')
 }
 setupApp()
