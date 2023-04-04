@@ -9,6 +9,8 @@ import { useSeleto } from '../_hooks/useSelecto'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
 import type { IComponent } from '@/store/modules/view'
+import { KeyCodeEnum } from '@/enum/keyboard.enum'
+import ContextMenu from '@/components/contextMenu/index.vue'
 
 /* viewStore */
 const viewStore = useViewStore()
@@ -171,6 +173,23 @@ onMounted(() => {
   setVueMoveableRef(moveable.value!)
 })
 
+// 右键菜单
+const menuList = [
+  { text: '上一层', type: KeyCodeEnum.LAYERUP },
+  { text: '下一层', type: KeyCodeEnum.LAYERDOWN },
+]
+const showmenu = ref(false)
+function contextMenu(e: MouseEvent) {
+  e.preventDefault()
+  showmenu.value = true
+  const { clientX, clientY } = e
+  nextTick(() => {
+    const dom = document.querySelector('#contextmenu') as HTMLElement
+    dom.style.left = `${clientX}px`
+    dom.style.top = `${clientY}px`
+  })
+}
+
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
@@ -217,6 +236,9 @@ onUnmounted(() => {
           @dragover="e => e.preventDefault()"
         >
           <div id="selecto" ref="selecto" absolute :style="setStyle" />
+          <Teleport to="body">
+            <ContextMenu v-show="showmenu" id="contextmenu" absolute :list="menuList" />
+          </Teleport>
           <Moveable
             ref="moveable"
             :target="selectTarget"
@@ -252,6 +274,7 @@ onUnmounted(() => {
               }"
               @click.stop
               @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
+              @contextmenu="contextMenu"
             />
           </template>
         </div>

@@ -18,9 +18,9 @@ export function useEclipse() {
   const { lock, unlock } = useLock()
 
   // execEcplise 执行组合快捷键 & 非组合快捷键
-  function execEcplise(keycode: number, e: KeyboardEvent) {
-    // 功能键是否按下
-    const isCtrlActive = isCtrl()
+  function execEcplise(keycode: number, e: KeyboardEvent, forceCtrl = false) {
+    // 功能键是否按下,  forceCtrl = true 代表无论全局状态下是否按下ctrl，都视为按下
+    const isCtrlActive = isCtrl() || forceCtrl
     if (isCtrlActive) {
       switch (keycode) {
         case KeyCodeEnum.COPY:

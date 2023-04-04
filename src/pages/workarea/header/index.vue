@@ -46,6 +46,7 @@ async function screenshot() {
       <div w-14 i-ion:arrow-redo-circle-outline @click="redo" />
       <div w-14 i-material-symbols:file-copy-outline @click="copy" />
       <div w-14 i-ic:outline-content-paste-go @click="paste" />
+      <div w-14 i-uil:object-group />
       <div data-red w-14 i-ic:outline-delete-forever @click="del" />
     </div>
     <div class="icons" h-full w="300px" flex items-center text-xl>

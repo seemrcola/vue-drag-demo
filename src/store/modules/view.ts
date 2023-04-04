@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import type { DertaData, IComponent } from '../types/view.d'
 import { useRulerStore } from './ruler'
 import { useHistoryStore } from './history'
+
 /*
  * usemoveable 的selectTarget用来控制选中的效果，以及让target可以进行操作，里面只有一个id属性
  * view里面的selectTarget内的数据更多，是把component的全部属性都保存下来形成的数组
@@ -17,13 +18,13 @@ export const useViewStore = defineStore(
     const rulerStore = useRulerStore()
     // history
     const historyStore = useHistoryStore()
-    // 画布上的全部图表
+    // 画布上的全部单个图表
     const components = ref<IComponent[]>([])
     // 画布上被选中的图表
     const taregtSelect = ref<IComponent[]>([])
 
     function setTarget(targetId: string[]) {
-    // 清空数组
+      // 清空数组
       taregtSelect.value = []
       // 重新给数组赋值
       targetId.forEach((id) => {
@@ -79,7 +80,6 @@ export const useViewStore = defineStore(
       () => <T extends IComponent>(comp: T) => initComponentStyle(comp),
     )
 
-    // 样式改变相关-------------------------------------------------------------------
     // 用来改变组件的样式 transform to absolute 以及改变views.components记录的值
     function uSetStyle(target: HTMLElement, delta: DertaData) {
       const id = target.id
@@ -87,7 +87,6 @@ export const useViewStore = defineStore(
       // 只有操作结束的时候才需要去调用transformcomponent,此时才会有完整的delta数据, 用于记录组件相关的位置信息--------
       transformcomponent(id, delta)
     }
-    // --------------------------------------------------------------------------
 
     return {
       components,
