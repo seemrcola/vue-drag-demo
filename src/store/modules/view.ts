@@ -88,6 +88,35 @@ export const useViewStore = defineStore(
       transformcomponent(id, delta)
     }
 
+    // 图层设置
+    function setLayer(type: string, index: number) {
+      const temp = components.value[index]
+      if (type === 'up') {
+        if (index === components.value.length - 1)
+          return
+        const tempNext = components.value[index + 1]
+        components.value[index] = tempNext
+        components.value[index + 1] = temp
+      }
+      if (type === 'down') {
+        if (index === 0)
+          return
+        const tempPrev = components.value[index - 1]
+        components.value[index] = tempPrev
+        components.value[index - 1] = temp
+      }
+      if (type === 'floor') {
+        const first = components.value[0]
+        components.value[0] = temp
+        components.value[index] = first
+      }
+      if (type === 'ceil') {
+        const end = components.value[components.value.length - 1]
+        components.value[components.value.length - 1] = temp
+        components.value[index] = end
+      }
+    }
+
     return {
       components,
       removeComponent,
@@ -99,6 +128,7 @@ export const useViewStore = defineStore(
       clearSelect,
       uSetStyle,
       setComponentStyle,
+      setLayer,
     }
   },
   {

@@ -6,11 +6,13 @@ import Moveable from 'vue3-moveable'
 import { useMoveable } from '../_hooks/useMoveable'
 import { useEclipse } from '../_hooks/useEclipse'
 import { useSeleto } from '../_hooks/useSelecto'
+import { useContextMenu } from '../_hooks/useContextMenu'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
 import type { IComponent } from '@/store/modules/view'
-import { KeyCodeEnum } from '@/enum/keyboard.enum'
 import ContextMenu from '@/components/contextMenu/index.vue'
+
+// 右键菜单
 
 /* viewStore */
 const viewStore = useViewStore()
@@ -173,23 +175,26 @@ onMounted(() => {
   setVueMoveableRef(moveable.value!)
 })
 
-// 右键菜单
+const { contextMenu: contextMenuHanlde, showmenu } = useContextMenu('#contextmenu')
 const menuList = [
-  { text: '上一层', type: KeyCodeEnum.LAYERUP },
-  { text: '下一层', type: KeyCodeEnum.LAYERDOWN },
+  { text: '上一层', type: 'up' },
+  { text: '下一层', type: 'down' },
+  { text: '置顶', type: 'ceil' },
+  { text: '置底', type: 'floor' },
 ]
-const showmenu = ref(false)
-function contextMenu(e: MouseEvent) {
+const currentContext = ref(0)
+function contextMenu(e: MouseEvent, index: number) {
   e.preventDefault()
   showmenu.value = true
-  const { clientX, clientY } = e
-  nextTick(() => {
-    const dom = document.querySelector('#contextmenu') as HTMLElement
-    dom.style.left = `${clientX}px`
-    dom.style.top = `${clientY}px`
-  })
+  currentContext.value = index
+  contextMenuHanlde(e)
+}
+function layerHanlde(type: string) {
+  viewStore.setLayer(type, currentContext.value)
+  showmenu.value = false
 }
 
+// 组件卸载
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleSrcollBar)
   window.removeEventListener('resize', windowResizeHandle) // 监听窗口变化
@@ -202,6 +207,7 @@ onUnmounted(() => {
   <div
     id="wrapper" ref="wrapperRef" class="wrapper" relative
     @mousedown="selectoDownHandler"
+    @contextmenu.stop="e => e.preventDefault()"
   >
     <!-- 标尺容器 -->
     <SketchRule
@@ -237,7 +243,11 @@ onUnmounted(() => {
         >
           <div id="selecto" ref="selecto" absolute :style="setStyle" />
           <Teleport to="body">
-            <ContextMenu v-show="showmenu" id="contextmenu" absolute :list="menuList" />
+            <ContextMenu
+              v-show="showmenu" id="contextmenu" :list="menuList"
+              absolute
+              @dispatch="layerHanlde"
+            />
           </Teleport>
           <Moveable
             ref="moveable"
@@ -262,20 +272,24 @@ onUnmounted(() => {
             @scale-group-end="(e) => groupEndHandler(e, 'scale')"
             @click-group="clickGroup"
           />
-          <template v-for="componentItem in viewStore.components" :key="componentItem.id">
-            <component
-              :is="componentItem.component"
-              :id="componentItem.id"
-              :style="{ ...viewStore.setComponentStyle(componentItem) }"
-              :class="{
-                component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
-                selecto: componentItem.selecto,
-                lock: componentItem.lock,
-              }"
-              @click.stop
-              @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
-              @contextmenu="contextMenu"
-            />
+          <template v-for="(componentItem, index) in viewStore.components" :key="componentItem?.id">
+            <template v-if="componentItem">
+              <component
+                :is="componentItem.component"
+                :id="componentItem.id"
+                :style="{
+                  ...viewStore.setComponentStyle(componentItem),
+                  'z-index': index,
+                }"
+                :class="{
+                  component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
+                  selecto: componentItem.selecto,
+                  lock: componentItem.lock,
+                }"
+                @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
+                @contextmenu.stop="contextMenu($event, index)"
+              />
+            </template>
           </template>
         </div>
       </div>

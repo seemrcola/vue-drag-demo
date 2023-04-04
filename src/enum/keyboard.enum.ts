@@ -26,8 +26,4 @@ export enum KeyCodeEnum {
   LOCK = 76,
   // 解除锁定
   UNLOCK = 79,
-  // 上一层
-  LAYERUP = 38,
-  // 下一层
-  LAYERDOWN = 40,
 }

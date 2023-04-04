@@ -1,23 +1,27 @@
 <script setup lang='ts'>
-import type { KeyCodeEnum } from '@/enum/keyboard.enum'
 interface Operate {
   text: string
-  type: KeyCodeEnum
+  type: string
 }
+
 const props = defineProps<{
   list: Array<Operate>
 }>()
+
 const emits = defineEmits<{
-  (e: 'dispatch', type: KeyCodeEnum): void
+  (e: 'dispatch', type: string): void
 }>()
 
-function operate(type: KeyCodeEnum) {
+function operate(type: string) {
   emits('dispatch', type)
 }
 </script>
 
 <template>
-  <div py-2 b="1px solid #444" rounded-2 bg="#fff" color="#666">
+  <div
+    py-2
+    b="1px solid #ccc" rounded-2 bg="#fff" color="#666"
+  >
     <div
       v-for="(item, index) of props.list" :key="index"
       h-8 w-30 f-c-c text-sm cursor-pointer
