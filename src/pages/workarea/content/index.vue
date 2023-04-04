@@ -241,18 +241,20 @@ onUnmounted(() => {
             @click-group="clickGroup"
           />
           <template v-for="componentItem in viewStore.components" :key="componentItem.id">
-            <component
-              :is="componentItem.component"
-              :id="componentItem.id"
-              :style="{ ...viewStore.setComponentStyle(componentItem) }"
-              :class="{
-                component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
-                selecto: componentItem.selecto,
-                lock: componentItem.lock,
-              }"
-              @click.stop
-              @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
-            />
+            <Suspense>
+              <component
+                :is="componentItem.component"
+                :id="componentItem.id"
+                :style="{ ...viewStore.setComponentStyle(componentItem) }"
+                :class="{
+                  component: !viewStore.taregtSelect.find(comp => comp.id === componentItem.id),
+                  selecto: componentItem.selecto,
+                  lock: componentItem.lock,
+                }"
+                @click.stop
+                @mousedown="(e: MouseEvent) => MouseDownHandle(e, componentItem)"
+              />
+            </suspense>
           </template>
         </div>
       </div>
