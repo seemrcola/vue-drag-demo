@@ -4,6 +4,8 @@ import html2canvas from 'html2canvas'
 import { useDel } from '../_hooks/useEclipse/del'
 import { useCVX } from '../_hooks/useEclipse/cvx'
 import { useHistory } from '../_hooks/useEclipse/history'
+import { useViewStore } from '@/store/modules'
+const viewStore = useViewStore()
 const { redo, undo } = useHistory()
 const { del } = useDel()
 const { copy, paste } = useCVX()
@@ -31,6 +33,10 @@ async function screenshot() {
   img.download = 'case.jpg'
   img.click()
 }
+// 清空
+function clear() {
+  viewStore.clear()
+}
 </script>
 
 <template>
@@ -50,6 +56,7 @@ async function screenshot() {
       <div data-red w-14 i-ic:outline-delete-forever @click="del" />
     </div>
     <div class="icons" h-full w="300px" flex items-center text-xl>
+      <div i-icon-park-outline:clear-format mx-4 @click="clear" />
       <div i-ion:paper-plane-outline mx-4 @click="preview" />
       <div i-iconoir:screenshot mx-4 @click="screenshot" />
     </div>

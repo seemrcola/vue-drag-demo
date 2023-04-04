@@ -40,6 +40,11 @@ export const useViewStore = defineStore(
       taregtSelect.value = []
     }
 
+    function clear() {
+      components.value = []
+      taregtSelect.value = []
+    }
+
     function removeComponent<T extends IComponent>(component: T) {
       const index = components.value.findIndex(comp => comp.id === component.id)
       components.value.splice(index, 1)
@@ -129,6 +134,7 @@ export const useViewStore = defineStore(
       uSetStyle,
       setComponentStyle,
       setLayer,
+      clear,
     }
   },
   {
