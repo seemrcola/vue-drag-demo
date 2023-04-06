@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 import Label from './components/label.vue'
-import { useCoord, useRulerStore, useViewStore } from '@/store/modules'
+import { useCoordStore, useRulerStore, useViewStore } from '@/store/modules'
 const viewStore = useViewStore()
-const coordStore = useCoord()
+const coordStore = useCoordStore()
 const rulerStore = useRulerStore()
 </script>
 

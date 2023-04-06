@@ -1,7 +1,7 @@
-import { useCoord, useViewStore } from '@/store/modules'
+import { useCoordStore, useViewStore } from '@/store/modules'
 
 export function useSingle() {
-  const coordStore = useCoord()
+  const coordStore = useCoordStore()
   const viewStore = useViewStore()
 
   function singleHandler(e: any, type: 'drag' | 'scale' | 'rotate') {

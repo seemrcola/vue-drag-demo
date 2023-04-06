@@ -12,7 +12,7 @@ import { isEmpty } from '@/utils/is'
  * 这个hooks需要用到store 改变view里面的属性
  * 这种需要依赖外部store的函数组合，就不写进全局的hooks中
  */
-import { useCoord, useViewStore } from '@/store/modules'
+import { useCoordStore, useViewStore } from '@/store/modules'
 
 type SelectMode = 'click' | 'selecto'
 
@@ -23,7 +23,7 @@ const moveableRef = ref<VueMoveableInstance>()
 // 这里主要做两个操作 选中和清空
 export function useMoveable() {
   const viewStore = useViewStore()
-  const coordStore = useCoord()
+  const coordStore = useCoordStore()
 
   const { groupHandler } = useGroup()
   const { singleHandler } = useSingle()

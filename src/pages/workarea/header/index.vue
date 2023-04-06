@@ -3,10 +3,12 @@ import { useRouter } from 'vue-router'
 import html2canvas from 'html2canvas'
 import { useDel } from '../_hooks/useEclipse/del'
 import { useCVX } from '../_hooks/useEclipse/cvx'
+import { useMoveable } from '../_hooks/useMoveable/index'
 import { useHistory } from '../_hooks/useEclipse/history'
 import { useViewStore } from '@/store/modules'
-const viewStore = useViewStore()
+const { clear } = useViewStore()
 const { redo, undo } = useHistory()
+const { clearSelect } = useMoveable()
 const { del } = useDel()
 const { copy, paste } = useCVX()
 
@@ -34,8 +36,9 @@ async function screenshot() {
   img.click()
 }
 // 清空
-function clear() {
-  viewStore.clear()
+function clearCanvas() {
+  clear()
+  clearSelect()
 }
 </script>
 
@@ -56,7 +59,7 @@ function clear() {
       <div data-red w-14 i-ic:outline-delete-forever @click="del" />
     </div>
     <div class="icons" h-full w="300px" flex items-center text-xl>
-      <div i-icon-park-outline:clear-format mx-4 @click="clear" />
+      <div i-icon-park-outline:clear-format mx-4 @click="clearCanvas" />
       <div i-ion:paper-plane-outline mx-4 @click="preview" />
       <div i-iconoir:screenshot mx-4 @click="screenshot" />
     </div>
