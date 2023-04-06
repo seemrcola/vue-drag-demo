@@ -94,4 +94,22 @@ export const toysComponentsConfig: ToysComponent[] = [
     visible: false, // 是否可见
     component: `${compType.TOYS}-virus`,
   },
+  // 黑板
+  {
+    type: compType.TOYS,
+    name: 'blackboard',
+    id: '',
+    initHeight: 500,
+    initWidth: 800,
+    height: 500,
+    width: 800,
+    x: 0,
+    y: 0,
+    rotate: 0,
+    scale: [1, 1],
+    selecto: false,
+    lock: false, // 是否锁定
+    visible: false, // 是否可见
+    component: `${compType.TOYS}-blackboard`,
+  },
 ]

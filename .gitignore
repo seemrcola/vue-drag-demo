@@ -10,6 +10,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+chatgpt.test.html
+stats.html
 *.local
 
 # Editor directories and files
