@@ -116,7 +116,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvas" height="400" width="400" />
+  <div>
+    <canvas ref="canvas" height="400" width="400" />
+  </div>
 </template>
 
 <style lang="scss" scoped>

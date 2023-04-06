@@ -349,17 +349,18 @@ onUnmounted(() => {
 .lock {
   cursor: not-allowed;
   &::before {
-    content: "";
+    content: "LOCK";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1;
+    z-index: 99999;
     background-color: rgba(241, 229, 123, 0.2);
   }
   &::after {
     content:'🔒';
+    color: brown;
     position: absolute;
     bottom: 0.3rem;
     right:0.3rem
