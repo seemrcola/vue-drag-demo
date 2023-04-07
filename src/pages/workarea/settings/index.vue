@@ -1,6 +1,5 @@
 <script setup lang='ts'>
 import Basic from './basic/index.vue'
-import Event from './events/index.vue'
 </script>
 
 <template>
@@ -9,6 +8,5 @@ import Event from './events/index.vue'
     border="1px solid #fff" color="#fff" bg="#222"
   >
     <Basic />
-    <Event />
   </div>
 </template>
