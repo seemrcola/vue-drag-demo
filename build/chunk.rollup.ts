@@ -1,4 +1,4 @@
-// todo 这个分包操作不生效 一直有一堆报错 不知道为啥---------------------------------
+// todo 这个分包操作不生效 一直有一堆报错 不知道为啥
 import fs from 'fs'
 
 function isLargeModule(id) {

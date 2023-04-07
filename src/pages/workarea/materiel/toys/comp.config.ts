@@ -21,6 +21,9 @@ export const toysComponentsConfig: ToysComponent[] = [
     lock: false, // 是否锁定
     visible: false, // 是否可见
     component: `${compType.TOYS}-automaton`, // 为防止名称重复 组件注册时候的名称就用类型+名称来表示
+    event: [
+      // { eventName: 'reset', disc: '重置' },
+    ],
   },
   // mines扫雷
   {
@@ -93,5 +96,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     lock: false, // 是否锁定
     visible: false, // 是否可见
     component: `${compType.TOYS}-virus`,
+    event: [
+      // { eventName: 'reset', disc: '重置' },
+    ],
   },
 ]

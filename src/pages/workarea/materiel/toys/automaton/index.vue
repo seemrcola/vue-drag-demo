@@ -12,7 +12,7 @@
 < 2 孤独而死
 -->
 <script setup lang='ts'>
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import type { CellState } from './type'
 import { CellStatus } from './type'
 
@@ -21,17 +21,25 @@ const WIDTH = 40
 const FRAME_RATE = 20
 const CELL_SIZE = 10
 
-const state = reactive(
-  Array.from(
+const state = ref<CellState[][]>(init())
+
+function init() {
+  return Array.from(
     { length: HEIGHT },
     (_, y) =>
-      Array.from({ length: WIDTH }, (_, x): CellState => ({
-        status: (Math.random() < 0.1) ? CellStatus.ALIVE : CellStatus.DEAD,
-        x,
-        y,
-      })),
-  ),
-)
+      Array.from(
+        { length: WIDTH },
+        (_, x): CellState => ({
+          status: (Math.random() < 0.1) ? CellStatus.ALIVE : CellStatus.DEAD,
+          x,
+          y,
+        })),
+  )
+}
+
+function reset() {
+  state.value = init()
+}
 
 const siblings = [
   [-1, -1], [-1, 0], [-1, 1],
@@ -46,7 +54,7 @@ function getSiblings(cell: CellState) {
       const x = cell.x + dx
       if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
         return false
-      return state[y][x].status
+      return state.value[y][x].status
     })
     .filter(Boolean)
     .length
@@ -54,7 +62,7 @@ function getSiblings(cell: CellState) {
 
 const canvas = ref<any>()
 function draw(ctx: any) {
-  state.forEach((list) => {
+  state.value.forEach((list) => {
     list.forEach(cell => drawCell(ctx, cell))
   })
 }
@@ -73,7 +81,7 @@ function drawCell(ctx: any, cell: CellState) {
 }
 
 function start(ctx: any) {
-  state.forEach((list, _idx, _self) => {
+  state.value.forEach((list, _idx, _self) => {
     list.forEach((cell, __idx, __self) => {
       const count = getSiblings(cell)
       // 状态转移方案-----------------

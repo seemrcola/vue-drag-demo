@@ -7,7 +7,7 @@ import { useViewStore } from './view'
 
 export { DeltaData, ShowData }
 
-export const useCoordStore = defineStore('base-single', () => {
+export const useCoordStore = defineStore('coord', () => {
   // ruler
   const rulerStore = useRulerStore()
   // view
