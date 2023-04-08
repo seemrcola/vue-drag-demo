@@ -4,11 +4,10 @@ import { cloneDeep } from 'lodash-es'
 import type { IComponent } from './view'
 import { useViewStore } from './view'
 
-const historyList = ref<IComponent[][]>([[]])
-const pointer = ref<number>(0)
-
 export const useHistoryStore = defineStore('history', () => {
   const viewStore = useViewStore()
+  const historyList = ref<IComponent[][]>([[]])
+  const pointer = ref<number>(0)
 
   function init() {
     historyList.value = []
