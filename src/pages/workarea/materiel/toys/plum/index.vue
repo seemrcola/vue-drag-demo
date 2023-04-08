@@ -105,7 +105,7 @@ function arcTo(p: Point) {
 </script>
 
 <template>
-  <div>
+  <div b>
     <canvas ref="el" :height="400" :width="400" b bg="#444" />
   </div>
 </template>

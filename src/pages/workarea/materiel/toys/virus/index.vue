@@ -204,7 +204,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
+  <div b>
     <canvas ref="canvas" height="400" width="400" />
   </div>
 </template>
