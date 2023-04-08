@@ -44,7 +44,7 @@ function linkPreviewImg(icon: Icon, idx: number) {
 }
 /********************************/
 
-/** 鼠标始终在图片中心的拖拽方案*******/
+/** raydata拖拽方案 *******************************************/
 const imgsrc = ref<ImgGlobResult>()
 let dragDom: HTMLElement | null = null
 function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
@@ -93,7 +93,7 @@ function dragHandle(e: DragEvent) {
   }
   dataTransfer!.setDragImage(target, w, h)
 }
-/***************************************************************/
+/**************************************************************************/
 
 /** ***************** 拖拽结束时组件放入画布 ***********************/
 function imgDragEnd(e: DragEvent) {
