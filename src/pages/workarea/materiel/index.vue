@@ -46,13 +46,34 @@ function linkPreviewImg(icon: Icon, idx: number) {
 
 /** 鼠标始终在图片中心的拖拽方案*******/
 const imgsrc = ref<ImgGlobResult>()
-function changeImgSrc(imgSrc: ImgGlobResult) {
+let dragDom: HTMLElement | null = null
+function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
   imgsrc.value = imgSrc
+  // 靠名字找到组件的config信息
+  const compnentConfig = componentsConfig[curIcon.type]
+    .find(comp => comp.component.includes(imgsrc.value!.name))!
+  const { height, width } = compnentConfig
+  generateImgDom(e, height, width)
+}
+function generateImgDom(e: MouseEvent, height: number, width: number) {
+  const { rulerOptions: { scale } } = useRulerStore()
+  const clone = (e.target as HTMLElement).cloneNode() as HTMLElement
+  document.querySelector('body')?.append(clone)
+  requestAnimationFrame(() => {
+    clone.style.height = `${height * scale}px`
+    clone.style.width = `${width * scale}px`
+    clone.style.border = '1px solid #000'
+    clone.style.position = 'absolute' // 定位到一个远一点的地方
+    clone.style.left = `${-99999}px`
+    clone.style.top = `${-99999}px`
+    dragDom = clone // 赋值
+    setTimeout(() => clone.remove(), 1000) // remove元素
+  })
 }
 function dragHandle(e: DragEvent) {
   // cloneNode 和 new Image 出来的图片都无法处理宽高，只能先这样
   const { dataTransfer } = e
-  const target = e.target as HTMLImageElement
+  const target = dragDom!
   // *******************************************************************
   // ** !!这里做个解释 [这是貌似是一个mac专属bug]
   // ** 当drag操作自定义拖动图片，并且改变了dataTransfer!.setDragImage(img, x, y)
@@ -64,21 +85,26 @@ function dragHandle(e: DragEvent) {
   const os = window.$OS
   window.$fixClientX = 0
   window.$fixClientY = 0
+  const w = parseInt(target.style.width) / 2
+  const h = parseInt(target.style.height) / 2
   if (os === 'MAC') {
-    window.$fixClientX = target.width / 2
-    window.$fixClientY = target.height / 2
+    window.$fixClientX = w
+    window.$fixClientY = h
   }
-  dataTransfer!.setDragImage(target, target.width / 2, target.height / 2)
+  dataTransfer!.setDragImage(target, w, h)
 }
 /***************************************************************/
 
 /** ***************** 拖拽结束时组件放入画布 ***********************/
-function imgDragEnd(e: DragEvent, idx: number) {
+function imgDragEnd(e: DragEvent) {
   const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
+  // 靠名字找到组件的config信息
+  const compnentConfig = componentsConfig[curIcon.type]
+    .find(comp => comp.component.includes(imgsrc.value!.name))!
   // 计算坐标点
   const { clientX, clientY } = e
   const scale = rulerStore.rulerOptions.scale
-  const { width, height } = componentsConfig[curIcon.type][idx]
+  const { width, height } = compnentConfig
   const x = (clientX - left - window.$fixClientX) / scale - (width / 2)
   const y = (clientY - top + window.$fixClientY) / scale - (height / 2)
   // 进入画布则收集该组件信息
@@ -86,9 +112,6 @@ function imgDragEnd(e: DragEvent, idx: number) {
     (clientX - window.$fixClientX) > left
     && (clientY + window.$fixClientY) > top
   ) {
-    // 靠名字找到组件的config信息
-    const compnentConfig = componentsConfig[curIcon.type]
-      .find(comp => comp.component.includes(imgsrc.value!.name))!
     const targetComponent = {
       ...compnentConfig,
       id: `wrapper${uuidv4().split('-')[0]}`,
@@ -141,8 +164,8 @@ function imgDragEnd(e: DragEvent, idx: number) {
             :src="item.img"
             h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
             @dragstart="dragHandle"
-            @dragend="imgDragEnd($event, idx)"
-            @mousedown.stop="changeImgSrc(item)"
+            @dragend="imgDragEnd($event)"
+            @mousedown.stop="changeImgSrc(item, $event)"
           >
         </div>
       </div>
