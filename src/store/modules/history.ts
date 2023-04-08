@@ -18,8 +18,8 @@ export const useHistoryStore = defineStore('history', () => {
     // 删除当前状态之后的所有状态
     historyList.value.splice(pointer.value + 1)
     // 将当前状态收集进来
-    const disk = (cloneDeep(viewStore.components))
-    historyList.value.push(disk)
+    const snapshoot = (cloneDeep(viewStore.components))
+    historyList.value.push(snapshoot)
     // 指针自加
     pointer.value++
   }

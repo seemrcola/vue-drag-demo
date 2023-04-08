@@ -37,10 +37,6 @@ function init() {
   )
 }
 
-function reset() {
-  state.value = init()
-}
-
 const siblings = [
   [-1, -1], [-1, 0], [-1, 1],
   [0, -1], /* self */[0, 1],
