@@ -48,8 +48,9 @@ function linkPreviewImg(icon: Icon, idx: number) {
 const imgsrc = ref<ImgGlobResult>()
 let dragDom: HTMLElement | null = null
 function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
+  // 图片src赋值确保拖出来的图片正确
   imgsrc.value = imgSrc
-  // 靠名字找到组件的config信息
+  // 靠名字找到组件的config信息 也可以根据index找 但是index有局限 config文件就必须按顺序来写组件
   const compnentConfig = componentsConfig[curIcon.type]
     .find(comp => comp.component.includes(imgsrc.value!.name))!
   const { height, width } = compnentConfig
@@ -60,12 +61,15 @@ function generateImgDom(e: MouseEvent, height: number, width: number) {
   const clone = (e.target as HTMLElement).cloneNode() as HTMLElement
   document.querySelector('body')?.append(clone)
   requestAnimationFrame(() => {
-    clone.style.height = `${height * scale}px`
-    clone.style.width = `${width * scale}px`
-    clone.style.border = '1px solid #000'
-    clone.style.position = 'absolute' // 定位到一个远一点的地方
-    clone.style.left = `${-99999}px`
-    clone.style.top = `${-99999}px`
+    clone.style.cssText // 定位到一个远一点的地方
+    += `
+      height: ${height * scale}px;
+      width: ${width * scale}px;
+      border: 1px solid #000;
+      position: absolute; 
+      left: -99999px;
+      top: -99999px;
+    `
     dragDom = clone // 赋值
     setTimeout(() => clone.remove(), 1000) // remove元素
   })
