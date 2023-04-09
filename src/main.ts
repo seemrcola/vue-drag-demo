@@ -11,11 +11,13 @@ import { setupStore } from './store'
 // global hooks
 import { useKeyboard } from '@/hooks/useFnKeyboard'
 import { useOS } from '@/hooks/useOS'
+import { useIfWebkit } from '@/hooks/useIfWebkit'
 // global components
 import { materielSetup } from '@/pages/workarea/materiel/comp.index'
 
 useKeyboard()
 useOS()
+useIfWebkit()
 
 function setupApp() {
   const app = createApp(App)
@@ -23,5 +25,8 @@ function setupApp() {
   setupStore(app)
   materielSetup(app)
   app.mount('#app')
+
+  if (!window.$ifwebkit)
+    alert('为了更好的体验，建议使用Chrome， Edge或者Arc浏览器')
 }
 setupApp()

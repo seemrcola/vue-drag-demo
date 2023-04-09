@@ -16,6 +16,8 @@ declare interface Window {
     $fixClientY: number
     // os
     $OS: 'WINDOWS'|'MAC'
+    // if chrome
+    $ifwebkit: boolean
 }
 
   // *******************************************************************
