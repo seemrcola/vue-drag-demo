@@ -18,3 +18,11 @@ declare interface Window {
     $OS: 'WINDOWS'|'MAC'
 }
 
+  // *******************************************************************
+  // ** !!这里做个解释 [这是貌似是一个mac专属bug] $fixClientX $fixClientY
+  // ** 当drag操作自定义拖动图片，并且改变了dataTransfer!.setDragImage(img, x, y)
+  // ** 此时当drag操作结束时，dragend获取clientX喝clientY都会受到这个x和y的影响
+  // ** 把dragend绑定在document上就不会有这个问题
+  // ** 但是dragend绑定在和dragstart一样的元素上时就会造成clientX和clientY的偏移
+  // ** fix: 但是为了记录这个操作，我决定在window上加个属性来打补丁，以提醒自己这个知识点。
+  //* ******************************************************************

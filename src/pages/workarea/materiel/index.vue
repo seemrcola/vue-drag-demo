@@ -46,7 +46,8 @@ function linkPreviewImg(icon: Icon, idx: number) {
 
 /** raydata拖拽方案 *******************************************/
 const imgsrc = ref<ImgGlobResult>()
-let dragDom: HTMLElement | null = null
+const dragDom: HTMLElement | null = null
+const raydata = ref<HTMLCanvasElement>()
 function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
   // 图片src赋值确保拖出来的图片正确
   imgsrc.value = imgSrc
@@ -56,46 +57,40 @@ function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
   const { height, width } = compnentConfig
   generateImgDom(e, height, width)
 }
+
 function generateImgDom(e: MouseEvent, height: number, width: number) {
   const { rulerOptions: { scale } } = useRulerStore()
-  const clone = (e.target as HTMLElement).cloneNode() as HTMLElement
-  document.querySelector('body')?.append(clone)
-  requestAnimationFrame(() => {
-    clone.style.cssText // 定位到一个远一点的地方
-    += `
-      height: ${height * scale}px;
-      width: ${width * scale}px;
-      border: 1px solid #000;
-      position: absolute; 
-      left: -99999px;
-      top: -99999px;
-    `
-    dragDom = clone // 赋值
-    setTimeout(() => clone.remove(), 1000) // remove元素
-  })
+  const target = e.target as HTMLImageElement
+  const ctx = raydata.value!.getContext('2d')!
+  const h = scale * height
+  const w = scale * width
+  raydata.value!.height = h
+  raydata.value!.width = w
+  // 处理宽高不同的组件 将img绘制在canvas中间部分
+  let startX = 0
+  let startY = 0
+  if (scale * height >= scale * width)
+    startY = (h - w) / 2
+  else startX = (w - h) / 2
+
+  ctx.drawImage(target, startX, startY, scale * height, scale * width)
 }
+
 function dragHandle(e: DragEvent) {
-  // cloneNode 和 new Image 出来的图片都无法处理宽高，只能先这样
   const { dataTransfer } = e
-  const target = dragDom!
-  // *******************************************************************
-  // ** !!这里做个解释 [这是貌似是一个mac专属bug]
-  // ** 当drag操作自定义拖动图片，并且改变了dataTransfer!.setDragImage(img, x, y)
-  // ** 此时当drag操作结束时，dragend获取clientX喝clientY都会受到这个x和y的影响
-  // ** 把dragend绑定在document上就不会有这个问题
-  // ** 但是dragend绑定在和dragstart一样的元素上时就会造成clientX和clientY的偏移
-  // ** fix: 但是为了记录这个操作，我决定在window上加个属性来打补丁，以提醒自己这个知识点。
-  //* ******************************************************************
+  const target = raydata.value as HTMLCanvasElement
+  // bugfix: 详见glob.d.ts*******************
   const os = window.$OS
   window.$fixClientX = 0
   window.$fixClientY = 0
-  const w = parseInt(target.style.width) / 2
-  const h = parseInt(target.style.height) / 2
+  const w = (target.width) / 2
+  const h = (target.height) / 2
   if (os === 'MAC') {
     window.$fixClientX = w
     window.$fixClientY = h
   }
-  dataTransfer!.setDragImage(target, w, h)
+  //* ************************************
+  dataTransfer!.setDragImage(raydata.value!, w, h)
 }
 /**************************************************************************/
 
@@ -131,6 +126,11 @@ function imgDragEnd(e: DragEvent) {
 
 <template>
   <div wh-full bg="#222">
+    <canvas
+      ref="raydata"
+      b="1px solid #000" bg="#eee"
+      absolute left="9999px" top="9999px"
+    />
     <div
       flex px-1 items-center
       w-full h="40px" leading="40px"

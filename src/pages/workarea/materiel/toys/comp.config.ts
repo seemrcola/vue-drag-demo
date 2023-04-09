@@ -31,7 +31,7 @@ export const toysComponentsConfig: ToysComponent[] = [
     name: 'mines',
     id: '',
     initHeight: 400,
-    initWidth: 400,
+    initWidth: 350,
     height: 400,
     width: 350,
     x: 0,
