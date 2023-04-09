@@ -61,6 +61,7 @@ function generateImgDom(e: MouseEvent, height: number, width: number) {
   const { rulerOptions: { scale } } = useRulerStore()
   let h = scale * height
   let w = scale * width
+  // 图片放大到一定程度图片跟随效果会出问题
   h = h > 800 ? 800 : h
   w = w > 800 ? 800 : w
   raydata.value!.src = imgsrc.value!.img
