@@ -59,8 +59,10 @@ function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
 
 function generateImgDom(e: MouseEvent, height: number, width: number) {
   const { rulerOptions: { scale } } = useRulerStore()
-  const h = scale * height
-  const w = scale * width
+  let h = scale * height
+  let w = scale * width
+  h = h > 800 ? 800 : h
+  w = w > 800 ? 800 : w
   raydata.value!.src = imgsrc.value!.img
   raydata.value!.style.height = `${h}px`
   raydata.value!.style.width = `${w}px`
@@ -119,7 +121,7 @@ function imgDragEnd(e: DragEvent) {
     <img
       ref="raydata"
       b="1px solid #000" bg="#eee"
-      absolute left="-9999px" top="-9999px"
+      absolute left="-9999999px" top="-999999px"
       object-contain
     >
     <div

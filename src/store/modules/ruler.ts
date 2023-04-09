@@ -12,6 +12,8 @@ export const useRulerStore = defineStore('ruler', () => {
     thick: 20, // 尺子厚度，即标尺本身所占宽度
     isShowRuler: true, // 显示标尺
     isShowReferLine: false, // 显示参考线
+    max: 3.0,
+    min: 0.4,
 
     palette: { // 基础样式
       bgColor: '#181b24',
@@ -38,6 +40,8 @@ export const useRulerStore = defineStore('ruler', () => {
   })
 
   function setScale(scale: number) {
+    if (scale > rulerOptions.value.max || scale < rulerOptions.value.min)
+      return
     rulerOptions.value.scale = scale
     /**
      * 改了rulerOptions.value.scale，
