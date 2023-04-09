@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { reactive, ref } from 'vue'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { componentsConfig } from './comp.config'
 import { compType } from '@/enum/materiel.enum'
@@ -61,7 +61,7 @@ function generateImgDom(e: MouseEvent, height: number, width: number) {
   const { rulerOptions: { scale } } = useRulerStore()
   let h = scale * height
   let w = scale * width
-  // 图片放大到一定程度图片跟随效果会出问题
+  // 图片放大到一定程度图片跟随效果会出问题 这个问题可以询问gpt
   h = h > 800 ? 800 : h
   w = w > 800 ? 800 : w
   raydata.value!.src = imgsrc.value!.img
@@ -115,6 +115,13 @@ function imgDragEnd(e: DragEvent) {
   }
 }
 /*******************************************************************/
+
+onMounted(() => {
+  document.addEventListener('dragend', imgDragEnd)
+})
+onUnmounted(() => {
+  document.removeEventListener('dragend', imgDragEnd)
+})
 </script>
 
 <template>
@@ -162,7 +169,6 @@ function imgDragEnd(e: DragEvent) {
             :src="item.img"
             h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
             @dragstart="dragHandle"
-            @dragend="imgDragEnd($event)"
             @mousedown.stop="changeImgSrc(item, $event)"
           >
         </div>
