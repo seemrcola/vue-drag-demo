@@ -119,7 +119,7 @@ function imgDragEnd(e: DragEvent) {
     <img
       ref="raydata"
       b="1px solid #000" bg="#eee"
-      absolute left="9999px" top="9999px"
+      absolute left="-9999px" top="-9999px"
       object-contain
     >
     <div
