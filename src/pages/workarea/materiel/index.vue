@@ -46,8 +46,7 @@ function linkPreviewImg(icon: Icon, idx: number) {
 
 /** raydata拖拽方案 *******************************************/
 const imgsrc = ref<ImgGlobResult>()
-const dragDom: HTMLElement | null = null
-const raydata = ref<HTMLCanvasElement>()
+const raydata = ref<HTMLImageElement>()
 function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
   // 图片src赋值确保拖出来的图片正确
   imgsrc.value = imgSrc
@@ -60,25 +59,16 @@ function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
 
 function generateImgDom(e: MouseEvent, height: number, width: number) {
   const { rulerOptions: { scale } } = useRulerStore()
-  const target = e.target as HTMLImageElement
-  const ctx = raydata.value!.getContext('2d')!
   const h = scale * height
   const w = scale * width
-  raydata.value!.height = h
-  raydata.value!.width = w
-  // 处理宽高不同的组件 将img绘制在canvas中间部分
-  let startX = 0
-  let startY = 0
-  if (scale * height >= scale * width)
-    startY = (h - w) / 2
-  else startX = (w - h) / 2
-
-  ctx.drawImage(target, startX, startY, scale * height, scale * width)
+  raydata.value!.src = imgsrc.value!.img
+  raydata.value!.style.height = `${h}px`
+  raydata.value!.style.width = `${w}px`
 }
 
 function dragHandle(e: DragEvent) {
   const { dataTransfer } = e
-  const target = raydata.value as HTMLCanvasElement
+  const target = raydata.value as HTMLImageElement
   // bugfix: 详见glob.d.ts*******************
   const os = window.$OS
   window.$fixClientX = 0
@@ -126,11 +116,12 @@ function imgDragEnd(e: DragEvent) {
 
 <template>
   <div wh-full bg="#222">
-    <canvas
+    <img
       ref="raydata"
       b="1px solid #000" bg="#eee"
       absolute left="9999px" top="9999px"
-    />
+      object-contain
+    >
     <div
       flex px-1 items-center
       w-full h="40px" leading="40px"
