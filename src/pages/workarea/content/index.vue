@@ -300,12 +300,12 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .wrapper {
   position: relative;
-  background: rgba($color: #000, $alpha: 0.9) ;
+  background: rgba($color: #fff, $alpha: 0.9) ;
   background-image:
-      linear-gradient(rgba(255,255,255,.3) 1px, transparent 0),
-      linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 0),
-      linear-gradient(white 1px, transparent 0),
-      linear-gradient(90deg, white 1px, transparent 0);
+      linear-gradient(rgba(#eee, 0.8) 1px, transparent 0),
+      linear-gradient(90deg, rgba(#eee, 0.8) 1px, transparent 0),
+      linear-gradient(#444 1px, transparent 0),
+      linear-gradient(90deg, #444 1px, transparent 0);
   background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
   /*
    * 特别注意,这个width要和传入组件的width成对应关系,
@@ -317,12 +317,12 @@ onUnmounted(() => {
   border: 1px solid #dadadc;
 
   #canvas {
-    background: rgba($color: #fff, $alpha: 1.0) ;
+    background: rgba($color: #555, $alpha: 1.0) ;
     background-image:
-        linear-gradient(rgba(0,0,0,.1) 1px, transparent 0),
-        linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 0),
-        linear-gradient(white 1px, transparent 0),
-        linear-gradient(90deg, white 1px, transparent 0);
+        linear-gradient(rgba(255,255,255,.1) 1px, transparent 0),
+        linear-gradient(90deg, rgba(255,0255,255,.1) 1px, transparent 0),
+        linear-gradient(#bbb 1px, transparent 0),
+        linear-gradient(90deg, #bbb 1px, transparent 0);
     background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
   }
 }
