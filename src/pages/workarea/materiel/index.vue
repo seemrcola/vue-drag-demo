@@ -1,11 +1,13 @@
 <script setup lang='ts'>
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { componentsConfig } from './comp.config'
 import { compType } from '@/enum/materiel.enum'
 import type { ImgGlobResult } from '@/utils/glob'
 import { imgGlob } from '@/utils/index'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
+import Goast from '@/components/goast/index.vue'
+import type { IComponent } from '@/store/types/view'
 
 const viewStore = useViewStore()
 const rulerStore = useRulerStore()
@@ -46,64 +48,49 @@ function linkPreviewImg(icon: Icon, idx: number) {
 
 /** raydata拖拽方案 *******************************************/
 const imgsrc = ref<ImgGlobResult>()
-const raydata = ref<HTMLImageElement>()
+const component = ref<IComponent>()
+const style = ref({ left: '0px', top: '0px', transform: '' })
+const dragFlag = ref(false)
+let scale = 0
 function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
+  scale = rulerStore.rulerOptions.scale
   // 图片src赋值确保拖出来的图片正确
   imgsrc.value = imgSrc
+  // 为拖拽做点准备
+  dragFlag.value = true
+  window.addEventListener('mousemove', mousemoveHandle)
+  window.addEventListener('mouseup', mouseupHandle)
+}
+
+function mousemoveHandle(e: MouseEvent) {
+  if (!dragFlag.value)
+    return
   // 靠名字找到组件的config信息 也可以根据index找 但是index有局限 config文件就必须按顺序来写组件
-  const compnentConfig = componentsConfig[curIcon.type]
+  component.value = componentsConfig[curIcon.type]
     .find(comp => comp.component.includes(imgsrc.value!.name))!
-  const { height, width } = compnentConfig
-  generateImgDom(e, height, width)
-}
-
-function generateImgDom(e: MouseEvent, height: number, width: number) {
-  const { rulerOptions: { scale } } = useRulerStore()
-  let h = scale * height
-  let w = scale * width
-  // 图片放大到一定程度图片跟随效果会出问题 这个问题可以询问gpt
-  h = h > 800 ? 800 : h
-  w = w > 800 ? 800 : w
-  raydata.value!.src = imgsrc.value!.img
-  raydata.value!.style.height = `${h}px`
-  raydata.value!.style.width = `${w}px`
-}
-
-function dragHandle(e: DragEvent) {
-  const { dataTransfer } = e
-  const target = raydata.value as HTMLImageElement
-  // bugfix: 详见glob.d.ts*******************
-  const os = window.$OS
-  window.$fixClientX = 0
-  window.$fixClientY = 0
-  const w = (target.width) / 2
-  const h = (target.height) / 2
-  if (os === 'MAC') {
-    window.$fixClientX = w
-    window.$fixClientY = h
-  }
-  //* ************************************
-  dataTransfer!.setDragImage(raydata.value!, w, h)
+  // 位置和大小处理一下
+  style.value.left = `${(e.clientX - component.value!.width / 2)}px`
+  style.value.top = `${(e.clientY - component.value!.height / 2)}px`
+  style.value.transform = `scale(${scale})`
 }
 /**************************************************************************/
 
 /** ***************** 拖拽结束时组件放入画布 ***********************/
-function imgDragEnd(e: DragEvent) {
+function mouseupHandle(e: MouseEvent) {
+  // 清空
+  dragFlag.value = false
+  style.value = { left: '0px', top: '0px', transform: '' }
+
   const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
   // 靠名字找到组件的config信息
-  const compnentConfig = componentsConfig[curIcon.type]
-    .find(comp => comp.component.includes(imgsrc.value!.name))!
+  const compnentConfig = component.value!
   // 计算坐标点
   const { clientX, clientY } = e
-  const scale = rulerStore.rulerOptions.scale
   const { width, height } = compnentConfig
-  const x = (clientX - left - window.$fixClientX) / scale - (width / 2)
-  const y = (clientY - top + window.$fixClientY) / scale - (height / 2)
+  const x = (clientX - left) / scale - (width / 2)
+  const y = (clientY - top) / scale - (height / 2)
   // 进入画布则收集该组件信息
-  if (
-    (clientX - window.$fixClientX) > left
-    && (clientY + window.$fixClientY) > top
-  ) {
+  if ((clientX) > left && (clientY) > top) {
     const targetComponent = {
       ...compnentConfig,
       id: `wrapper${uuidv4().split('-')[0]}`,
@@ -113,25 +100,31 @@ function imgDragEnd(e: DragEvent) {
     }
     viewStore.addComponent(targetComponent)
   }
+  // 清空
+  component.value = undefined
+  clearListener()
+}
+
+function clearListener() {
+  window.removeEventListener('mousemove', mousemoveHandle)
+  window.removeEventListener('mouseup', mouseupHandle)
 }
 /*******************************************************************/
 
-onMounted(() => {
-  document.addEventListener('dragend', imgDragEnd)
-})
 onUnmounted(() => {
-  document.removeEventListener('dragend', imgDragEnd)
+  clearListener()
 })
 </script>
 
 <template>
   <div wh-full bg="#222">
-    <img
-      ref="raydata"
-      b="1px solid #000" bg="#eee"
-      absolute left="-9999999px" top="-999999px"
-      object-contain
-    >
+    <Teleport to="body">
+      <Goast
+        v-if="component"
+        ref="goast" absolute z-999
+        :style="style" :component="component!"
+      />
+    </Teleport>
     <div
       flex px-1 items-center
       w-full h="40px" leading="40px"
@@ -168,7 +161,7 @@ onUnmounted(() => {
           <img
             :src="item.img"
             h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
-            @dragstart="dragHandle"
+            :draggable="false"
             @mousedown.stop="changeImgSrc(item, $event)"
           >
         </div>

@@ -12,8 +12,6 @@ import { useDrag } from '@/hooks/useDrag'
 import type { IComponent } from '@/store/modules/view'
 import ContextMenu from '@/components/contextMenu/index.vue'
 
-// 右键菜单
-
 /* viewStore */
 const viewStore = useViewStore()
 /* Eclipse */
