@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import Label from './components/label.vue'
+import Label from './label.vue'
 import { useCoordStore, useRulerStore, useViewStore } from '@/store/modules'
 const viewStore = useViewStore()
 const coordStore = useCoordStore()
