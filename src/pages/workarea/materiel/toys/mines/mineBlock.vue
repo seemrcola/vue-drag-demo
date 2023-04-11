@@ -40,7 +40,7 @@ function getColor(block: BlockState) {
     :class="getColor(props.block)"
     h-8 w-8 b f-c-c m="1px"
     @click="blockClick(props.block)"
-    @contextmenu.prevent="rightClick(props.block)"
+    @contextmenu.prevent.stop="rightClick(props.block)"
   >
     <template v-if="props.block.revealed">
       <div v-if="props.block.mine">
