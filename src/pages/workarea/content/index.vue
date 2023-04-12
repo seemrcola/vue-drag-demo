@@ -54,7 +54,7 @@ const handleWheel = (
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
     const nextScale = parseFloat(
-      Math.max(0.2, state.scale - e.deltaY / 500).toFixed(5),
+      Math.max(0.2, state.scale - e.deltaY / 300).toFixed(2),
     )
     rulerStore.setScale(nextScale)
   }
