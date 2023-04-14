@@ -84,6 +84,9 @@ function mouseupHandle(e: MouseEvent) {
   const { left, top } = document.querySelector('#canvas')!.getBoundingClientRect()
   // 靠名字找到组件的config信息
   const compnentConfig = component.value!
+  // 按下就松开的情况下直接return
+  if (!compnentConfig)
+    return
   // 计算坐标点
   const { clientX, clientY } = e
   const { width, height } = compnentConfig

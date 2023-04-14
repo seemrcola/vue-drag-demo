@@ -15,6 +15,7 @@ function getUrl({ thumbnail }: IComponent) {
 function generateObserver() {
   intersectionObserver = new IntersectionObserver(
     (entries) => {
+      console.log(entries, 'entries')
       entries.forEach((item) => {
         if (item.intersectionRatio <= 0)
           return
