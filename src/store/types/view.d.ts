@@ -14,6 +14,7 @@ export interface IComponent {
   lock: boolean // 是否锁定
   visible: boolean // 是否可见
   component: string // 组件名称 由TYPE加name拼接而成
+  thumbnail: string // 组件预览图地址
   event?: EventItem[]
 }
 

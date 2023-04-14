@@ -1,12 +1,12 @@
 import type { IComponent } from '@/store/modules/view'
-import { compType } from '@/enum/materiel.enum'
+import { CompType } from '@/enum/materiel.enum'
 
 interface ToysComponent extends IComponent {}
 
 export const toysComponentsConfig: ToysComponent[] = [
   // 元胞自动机-生命游戏
   {
-    type: compType.TOYS, // 组件类型
+    type: CompType.TOYS, // 组件类型
     name: 'automaton', // 组件名称
     id: '', // 组件id
     initHeight: 400, // 组件初始高度
@@ -20,14 +20,15 @@ export const toysComponentsConfig: ToysComponent[] = [
     selecto: false, // 是否选中
     lock: false, // 是否锁定
     visible: false, // 是否可见
-    component: `${compType.TOYS}-automaton`, // 为防止名称重复 组件注册时候的名称就用类型+名称来表示
+    component: `${CompType.TOYS}-automaton`, // 为防止名称重复 组件注册时候的名称就用类型+名称来表示
+    thumbnail: 'assets/img/toys/automaton.png',
     event: [
       // { eventName: 'reset', disc: '重置' },
     ],
   },
   // mines扫雷
   {
-    type: compType.TOYS,
+    type: CompType.TOYS,
     name: 'mines',
     id: '',
     initHeight: 400,
@@ -41,11 +42,12 @@ export const toysComponentsConfig: ToysComponent[] = [
     selecto: false,
     lock: false, // 是否锁定
     visible: false, // 是否可见
-    component: `${compType.TOYS}-mines`,
+    component: `${CompType.TOYS}-mines`,
+    thumbnail: 'assets/img/toys/mines.png',
   },
   // plum 梅花生长
   {
-    type: compType.TOYS,
+    type: CompType.TOYS,
     name: 'plum',
     id: '',
     initHeight: 400,
@@ -59,11 +61,12 @@ export const toysComponentsConfig: ToysComponent[] = [
     selecto: false,
     lock: false, // 是否锁定
     visible: false, // 是否可见
-    component: `${compType.TOYS}-plum`,
+    component: `${CompType.TOYS}-plum`,
+    thumbnail: 'assets/img/toys/plum.png',
   },
   // 随机数
   {
-    type: compType.TOYS,
+    type: CompType.TOYS,
     name: 'random',
     id: '',
     initHeight: 200,
@@ -77,11 +80,12 @@ export const toysComponentsConfig: ToysComponent[] = [
     selecto: false,
     lock: false, // 是否锁定
     visible: false, // 是否可见
-    component: `${compType.TOYS}-random`,
+    component: `${CompType.TOYS}-random`,
+    thumbnail: 'assets/img/toys/random.png',
   },
   // 疫情元胞自动机
   {
-    type: compType.TOYS,
+    type: CompType.TOYS,
     name: 'virus',
     id: '',
     initHeight: 400,
@@ -95,7 +99,8 @@ export const toysComponentsConfig: ToysComponent[] = [
     selecto: false,
     lock: false, // 是否锁定
     visible: false, // 是否可见
-    component: `${compType.TOYS}-virus`,
+    component: `${CompType.TOYS}-virus`,
+    thumbnail: 'assets/img/toys/virus.png',
     event: [
       // { eventName: 'reset', disc: '重置' },
     ],

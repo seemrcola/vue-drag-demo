@@ -1,4 +1,4 @@
-import { compType } from '@/enum/materiel.enum'
+import { CompType } from '@/enum/materiel.enum'
 
 export interface ImgGlobResult {
   img: string // 图片本体
@@ -11,25 +11,25 @@ export type GlobResult = Record<string, unknown>
  * 后续我们需要根据src路径来拿到图片名称 并根据图片名称找到对应的组件
  * 如果变成base64就找不到了
  */
-export function imgGlob(dir: compType): ImgGlobResult[] {
+export function imgGlob(dir: CompType): ImgGlobResult[] {
   let ans: GlobResult
   switch (dir) {
-    case compType.TOYS:
+    case CompType.TOYS:
       ans = import.meta.glob('/src/assets/img/toys/*.png', { eager: true })
       break
-    case compType.CHART:
+    case CompType.CHART:
       ans = import.meta.glob('/src/assets/img/charts/*.png', { eager: true })
       break
-    case compType.SHAPE:
+    case CompType.SHAPE:
       ans = import.meta.glob('/src/assets/img/shape/*.png', { eager: true })
       break
-    case compType.MEDIA:
+    case CompType.MEDIA:
       ans = import.meta.glob('/src/assets/img/media/*.png', { eager: true })
   }
   return toArray(ans)
 }
 
-export function toArray(record: GlobResult) {
+function toArray(record: GlobResult) {
   return Object.keys(record).map((key) => {
     return {
       img: (record[key] as any).default,

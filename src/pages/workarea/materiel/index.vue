@@ -2,7 +2,7 @@
 import { onUnmounted, reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { componentsConfig } from './comp.config'
-import { compType } from '@/enum/materiel.enum'
+import { CompType } from '@/enum/materiel.enum'
 import type { ImgGlobResult } from '@/utils/glob'
 import { imgGlob } from '@/utils/index'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
@@ -12,22 +12,22 @@ import type { IComponent } from '@/store/types/view'
 const viewStore = useViewStore()
 const rulerStore = useRulerStore()
 
-const toysModules = imgGlob(compType.TOYS)
-const shapeModules = imgGlob(compType.SHAPE)
-const mediaModules = imgGlob(compType.MEDIA)
-const chartModules = imgGlob(compType.CHART)
+const toysModules = imgGlob(CompType.TOYS)
+const shapeModules = imgGlob(CompType.SHAPE)
+const mediaModules = imgGlob(CompType.MEDIA)
+const chartModules = imgGlob(CompType.CHART)
 
 interface Icon {
   icon: string
   text: string
-  type: compType
+  type: CompType
   imgList: ImgGlobResult[]
 }
 const icons = reactive<Icon[]>([
-  { icon: 'i-icon-park-solid:game', text: '玩具', type: compType.TOYS, imgList: toysModules },
-  { icon: 'i-simple-icons:soundcharts', text: '图表', type: compType.CHART, imgList: chartModules },
-  { icon: 'i-ic:twotone-media-bluetooth-on', text: '媒体', type: compType.MEDIA, imgList: mediaModules },
-  { icon: 'i-carbon:shape-intersect', text: '形状', type: compType.SHAPE, imgList: shapeModules },
+  { icon: 'i-icon-park-solid:game', text: '玩具', type: CompType.TOYS, imgList: toysModules },
+  { icon: 'i-simple-icons:soundcharts', text: '图表', type: CompType.CHART, imgList: chartModules },
+  { icon: 'i-ic:twotone-media-bluetooth-on', text: '媒体', type: CompType.MEDIA, imgList: mediaModules },
+  { icon: 'i-carbon:shape-intersect', text: '形状', type: CompType.SHAPE, imgList: shapeModules },
 ])
 
 /** ****** 鼠标移入显示类型 *********/
