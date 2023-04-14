@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import Vitrual from './vitrual.vue'
+import List from './complist.vue'
 </script>
 
 <template>
@@ -7,6 +7,6 @@ import Vitrual from './vitrual.vue'
     <div text="0.9rem" bg="#000" py-1>
       组件列表
     </div>
-    <Vitrual />
+    <List />
   </div>
 </template>
