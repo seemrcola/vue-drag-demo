@@ -18,6 +18,8 @@ function generateObserver() {
       entries.forEach((item) => {
         if (item.intersectionRatio <= 0)
           return
+        const target = item.target as HTMLElement
+        console.log(target.dataset, 'xxxx') // 使用data-v属性来拿到index
         console.log(entries, 'load') // 这里面有很多坐标相关属性，可以在这里做点文章
       })
     },
@@ -63,6 +65,7 @@ watch(
       v-for="(component, index) of components"
       :key="index"
       class=".list-item"
+      :data-index="index"
       flex items-center h="36px"
       bg="#555" b-b="1px solid #fff"
     >
