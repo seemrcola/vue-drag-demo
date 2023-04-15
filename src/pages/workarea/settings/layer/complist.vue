@@ -14,8 +14,9 @@ function getUrl({ thumbnail }: IComponent) {
   return new URL(`../../../../${thumbnail}`, import.meta.url).href
 }
 
+// 右键事件----------------------------------------------------------------------
 const { contextMenu: contextMenuHanlde, showmenu } = useContextMenu('#layerMenu')
-const currentContext = ref(0)
+const currentContext = ref(Infinity)
 function contextMenu(e: MouseEvent, index: number) {
   console.log(e)
   e.preventDefault()
@@ -33,12 +34,28 @@ function layerHanlde(type: string) {
   viewStore.setLayer(type, currentContext.value)
   showmenu.value = false
 }
+// ----------------------------------------------------------------
+
+// hover与点击 -----------------------------------------------------
 function mouseEnterHandle(index: number) {
+  currentContext.value = index
   viewStore.components[index].selecto = true
 }
 function mouseLeaveHandle(index: number) {
+  currentContext.value = Infinity
   viewStore.components[index].selecto = false
 }
+
+function delComponent(component: IComponent) {
+  viewStore.removeComponent(component)
+}
+function lockComponent(component: IComponent) {
+  component.lock = true
+}
+// ---------------------------------------------------------------
+
+// 拖拽排序--------------------------------------------------------
+// --------------------------------------------------------------
 
 onMounted(() => {
   generateObserver()
@@ -68,6 +85,7 @@ onMounted(() => {
       :key="index"
       class="list-item"
       :data-index="index"
+      relative
       flex items-center h="36px"
       bg="#555" b-b="1px solid #fff"
       @contextmenu.stop="contextMenu($event, index)"
@@ -75,7 +93,26 @@ onMounted(() => {
       @mouseleave="mouseLeaveHandle(index)"
     >
       <img :src="getUrl(component)" h-6 w-6 mx-4>
-      <p> {{ component.name.toLocaleUpperCase() }}</p>
+      <p>
+        {{ component.name.toLocaleUpperCase() }}
+      </p>
+      <div
+        v-show="index === currentContext"
+        flex w-12 justify-between
+        absolute right-4
+        text-xl
+      >
+        <div
+          v-if="!component.lock"
+          hover:color-blue i-material-symbols:water-lock-outline
+          @click="lockComponent(component)"
+        />
+        <div
+          hover:color-red
+          i-material-symbols:delete-outline
+          @click="delComponent(component)"
+        />
+      </div>
     </div>
   </div>
 </template>
