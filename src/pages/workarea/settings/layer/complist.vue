@@ -15,14 +15,24 @@ function getUrl({ thumbnail }: IComponent) {
 function generateObserver() {
   intersectionObserver = new IntersectionObserver(
     (entries) => {
-      console.log(entries, 'entries')
-      entries.forEach((item) => {
-        if (item.intersectionRatio <= 0)
-          return
+      for (const item of entries) {
         const target = item.target as HTMLElement
-        console.log(target.dataset, 'xxxx') // 使用data-v属性来拿到index
-        console.log(entries, 'load') // 这里面有很多坐标相关属性，可以在这里做点文章
-      })
+        const index = Number(target.dataset.index)
+        if (item.intersectionRatio > 0) {
+          requestAnimationFrame(() => {
+            target.style.visibility = ''
+            if (index >= 1)
+              (elements[index - 1] as HTMLElement).style.visibility = ''
+            if (index < elements.length - 1)
+              (elements[index + 1] as HTMLElement).style.visibility = ''
+          })
+        }
+        else {
+          requestAnimationFrame(() => {
+            target.style.visibility = 'hidden'
+          })
+        }
+      }
     },
     { root: document.querySelector('.vitural') },
   )
@@ -60,8 +70,13 @@ watch(
 <template>
   <div
     h="500px" max-h="500px" overflow-auto
+    relative
     class="no-scroll-bar vitural"
   >
+    <div
+      w-full z--1 absolute bg="#fff"
+      :style="{ height: `${components.length * 36}px` }"
+    />
     <div
       v-for="(component, index) of components"
       :key="index"

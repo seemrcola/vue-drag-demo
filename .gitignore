@@ -12,6 +12,7 @@ dist
 dist-ssr
 chatgpt.test.html
 stats.html
+test.html
 *.local
 
 # Editor directories and files
