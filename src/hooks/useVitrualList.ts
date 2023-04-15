@@ -5,11 +5,18 @@
  */
 
 import { watch } from 'vue'
+interface Options {
+  cacheLength: number // 缓存长度
+}
 
-export function useVitrualList(selector: string, list: any[]) {
+export function useVitrualList(
+  selector: string,
+  list: any[],
+  options: Options = { cacheLength: 10 },
+) {
   let elements: Element[]
   let intersectionObserver: any
-  const CACHE_LENGTH = 10
+  const CACHE_LENGTH = options.cacheLength
 
   function onObserve() {
     elements = Array.from(document.getElementsByClassName(selector))
