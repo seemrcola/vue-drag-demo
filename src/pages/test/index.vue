@@ -4,7 +4,7 @@ import { useVitrualList } from '@/hooks/useVitrualList'
 import img from '@/assets/vue.svg'
 
 const components: any[] = []
-for (let i = 0; i < 10000; i++)
+for (let i = 0; i < 50000; i++)
   components.push({ url: img, text: '1000' })
 
 const { generateObserver, onObserve } = useVitrualList('.list-item', components, { cacheLength: 50 })
