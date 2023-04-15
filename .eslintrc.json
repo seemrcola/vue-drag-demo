@@ -2,8 +2,10 @@
   "extends": "@antfu",
   "rules": {
     "no-console": "off",
+    "no-alert": "off",
     "no-debugger": "off",
     "no-restricted-syntax": "warn",
-    "vue/no-deprecated-v-on-native-modifier": "off"
+    "vue/no-deprecated-v-on-native-modifier": "off",
+    "vue/prop-name-casing": "off"
   }
 }

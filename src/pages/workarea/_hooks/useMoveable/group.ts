@@ -15,20 +15,20 @@ export function useGroup() {
     if (type === 'rotate')
       onRotateGroup(e)
   }
-  function onDragGroup({ events, dist }: any) {
+  function onDragGroup({ events }: any) {
     events.forEach((event: any) => {
       event.target.style.transform = event.style.transform
     })
   }
 
-  function onScaleGroup({ events, dist }: any) {
+  function onScaleGroup({ events }: any) {
     events.forEach((event: any) => {
       const transformString = event.style.transform
       event.target.style.transform = transformString // fixme 应该 不允许翻转 moveable的组合完全翻转存在bug
     })
   }
 
-  function onRotateGroup({ events, dist }: any) {
+  function onRotateGroup({ events }: any) {
     events.forEach((event: any) => {
       event.target.style.transform = event.style.transform
     })

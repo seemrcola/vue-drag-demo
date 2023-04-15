@@ -52,7 +52,7 @@ const component = ref<IComponent>()
 const style = ref({ left: '0px', top: '0px', transform: '' })
 const dragFlag = ref(false)
 let scale = 0
-function changeImgSrc(imgSrc: ImgGlobResult, e: MouseEvent) {
+function changeImgSrc(imgSrc: ImgGlobResult) {
   scale = rulerStore.rulerOptions.scale
   // 图片src赋值确保拖出来的图片正确
   imgsrc.value = imgSrc
@@ -165,7 +165,7 @@ onUnmounted(() => {
             :src="item.img"
             h-24 w-full rounded-1 cursor-move object-contain bg="#fff"
             :draggable="false"
-            @mousedown.stop="changeImgSrc(item, $event)"
+            @mousedown.stop="changeImgSrc(item)"
           >
         </div>
       </div>

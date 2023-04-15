@@ -13,12 +13,12 @@ export function useContextMenu(selector: string) {
     document.addEventListener('contextmenu', onContextOutside)
   }
 
-  function onClickOutside(event: MouseEvent) {
+  function onClickOutside() {
     showmenu.value = false
     closeContextMenu()
   }
 
-  function onContextOutside(event: MouseEvent) {
+  function onContextOutside() {
     showmenu.value = false
     closeContextMenu()
   }

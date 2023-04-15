@@ -9,7 +9,7 @@ export function useCVX() {
   const viewStore = useViewStore()
   const cacheComponents = ref<IComponent[]>([])
   // 复制 COPY
-  function copy<T extends Event>(e: T) {
+  function copy() {
     const cache = viewStore.taregtSelect
     if (isEmpty(cache))
       return

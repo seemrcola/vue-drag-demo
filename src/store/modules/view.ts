@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { DertaData, IComponent } from '../types/view.d'
-import { useRulerStore } from './ruler'
 import { useHistoryStore } from './history'
 
 /*
@@ -14,8 +13,6 @@ export { DertaData, IComponent }
 export const useViewStore = defineStore(
   'view',
   () => {
-  // ruler
-    const rulerStore = useRulerStore()
     // history
     const historyStore = useHistoryStore()
     // 画布上的全部单个图表
