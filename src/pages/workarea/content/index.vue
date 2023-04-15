@@ -173,7 +173,7 @@ onMounted(() => {
   setVueMoveableRef(moveable.value!)
 })
 
-const { contextMenu: contextMenuHanlde, showmenu } = useContextMenu('#contextmenu')
+const { contextMenu: contextMenuHanlde, showmenu } = useContextMenu('#componentMenu')
 const menuList = [
   { text: '上一层', type: 'up' },
   { text: '下一层', type: 'down' },
@@ -242,7 +242,7 @@ onUnmounted(() => {
           <div id="selecto" ref="selecto" absolute :style="setStyle" />
           <Teleport to="body">
             <ContextMenu
-              v-show="showmenu" id="contextmenu" :list="menuList"
+              v-show="showmenu" id="componentMenu" :list="menuList"
               absolute
               @dispatch="layerHanlde"
             />
@@ -341,7 +341,7 @@ onUnmounted(() => {
     right: 0;
     bottom: 0;
     z-index: 1;
-    background-color: rgba(68, 170, 255, 0.1);
+    background-color: rgba(68, 170, 255, 0.4);
   }
 }
 .lock {
