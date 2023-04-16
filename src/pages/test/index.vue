@@ -22,10 +22,6 @@ onMounted(() => {
     class="no-scroll-bar vitural"
   >
     <div
-      w-full z--1 absolute bg="#fff"
-      :style="{ height: `${components.length * 36}px` }"
-    />
-    <div
       v-for="(component, index) of components"
       :key="index"
       class=".list-item"

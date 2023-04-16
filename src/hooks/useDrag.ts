@@ -10,9 +10,9 @@
 
 import { onUnmounted } from 'vue'
 
-import type { DertaState, DragState, UseDragResult } from './types/useDrag.d'
+import type { DertaState, DragState, Options, UseDragResult } from './types/useDrag.d'
 
-export function useDrag(): UseDragResult {
+export function useDrag(options: Options = { needShift: true }): UseDragResult {
   let pointState: DragState = {
     isDragging: false,
     clientX: 0,
@@ -25,8 +25,12 @@ export function useDrag(): UseDragResult {
     dertaY: 0,
   }
 
+  function isEnable(shiftKey: boolean) {
+    return (options.needShift && shiftKey) || !options.needShift
+  }
+
   function handleMouseDown(e: MouseEvent) {
-    if (!e.shiftKey)
+    if (!isEnable(e.shiftKey))
       return
     const { clientX, clientY } = e
     pointState.isDragging = true
@@ -44,7 +48,7 @@ export function useDrag(): UseDragResult {
   function handleMouseMove(e: MouseEvent): boolean {
     const { clientX, clientY } = e
     // 如果没有开启移动锁，则直接return
-    if (!pointState.isDragging || !e.shiftKey) {
+    if (!pointState.isDragging || !isEnable(e.shiftKey)) {
       derta.isChanged = false
       return false
     }

@@ -1,3 +1,6 @@
+export interface Options {
+  needShift: boolean
+}
 
 export interface DragState {
   isDragging: boolean

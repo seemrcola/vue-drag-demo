@@ -16,7 +16,7 @@ function getUrl({ thumbnail }: IComponent) {
 
 // 右键事件----------------------------------------------------------------------
 const { contextMenu: contextMenuHanlde, showmenu } = useContextMenu('#layerMenu')
-const currentContext = ref(Infinity)
+const currentContext = ref(-1)
 function contextMenu(e: MouseEvent, index: number) {
   console.log(e)
   e.preventDefault()
@@ -55,6 +55,32 @@ function lockComponent(component: IComponent) {
 // ---------------------------------------------------------------
 
 // 拖拽排序--------------------------------------------------------
+const overIndex = ref(-1)
+const dragIndex = ref(-1)
+function dragStartHandle(e: DragEvent, index: number) {
+  e.preventDefault()
+  dragIndex.value = index
+  const { target, dataTransfer } = e
+  dataTransfer?.setDragImage(target as Element, 0, 0)
+}
+
+function dragOverHandle(e: DragEvent, index: number) {
+  e.preventDefault()
+  overIndex.value = index
+}
+
+function dragEndHandle(e: DragEvent) {
+  // mac下自带回弹效果，去掉
+  e.preventDefault()
+  // 简单做个swap
+  const overComponent = components.value[overIndex.value]
+  const dragComponent = components.value[dragIndex.value]
+  components.value[overIndex.value] = dragComponent
+  components.value[dragIndex.value] = overComponent
+  // 回复初始状态
+  dragIndex.value = -1
+  overIndex.value = -1
+}
 // --------------------------------------------------------------
 
 onMounted(() => {
@@ -69,10 +95,6 @@ onMounted(() => {
     relative
     class="no-scroll-bar vitural"
   >
-    <div
-      w-full z--1 absolute bg="#fff"
-      :style="{ height: `${components.length * 36}px` }"
-    />
     <Teleport to="body">
       <ContextMenu
         v-show="showmenu" id="layerMenu" :list="menuList"
@@ -88,9 +110,14 @@ onMounted(() => {
       relative
       flex items-center h="36px"
       bg="#555" b-b="1px solid #fff"
+      :draggable="true"
+      :class="{ dtagover: index === overIndex }"
       @contextmenu.stop="contextMenu($event, index)"
       @mouseenter="mouseEnterHandle(index)"
       @mouseleave="mouseLeaveHandle(index)"
+      @drag="dragStartHandle($event, index)"
+      @dragover="dragOverHandle($event, index)"
+      @dragend="dragEndHandle($event)"
     >
       <img :src="getUrl(component)" h-6 w-6 mx-4>
       <p>
@@ -137,5 +164,18 @@ onMounted(() => {
         background-color: aliceblue;
         color: #222
       }
+    }
+    .dtagover{
+      &::before {
+        content: "SWAP";
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99999;
+        background-color: rgb(245, 197, 138);
+  }
     }
 </style>
