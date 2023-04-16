@@ -24,7 +24,7 @@ export function useEclipse() {
     if (isCtrlActive) {
       switch (keycode) {
         case KeyCodeEnum.COPY:
-          copy(e)
+          copy()
           break
         case KeyCodeEnum.PASTE:
           paste(e)
