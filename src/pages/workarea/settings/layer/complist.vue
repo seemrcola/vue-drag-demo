@@ -50,7 +50,7 @@ function delComponent(component: IComponent) {
   viewStore.removeComponent(component)
 }
 function lockComponent(component: IComponent) {
-  component.lock = true
+  component.lock = !component.lock
 }
 // ---------------------------------------------------------------
 
@@ -132,6 +132,11 @@ onMounted(() => {
         <div
           v-if="!component.lock"
           hover:color-blue i-material-symbols:water-lock-outline
+          @click="lockComponent(component)"
+        />
+        <div
+          v-else
+          hover:color-blue i-material-symbols:key-outline
           @click="lockComponent(component)"
         />
         <div
