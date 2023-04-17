@@ -82,7 +82,9 @@ export function useMoveable() {
 
   // 这个对应的是movebale的click-group API 可以拿到被moveable-area覆盖的被点击元素
   function clickGroup(e: any) {
-    const targetId = e.inputTarget.id
+    const targetId = e?.inputTarget?.id
+    if (!targetId)
+      return
     const ifSelected = viewStore.taregtSelect
       .find(comp => comp.id === targetId)
     if (!ifSelected) {
