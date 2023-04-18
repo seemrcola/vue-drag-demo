@@ -11,7 +11,7 @@ const components = computed(() => viewStore.components)
 const { generateObserver, onObserve } = useVitrualList(
   'list-item',
   components.value,
-  { cacheLength: 10, rootSelector: '.vitural' },
+  { cacheLength: 4, rootSelector: '.vitural' },
 )
 
 function getUrl({ thumbnail }: IComponent) {

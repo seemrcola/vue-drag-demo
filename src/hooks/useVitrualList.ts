@@ -10,7 +10,7 @@ import type { Options } from './types/useVitrualList.d'
 export function useVitrualList(
   selector: string,
   list: any[],
-  options: Options = { cacheLength: 3, rootSelector: 'body' },
+  options: Options = { cacheLength: 10, rootSelector: 'body' },
 ) {
   let elements: Element[]
   let intersectionObserver: any
