@@ -7,7 +7,11 @@ const components: any[] = []
 for (let i = 0; i < 50000; i++)
   components.push({ url: img, text: '1000' })
 
-const { generateObserver, onObserve } = useVitrualList('.list-item', components, { cacheLength: 50 })
+const { generateObserver, onObserve } = useVitrualList(
+  '.list-item',
+  components,
+  { cacheLength: 50, rootSelector: '.vitural' },
+)
 
 onMounted(() => {
   generateObserver()

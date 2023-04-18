@@ -5,14 +5,12 @@
  */
 
 import { watch } from 'vue'
-interface Options {
-  cacheLength: number // 缓存长度
-}
+import type { Options } from './types/useVitrualList.d'
 
 export function useVitrualList(
   selector: string,
   list: any[],
-  options: Options = { cacheLength: 10 },
+  options: Options = { cacheLength: 3, rootSelector: 'body' },
 ) {
   let elements: Element[]
   let intersectionObserver: any
@@ -59,7 +57,7 @@ export function useVitrualList(
           }
         }
       },
-      { root: document.querySelector('.vitural') },
+      { root: document.querySelector(options.rootSelector) },
     )
   }
 

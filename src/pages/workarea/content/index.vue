@@ -268,6 +268,7 @@ onUnmounted(() => {
             @drag-group-end="(e) => groupEndHandler(e, 'drag')"
             @rotate-group-end="(e) => groupEndHandler(e, 'rotate')"
             @scale-group-end="(e) => groupEndHandler(e, 'scale')"
+            @click-group="clickGroup"
           />
           <template v-for="(componentItem, index) in viewStore.components" :key="componentItem?.id">
             <template v-if="componentItem">
