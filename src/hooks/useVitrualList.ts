@@ -38,13 +38,17 @@ export function useVitrualList(
             requestAnimationFrame(() => {
               let count = 0
               while (count < CACHE_LENGTH && index > 0) {
-                (elements[index] as HTMLElement).style.visibility = ''
+                const ele = (elements[index] as HTMLElement)
+                if (ele.style.visibility !== '')
+                  ele.style.visibility = ''
                 count++
                 index--
               }
               count = 0
               while (count < CACHE_LENGTH && index < elements.length - 1) {
-                (elements[index] as HTMLElement).style.visibility = ''
+                const ele = (elements[index] as HTMLElement)
+                if (ele.style.visibility !== '')
+                  ele.style.visibility = ''
                 count++
                 index++
               }
@@ -52,6 +56,8 @@ export function useVitrualList(
           }
           else {
             requestAnimationFrame(() => {
+              if (target.style.visibility === 'hidden')
+                return
               target.style.visibility = 'hidden'
             })
           }
