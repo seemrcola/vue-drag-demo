@@ -12,6 +12,7 @@ import { onUnmounted } from 'vue'
 
 import type { DertaState, DragState, Options, UseDragResult } from './types/useDrag.d'
 
+// needShift表示是否需要一个控制按键于鼠标同时操作，来实现拖拽
 export function useDrag(options: Options = { needShift: true }): UseDragResult {
   let pointState: DragState = {
     isDragging: false,
