@@ -21,7 +21,6 @@ const { selectoDown, setStyle } = useSeleto({ container: '#canvas' })
 /* 拿到rulerStore的配置 */
 const rulerStore = useRulerStore()
 const state = rulerStore.rulerOptions
-const canvasStyle = rulerStore.canvasStyle
 
 /* drag */
 const { handleMouseDown, getDerta } = useDrag()
@@ -234,7 +233,7 @@ onUnmounted(() => {
         <div
           id="canvas"
           ref="canvasRef"
-          :style="canvasStyle"
+          :style="rulerStore.canvasStyle"
           absolute bg="#ccc" rounded-2
           @mousedown="handleMouseDown"
           @dragover="e => e.preventDefault()"

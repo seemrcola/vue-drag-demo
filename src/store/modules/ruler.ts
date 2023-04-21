@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useRulerStore = defineStore('ruler', () => {
   // 比例尺相关配置
@@ -33,22 +33,20 @@ export const useRulerStore = defineStore('ruler', () => {
   })
 
   // canvas样式配置, 样式的动态属性都由其他配置计算得来
-  const canvasStyle = ref({
-    height: `${canvasOptions.value.height}px`,
-    width: `${canvasOptions.value.width}px`,
-    transform: `scale(${rulerOptions.value.scale})`,
-  })
+  const canvasStyle = computed(
+    () => {
+      return {
+        height: `${canvasOptions.value.height}px`,
+        width: `${canvasOptions.value.width}px`,
+        transform: `scale(${rulerOptions.value.scale})`,
+      }
+    },
+  )
 
   function setScale(scale: number) {
     if (scale > rulerOptions.value.max || scale < rulerOptions.value.min)
       return
     rulerOptions.value.scale = scale
-    /**
-     * 改了rulerOptions.value.scale，
-     * 但是canvasStyle.value.transform没有变，
-     * 目前不知道为什么，只能再改一遍了
-     */
-    canvasStyle.value.transform = `scale(${scale})`
   }
 
   function setStart(x: number, y: number) {
