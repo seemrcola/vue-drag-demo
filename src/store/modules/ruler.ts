@@ -33,6 +33,8 @@ export const useRulerStore = defineStore('ruler', () => {
   })
 
   // canvas样式配置, 样式的动态属性都由其他配置计算得来
+  // computed返回一个普通对象，这个对象会被处理成reactive类型，对象里的原始类型处理成ref，引用类型处理成shallowRef
+  // 所以如果将这个值解构出来去赋值给:style的话会丢失响应式
   const canvasStyle = computed(
     () => {
       return {
