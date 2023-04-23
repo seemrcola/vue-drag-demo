@@ -205,6 +205,9 @@ onUnmounted(() => {
 
 <template>
   <div b>
+    <div bg="#fff" color="#000">
+      {{ day }}
+    </div>
     <canvas ref="canvas" height="400" width="400" />
   </div>
 </template>
