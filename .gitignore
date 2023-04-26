@@ -14,7 +14,7 @@ chatgpt.test.html
 stats.html
 test.html
 *.local
-pnpm-lock-yaml
+pnpm-lock.yaml
 
 # Editor directories and files
 !.vscode/extensions.json
