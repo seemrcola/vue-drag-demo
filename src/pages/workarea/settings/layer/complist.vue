@@ -20,12 +20,12 @@ function getUrl({ thumbnail }: IComponent) {
 
 // 右键事件----------------------------------------------------------------------
 const { contextMenu: contextMenuHanlde, showmenu } = useContextMenu('#layerMenu')
-const currentContext = ref(-1)
+const contextCurrent = ref(-1)
 function contextMenu(e: MouseEvent, index: number) {
   console.log(e)
   e.preventDefault()
   showmenu.value = true
-  currentContext.value = index
+  contextCurrent.value = index
   contextMenuHanlde(e)
 }
 const menuList = [
@@ -35,12 +35,14 @@ const menuList = [
   { text: '置底', type: 'floor' },
 ]
 function layerHanlde(type: string) {
-  viewStore.setLayer(type, currentContext.value)
+  console.log(contextCurrent.value, type, 'xxxx')
+  viewStore.setLayer(type, contextCurrent.value)
   showmenu.value = false
 }
 // ----------------------------------------------------------------
 
 // hover与点击 -----------------------------------------------------
+const currentContext = ref(-1)
 function mouseEnterHandle(index: number) {
   currentContext.value = index
   viewStore.components[index].selecto = true
