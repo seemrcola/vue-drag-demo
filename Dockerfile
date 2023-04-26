@@ -1,5 +1,6 @@
 FROM node:18-alpine3.15
+FROM pnpm:latest
 WORKDIR /datav
 COPY package.json .
-RUN npm install
+RUN pnpm install
 COPY . .
