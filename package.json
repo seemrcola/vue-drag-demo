@@ -15,6 +15,7 @@
     "@types/lodash-es": "^4.17.7",
     "@types/node": "^18.13.0",
     "@types/uuid": "^9.0.1",
+    "echarts": "^5.4.2",
     "html2canvas": "^1.4.1",
     "lodash-es": "^4.17.21",
     "moveable": "^0.43.1",

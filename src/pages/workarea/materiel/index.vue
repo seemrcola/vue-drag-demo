@@ -30,16 +30,14 @@ const icons = reactive<Icon[]>([
   { icon: 'i-carbon:shape-intersect', text: '形状', type: CompType.SHAPE, imgList: shapeModules },
 ])
 
-/** ****** 鼠标移入显示类型 *********/
-const curIcon: Icon = icons[0]
-/*********************************/
 /** ********* 初始化显示 **********/
+let curIconIndex = 0
 const checkArr = ref<boolean[]>([true, false, false, false])
 const curImgList = ref<ImgGlobResult[]>(icons[0].imgList)
 /*********************************/
-
 /* *** 鼠标点击icon右侧显示缩略图 ***/
 function linkPreviewImg(icon: Icon, idx: number) {
+  curIconIndex = idx
   checkArr.value = [false, false, false, false]
   checkArr.value[idx] = true
   curImgList.value = icon.imgList
@@ -66,8 +64,9 @@ function mousemoveHandle(e: MouseEvent) {
   if (!dragFlag.value)
     return
   // 靠名字找到组件的config信息 也可以根据index找 但是index有局限 config文件就必须按顺序来写组件
-  component.value = componentsConfig[curIcon.type]
+  component.value = componentsConfig[icons[curIconIndex].type]
     .find(comp => comp.component.includes(imgsrc.value!.name))!
+  console.log(component.value, 'sdsjhbjns')
   // 位置和大小处理一下
   style.value.left = `${(e.clientX - component.value!.width / 2)}px`
   style.value.top = `${(e.clientY - component.value!.height / 2)}px`
@@ -125,7 +124,8 @@ onUnmounted(() => {
       <Goast
         v-if="component"
         ref="goast" absolute z-999
-        :style="style" :component="component!"
+        :style="style"
+        :component="component!"
       />
     </Teleport>
     <div

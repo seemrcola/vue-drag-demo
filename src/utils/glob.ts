@@ -18,7 +18,7 @@ export function imgGlob(dir: CompType): ImgGlobResult[] {
       ans = import.meta.glob('/src/assets/img/toys/*.png', { eager: true })
       break
     case CompType.CHART:
-      ans = import.meta.glob('/src/assets/img/charts/*.png', { eager: true })
+      ans = import.meta.glob('/src/assets/img/chart/*.png', { eager: true })
       break
     case CompType.SHAPE:
       ans = import.meta.glob('/src/assets/img/shape/*.png', { eager: true })
