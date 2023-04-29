@@ -6,6 +6,7 @@ import Moveable from 'vue3-moveable'
 import { useMoveable } from '../_hooks/useMoveable'
 import { useEclipse } from '../_hooks/useEclipse'
 import { useSeleto } from '../_hooks/useSelecto'
+import Group from './group/index.vue'
 import { useContextMenu } from '@/hooks/useContextMenu'
 import { useRulerStore, useViewStore } from '@/store/modules/index'
 import { useDrag } from '@/hooks/useDrag'
@@ -269,6 +270,9 @@ onUnmounted(() => {
             @scale-group-end="(e) => groupEndHandler(e, 'scale')"
             @click-group="clickGroup"
           />
+          <template v-for="(group, index) in viewStore.groupComponent" :key="index + Math.random()">
+            <Group :group="group" />
+          </template>
           <template v-for="(componentItem, index) in viewStore.components" :key="componentItem?.id">
             <template v-if="componentItem">
               <component

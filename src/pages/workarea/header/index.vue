@@ -6,6 +6,7 @@ import { useCVX } from '../_hooks/useEclipse/cvx'
 import { useMoveable } from '../_hooks/useMoveable/index'
 import { useHistory } from '../_hooks/useEclipse/history'
 import { useViewStore } from '@/store/modules'
+const viewStore = useViewStore()
 const { clear } = useViewStore()
 const { redo, undo } = useHistory()
 const { clearSelect } = useMoveable()
@@ -35,6 +36,12 @@ async function screenshot() {
   img.download = 'case.jpg'
   img.click()
 }
+// 分组
+function group() {
+  if (viewStore.taregtSelect.length < 2)
+    return console.log('[datav warn]: group need at least two components')
+  viewStore.groupComponent.push(viewStore.taregtSelect)
+}
 // 清空
 function clearCanvas() {
   clear()
@@ -55,7 +62,7 @@ function clearCanvas() {
       <div w-14 i-ion:arrow-redo-circle-outline @click="redo" />
       <div w-14 i-material-symbols:file-copy-outline @click="copy" />
       <div w-14 i-ic:outline-content-paste-go @click="paste" />
-      <!-- <div w-14 i-uil:object-group /> -->
+      <div w-14 i-uil:object-group @click="group" />
       <div data-red w-14 i-ic:outline-delete-forever @click="del" />
     </div>
     <div class="icons" h-full w="300px" flex items-center text-xl>
