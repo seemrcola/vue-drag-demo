@@ -9,6 +9,11 @@ const viewStore = useViewStore()
 
 <template>
   <div>
-    <component :is="item.component" v-for="(item) of props.group" :key="item.id" />
+    <component
+      :is="item.component" v-for="(item) of props.group" :key="item.id"
+      :style="{
+        ...viewStore.setComponentStyle(item),
+      }"
+    />
   </div>
 </template>
