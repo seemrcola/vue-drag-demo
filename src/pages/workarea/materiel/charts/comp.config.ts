@@ -3,16 +3,20 @@ import { CompType } from '@/enum/materiel.enum'
 
 interface ChartComponent extends IComponent {}
 
+export const basicConfig = {
+  initHeight: 320, // 组件初始高度
+  initWidth: 420, // 组件初始宽度
+  height: 320, // 组件高度
+  width: 420, // 组件宽度
+}
+
 export const chartComponentsConfig: ChartComponent[] = [
   // 旭日图
   {
     type: CompType.CHART, // 组件类型
     name: 'sun', // 组件名称
     id: '', // 组件id
-    initHeight: 400, // 组件初始高度
-    initWidth: 400, // 组件初始宽度
-    height: 400, // 组件高度
-    width: 400, // 组件宽度
+    ...basicConfig,
     x: 0, // 相对画布的x距离
     y: 0, // 相对画布的y距离
     rotate: 0, // 旋转角度

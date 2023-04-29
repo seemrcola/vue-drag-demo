@@ -52,6 +52,11 @@ export const useViewStore = defineStore(
       setTimeout(() => historyStore.track())
     }
 
+    // watch(
+    //   () => components.value.length,
+    //   n => console.log(n, 'xxxxxx'),
+    // )
+
     function transformcomponent(componentId: string, data: DertaData) {
       const item = components.value.find(item => componentId === item.id)!
       const { x, y, rotate, scale } = data

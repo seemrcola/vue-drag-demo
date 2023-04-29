@@ -66,7 +66,6 @@ function mousemoveHandle(e: MouseEvent) {
   // 靠名字找到组件的config信息 也可以根据index找 但是index有局限 config文件就必须按顺序来写组件
   component.value = componentsConfig[icons[curIconIndex].type]
     .find(comp => comp.component.includes(imgsrc.value!.name))!
-  console.log(component.value, 'sdsjhbjns')
   // 位置和大小处理一下
   style.value.left = `${(e.clientX - component.value!.width / 2)}px`
   style.value.top = `${(e.clientY - component.value!.height / 2)}px`
