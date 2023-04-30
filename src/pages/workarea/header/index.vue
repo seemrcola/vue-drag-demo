@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import html2canvas from 'html2canvas'
 import { useDel } from '../_hooks/useEclipse/del'
@@ -6,6 +7,7 @@ import { useCVX } from '../_hooks/useEclipse/cvx'
 import { useMoveable } from '../_hooks/useMoveable/index'
 import { useHistory } from '../_hooks/useEclipse/history'
 import { useViewStore } from '@/store/modules'
+import Snapshoot from '@/components/snapshoot/index.vue'
 const { clear } = useViewStore()
 const { redo, undo } = useHistory()
 const { clearSelect } = useMoveable()
@@ -25,6 +27,11 @@ function preview() {
   })
   window.open(link, '_blank')
 }
+// 快照
+const showSnapshoot = ref(false)
+function snapshoot() {
+  showSnapshoot.value = true
+}
 // 截图
 async function screenshot() {
   const canvas = await html2canvas(document.querySelector('#canvas')!)
@@ -43,7 +50,9 @@ function clearCanvas() {
 </script>
 
 <template>
-  <div h-full w-full bg="#222" color="#fff" flex>
+  <Snapshoot v-if="showSnapshoot" @close="showSnapshoot = false" />
+
+  <div v-else h-full w-full bg="#222" color="#fff" flex>
     <div h-full flex items-center cursor-pointer w="220px">
       <div i-prime:github text-2xl hover="color-#789" @click="goto" />
       <div text-xs p-2>
@@ -55,6 +64,7 @@ function clearCanvas() {
       <div w-14 i-ion:arrow-redo-circle-outline @click="redo" />
       <div w-14 i-material-symbols:file-copy-outline @click="copy" />
       <div w-14 i-ic:outline-content-paste-go @click="paste" />
+      <div w-14 i-codicon:open-preview @click="snapshoot" />
       <div data-red w-14 i-ic:outline-delete-forever @click="del" />
     </div>
     <div class="icons" h-full w="300px" flex items-center text-xl>
