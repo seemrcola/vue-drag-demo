@@ -17,8 +17,6 @@ export const useViewStore = defineStore(
     const historyStore = useHistoryStore()
     // 画布上的全部单个图表
     const components = ref<IComponent[]>([])
-    // 组合图表
-    const groupComponent = ref<IComponent[][]>([])
     // 画布上被选中的图表
     const taregtSelect = ref<IComponent[]>([])
 
@@ -123,7 +121,6 @@ export const useViewStore = defineStore(
 
     return {
       components,
-      groupComponent,
       removeComponent,
       addComponent,
       setTarget,
