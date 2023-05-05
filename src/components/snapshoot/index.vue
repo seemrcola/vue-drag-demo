@@ -49,7 +49,7 @@ window.addEventListener('resize', handleFilled)
         backgroundColor: '#eee',
         transformOrigin: 'top left',
         transform: `scale(${scale})`,
-        margin: `${skewingY}px  ${skewingX}px ${skewingY}px ${skewingX}px`,
+        margin: `${skewingY}px ${skewingX}px ${skewingY}px ${skewingX}px`,
         transition: 'all .3s',
         border: '2px solid #333',
       }"
