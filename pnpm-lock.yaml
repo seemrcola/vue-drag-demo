@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@daybrush/utils':
+    specifier: ^1.11.0
+    version: 1.11.0
   '@types/lodash-es':
     specifier: ^4.17.7
     version: 4.17.7
