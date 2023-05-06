@@ -1,7 +1,3 @@
-<script setup lang='ts'>
-
-</script>
-
 <template>
   <div h="100vh" w="100vw">
     <div w-full h-full flex>

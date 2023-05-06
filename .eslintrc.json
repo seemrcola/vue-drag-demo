@@ -6,6 +6,7 @@
     "no-debugger": "off",
     "no-restricted-syntax": "warn",
     "vue/no-deprecated-v-on-native-modifier": "off",
-    "vue/prop-name-casing": "off"
+    "vue/prop-name-casing": "off",
+    "vue/dot-location": "off"
   }
 }
