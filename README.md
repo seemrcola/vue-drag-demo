@@ -45,4 +45,7 @@
 后续我会按照这个项目的功能慢慢往里添加  
 https://github.com/woai3c/visual-drag-demo  
 
+`bug`
+"@daybrush/utils": "^1.11.0" 这个依赖本来是被moveable依赖的，但是突然有一天，netlify报错找不到这玩意，我就下载了，原因未知，折腾了半天。
+
 
