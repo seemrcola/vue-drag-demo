@@ -8,7 +8,6 @@
     "vue/no-deprecated-v-on-native-modifier": "off",
     "vue/prop-name-casing": "off",
     "indent": "off",
-    "@typescript-eslint/indent": "error",
-    "vue/dot-location": "off"
+    "@typescript-eslint/indent": "error"
   }
 }
