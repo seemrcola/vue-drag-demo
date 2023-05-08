@@ -18,10 +18,6 @@ export function useVitrualList(
 
   function onObserve() {
     elements = Array.from(document.getElementsByClassName(selector))
-    // fixme: ===最多只先监听前一百个元素=====
-    if (elements.length >= 100)
-      elements.splice(0, 100)
-    // fixme =============================
     for (const ele of elements)
       intersectionObserver.observe(ele)
   }
