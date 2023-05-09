@@ -6,8 +6,6 @@
     "no-debugger": "off",
     "no-restricted-syntax": "warn",
     "vue/no-deprecated-v-on-native-modifier": "off",
-    "vue/prop-name-casing": "off",
-    "indent": "off",
-    "@typescript-eslint/indent": "error"
+    "vue/prop-name-casing": "off"
   }
 }
