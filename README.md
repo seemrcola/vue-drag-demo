@@ -48,7 +48,8 @@ https://github.com/woai3c/visual-drag-demo
 `bug`
 "@daybrush/utils": "^1.11.0" 这个依赖本来是被moveable依赖的，但是突然有一天netlify报错找不到这玩意，我就下载了，原因未知，折腾了半天。
 
-`虚拟滚动`
+`虚拟滚动`. 
+
 这里面之前实现了一个比较简单的虚拟滚动，效果不好，没有真正实现减少dom渲染，我写了两个虚拟滚动的方案，在另一个项目 `nuxt-demos`里，路径 /pages/vitruallist
 
 
